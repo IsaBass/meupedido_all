@@ -9,8 +9,8 @@ import 'carrinho_interf_repository.dart';
 
 class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
   //
-  final AppController _appController = AppModule.to.get();
-  final AuthController _authController = AppModule.to.get();
+  final AppController _appController = Modular.get();
+  final AuthController _authController = Modular.get();
 
   /// USAR APENAS PARA GRAVACAO DE NOVO PEDIDO
   @override

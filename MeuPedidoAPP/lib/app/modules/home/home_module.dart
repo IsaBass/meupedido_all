@@ -21,7 +21,7 @@ class HomeModule extends Module {
         Bind((i) => HomeRepository()),
         Bind((i) => HomeController()),
         Bind((i) => FavoritosController(i.get<FavoritosRepository>())),
-        Bind((i) => FavoritosRepository(AppModule.to.get())),
+        Bind((i) => FavoritosRepository(Modular.get())),
         Bind((i) => SearchController()),
         Bind((i) => ListEnderecosRepository()),
         Bind((i) => ListEnderecosController(i.get<ListEnderecosRepository>())),
@@ -31,11 +31,11 @@ class HomeModule extends Module {
 
   @override
   List<ModularRoute> get routers => [
-        ModuleRoute('/', child: (_, args) => HomePage()),
-        ModuleRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
-        ModuleRoute('/listenderecos',
+        ChildRoute('/', child: (_, args) => HomePage()),
+        ChildRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
+        ChildRoute('/listenderecos',
             child: (_, args) => PerfilListaEnderecos()),
       ];
 
-  static Inject get to => Inject<HomeModule>.of();
+  // static Inject get to => Inject<HomeModule>.of();
 }

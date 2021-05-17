@@ -10,7 +10,7 @@ import 'pedido_interf_repository.dart';
 class PedidoRepository extends Disposable implements IPedidoRepository {
   final AppController _appController;
   final AuthController _authController;
-  final FCMFirebase _fcmFirebase = AppModule.to.get<FCMFirebase>();
+  final FCMFirebase _fcmFirebase = Modular.get<FCMFirebase>();
 
   PedidoRepository(this._appController, this._authController);
 

@@ -18,7 +18,7 @@ class CarrinhoListaPage extends StatefulWidget {
 }
 
 class _CarrinhoTabListaState extends State<CarrinhoListaPage> {
-  final HomeController _homeController = HomeModule.to.get<HomeController>();
+  final HomeController _homeController = Modular.get<HomeController>();
 
   final CartController _cartController = Modular.get<CartController>();
   final CarrinhoController _carrinhoController =

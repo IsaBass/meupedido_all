@@ -12,7 +12,7 @@ class FavoritosTab extends StatefulWidget {
 }
 
 class _FavoritosTabState extends State<FavoritosTab> {
-  final CategsController _categsController = AppModule.to.get<CategsController>();
+  final CategsController _categsController = Modular.get<CategsController>();
   int codCateg = 0;
 
   @override
@@ -23,43 +23,43 @@ class _FavoritosTabState extends State<FavoritosTab> {
 
   Column _testeCategAdicionais() {
     return Column(
-    children: <Widget>[
-      Text(' Favoritos TAB '),
-      FlatButton(
-        child: Text('Criar Categoria'),
-        onPressed: () {
-          codCateg++;
+      children: <Widget>[
+        Text(' Favoritos TAB '),
+        FlatButton(
+          child: Text('Criar Categoria'),
+          onPressed: () {
+            codCateg++;
 
-          _categsController.categs.add(CategoriaModel(
-              codCateg: codCateg, descricao: 'CategCriada $codCateg'));
-        },
-      ),
-      Expanded(
-        child: ListView(
-          children: [
-            Observer(builder: (_) {
-              return Column(
-                children: _categsController.categs
-                    .map((categ) => Card(
-                          elevation: 10,
-                          child: Column(
-                            children: [
-                              Text(categ.descricao),
-                              _botoesDaCateg(categ),
-                              PainelAdicional(
-                                  grupoAdicionais: categ.grupoAdicionais),
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              );
-            }),
-            SizedBox(height: 30), // << para botao flutuante na cobrir a lista
-          ],
+            _categsController.categs.add(CategoriaModel(
+                codCateg: codCateg, descricao: 'CategCriada $codCateg'));
+          },
         ),
-      ),
-    ],
-  );
+        Expanded(
+          child: ListView(
+            children: [
+              Observer(builder: (_) {
+                return Column(
+                  children: _categsController.categs
+                      .map((categ) => Card(
+                            elevation: 10,
+                            child: Column(
+                              children: [
+                                Text(categ.descricao),
+                                _botoesDaCateg(categ),
+                                PainelAdicional(
+                                    grupoAdicionais: categ.grupoAdicionais),
+                              ],
+                            ),
+                          ))
+                      .toList(),
+                );
+              }),
+              SizedBox(height: 30), // << para botao flutuante na cobrir a lista
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Row _botoesDaCateg(CategoriaModel categ) {
@@ -129,8 +129,7 @@ class _FavoritosTabState extends State<FavoritosTab> {
                 ordem: 1,
                 valorAtual: '',
                 minQtd: 0,
-                maxQtd: 5
-                );
+                maxQtd: 5);
             var adic = AdicionalModel(
                 codigo: 1, descricao: 'marca 1', valor: '01', preco: 1.00);
             grp.adics.add(adic);

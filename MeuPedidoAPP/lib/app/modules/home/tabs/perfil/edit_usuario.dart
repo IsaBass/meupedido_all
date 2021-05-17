@@ -18,7 +18,7 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
   final TextEditingController _nomeCont = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
   final TextEditingController _telefoneCont = TextEditingController();
-  final AuthController _controller = AppModule.to.get();
+  final AuthController _controller = Modular.get();
 
   DateTime _selectedDataNascimento;
 
@@ -194,6 +194,7 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
       },
     );
   }
+
   Widget _editTelefone() {
     return DefaultTextFormField(
       textController: _telefoneCont,

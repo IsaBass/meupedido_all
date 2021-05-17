@@ -10,16 +10,16 @@ import 'repository/proddetails_repository.dart';
 class ProddetailsModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => ProddetailsRepository(AppModule.to.get<AppController>())),
+        Bind((i) => ProddetailsRepository(Modular.get<AppController>())),
         Bind((i) => ProddetailsController(i.get<ProddetailsRepository>())),
       ];
 
   @override
   List<ModularRoute> get routers => [
-        ModuleRoute('/:cod',
+        ChildRoute('/:cod',
             child: (_, args) =>
                 ProdDetailsPage(codigoProd: args.params['cod'])),
       ];
 
-  static Inject get to => Inject<ProddetailsModule>.of();
+  // static Inject get to => Inject<ProddetailsModule>.of();
 }

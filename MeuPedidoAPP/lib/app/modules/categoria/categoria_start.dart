@@ -21,8 +21,8 @@ class CategoriaStart extends StatefulWidget {
 
 class CategoriaStartState extends State<CategoriaStart> {
   ///
-  final CategoriaController _controller = CategoriaModule.to.get();
-  final AppController _appController = AppModule.to.get();
+  final CategoriaController _controller = Modular.get();
+  final AppController _appController = Modular.get();
 
   List<T> map<T>(List list, Function handler) {
     var result = [];

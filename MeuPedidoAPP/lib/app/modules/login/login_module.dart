@@ -13,12 +13,12 @@ class LoginModule extends Module {
 
   @override
   List<ModularRoute> get routers => [
-        ModuleRoute('/', child: (_, args) => LoginPage()),
-        ModuleRoute('/cadastro', child: (_, args) => LoginCadastroPage()),
-        ModuleRoute('/cadastrogoogle',
+        ChildRoute('/', child: (_, args) => LoginPage()),
+        ChildRoute('/cadastro', child: (_, args) => LoginCadastroPage()),
+        ChildRoute('/cadastrogoogle',
             child: (_, args) => LoginCadastroGooglePage()),
-        ModuleRoute('/reset', child: (_, args) => LoginResetPage()),
+        ChildRoute('/reset', child: (_, args) => LoginResetPage()),
       ];
 
-  static Inject get to => Inject<LoginModule>.of();
+  // static Inject get to => Inject<LoginModule>.of();
 }

@@ -14,12 +14,12 @@ class CategoriaModule extends Module {
 
   @override
   List<ModularRoute> get routers => [
-        ModuleRoute('/', child: (_, args) => CategoriaStart()),
-        ModuleRoute(
+        ChildRoute('/', child: (_, args) => CategoriaStart()),
+        ChildRoute(
           '/categ/:codcateg',
           child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
         ),
       ];
 
-  static Inject get to => Inject<CategoriaModule>.of();
+  // static Inject get to => Inject<CategoriaModule>.of();
 }

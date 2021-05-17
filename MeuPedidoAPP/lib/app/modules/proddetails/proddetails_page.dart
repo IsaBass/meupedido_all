@@ -2,6 +2,7 @@ import 'package:MeuPedido/app/widgets/produtos/favorito.botao.dart';
 import 'package:MeuPedido/app/widgets/produtos/painel.adicionais.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
@@ -20,7 +21,7 @@ class ProdDetailsPage extends StatefulWidget {
 
 class _ProdDetailsPageState extends State<ProdDetailsPage> {
   ///
-  final ProddetailsController _controller = ProddetailsModule.to.get();
+  final ProddetailsController _controller = Modular.get();
   // final AppController _appController = AppModule.to.get();
   //final CartController _cartController = AppModule.to.get();
   // final AuthController _authController = AppModule.to.get();

@@ -37,7 +37,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
   final MaskedController _cepMaskedCont =
       MaskedController(mask: Mask(mask: 'NN.NNN-NNN'));
 
-  final AuthController _authController = AppModule.to.get<AuthController>();
+  final AuthController _authController = Modular.get<AuthController>();
   //
   final EnderecoController controller =
       Get.put<EnderecoController>(EnderecoController());

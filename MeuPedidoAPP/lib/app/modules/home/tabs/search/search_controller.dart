@@ -1,5 +1,6 @@
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/app_module.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 import 'package:mobx/mobx.dart';
 part 'search_controller.g.dart';
@@ -7,7 +8,7 @@ part 'search_controller.g.dart';
 class SearchController = _SearchControllerBase with _$SearchController;
 
 abstract class _SearchControllerBase with Store {
-  final AppController _appController = AppModule.to.get();
+  final AppController _appController = Modular.get();
 
   @observable
   ObservableList<ProdutoModel> prods;

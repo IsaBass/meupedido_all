@@ -5,5 +5,5 @@ class TestenovoModule extends Module {
   final List<Bind> binds = [];
 
   @override
-  final List<ModularRoute> routes = [ModuleRoute(routerName, module: module)];
+  final List<ModularRoute> routes = [ModuleRoute('', module: module)];
 }

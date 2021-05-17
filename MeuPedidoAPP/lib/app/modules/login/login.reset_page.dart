@@ -17,7 +17,7 @@ class LoginResetPage extends StatefulWidget {
 class _LoginResetPageState extends State<LoginResetPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  final AuthController _authController = AppModule.to.get<AuthController>();
+  final AuthController _authController = Modular.get<AuthController>();
   final _contEmail = TextEditingController();
 
   @override
@@ -46,8 +46,9 @@ class _LoginResetPageState extends State<LoginResetPage> {
                       labelText: 'E-mail*',
                       helperText: 'seu -email cadastrado',
                       validator: (v) {
-                        if (!v.contains('@') || !v.contains('.'))
-                          {return 'e-mail inválido';}
+                        if (!v.contains('@') || !v.contains('.')) {
+                          return 'e-mail inválido';
+                        }
                         return null;
                       },
                     ),
@@ -58,7 +59,11 @@ class _LoginResetPageState extends State<LoginResetPage> {
                       child: RaisedButton(
                         color: Theme.of(context).primaryColor,
                         child: Text('Redefinir Senha',
-                            style: TextStyle(color: Theme.of(context).primaryTextTheme.bodyText1.color)),
+                            style: TextStyle(
+                                color: Theme.of(context)
+                                    .primaryTextTheme
+                                    .bodyText1
+                                    .color)),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
                             _authController.recoveryPass(

@@ -20,7 +20,7 @@ class FavoritosTab extends StatefulWidget {
 
 class _FavoritosTabState
     extends ModularState<FavoritosTab, FavoritosController> {
-  final AuthController _authController = AppModule.to.get<AuthController>();
+  final AuthController _authController = Modular.get<AuthController>();
 
   @override
   void initState() {

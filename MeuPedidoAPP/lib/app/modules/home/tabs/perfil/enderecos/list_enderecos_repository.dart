@@ -7,7 +7,7 @@ import 'list_enderecos_interf_repository.dart';
 
 class ListEnderecosRepository extends Disposable
     implements ListEnderecosRepositoryI {
-  final AppController _appController = AppModule.to.get();
+  final AppController _appController = Modular.get();
 
   @override
   Future<List<Map>> getEnderecos() async {

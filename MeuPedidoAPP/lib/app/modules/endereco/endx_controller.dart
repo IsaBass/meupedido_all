@@ -1,3 +1,4 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
@@ -5,7 +6,7 @@ import 'endereco_module.dart';
 import 'repository/endereco_interf_repository.dart';
 
 class EnderecoController extends GetxController {
-  final IEnderecoRepository _repository = EnderecoModule.to.get();
+  final IEnderecoRepository _repository = Modular.get();
 
   final isLoading = false.obs;
 

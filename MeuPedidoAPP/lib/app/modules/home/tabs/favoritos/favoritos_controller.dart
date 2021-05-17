@@ -9,7 +9,7 @@ part 'favoritos_controller.g.dart';
 class FavoritosController = _FavoritosBase with _$FavoritosController;
 
 abstract class _FavoritosBase with Store {
-  final AuthController _authController = AppModule.to.get();
+  final AuthController _authController = Modular.get();
   //
   final FavoritosRepositoryI _repository;
   //
@@ -20,7 +20,6 @@ abstract class _FavoritosBase with Store {
 
   @observable
   bool isLoading = false;
-
 
   @action
   Future<void> getProdutoFav() async {

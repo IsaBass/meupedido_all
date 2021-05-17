@@ -14,8 +14,8 @@ class CarrinhoModule extends Module {
 
   @override
   List<ModularRoute> get routers => [
-        ModuleRoute('/', child: (_, args) => CarrinhoListaPage()),
-        ModuleRoute('/finaliza', child: (_, args) => CarrinhoPage()),
+        ChildRoute('/', child: (_, args) => CarrinhoListaPage()),
+        ChildRoute('/finaliza', child: (_, args) => CarrinhoPage()),
       ];
 
   static Inject get to => Inject<CarrinhoModule>();

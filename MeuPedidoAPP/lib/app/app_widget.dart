@@ -11,7 +11,7 @@ import 'app_module.dart';
 
 class AppWidget extends StatelessWidget {
   //
-  final AppController _appController = AppModule.to.get<AppController>();
+  final AppController _appController = Modular.get<AppController>();
 
   @override
   Widget build(BuildContext context) {

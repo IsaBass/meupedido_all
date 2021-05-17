@@ -50,8 +50,8 @@ class AppModule extends Module {
         ModuleRoute('/endereco', module: EnderecoModule()),
         ModuleRoute('/pedido', module: PedidoModule()),
         ModuleRoute('/categoria', module: CategoriaModule()),
-        ModuleRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
-        ModuleRoute(
+        ChildRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
+        ChildRoute(
           'categoria/categ/:codcateg',
           child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
         ),

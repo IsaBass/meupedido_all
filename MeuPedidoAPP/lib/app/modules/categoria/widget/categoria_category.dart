@@ -2,15 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import '../categoria_controller.dart';
 import '../categoria_module.dart';
 
-
 class CategCategory extends StatefulWidget {
   final CategoriaModel categ;
-  
+
   const CategCategory({Key key, this.categ}) : super(key: key);
 
   @override
@@ -18,13 +18,12 @@ class CategCategory extends StatefulWidget {
 }
 
 class _CategCategoryState extends State<CategCategory> {
- final CategoriaController _controller = CategoriaModule.to.get();
+  final CategoriaController _controller = Modular.get();
 
   void _onTap() {
-    
-    if (widget.categ.codCateg != _controller.codCategSelecionada)
-        {_controller.setCategSelecionada(widget.categ.codCateg);}
-   
+    if (widget.categ.codCateg != _controller.codCategSelecionada) {
+      _controller.setCategSelecionada(widget.categ.codCateg);
+    }
   }
 
   @override
@@ -53,14 +52,12 @@ class _CategCategoryState extends State<CategCategory> {
                   style: TextStyle(
                     fontWeight: FontWeight.w900,
                     fontSize: 16,
-                    color: categ.codCateg ==
-                            _controller.codCategSelecionada
+                    color: categ.codCateg == _controller.codCategSelecionada
                         ? Theme.of(context).accentColor
                         : Theme.of(context).textTheme.headline6.color,
                   ),
                 );
               }),
-             
             ],
           ),
         ),

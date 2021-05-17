@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class MeusPedidosRepository extends Disposable {
-  final AppController _appController = AppModule.to.get();
+  final AppController _appController = Modular.get();
 
   Future<List<Map>> getPedidos() async {
     var docs = await _appController.userAtualDocRef

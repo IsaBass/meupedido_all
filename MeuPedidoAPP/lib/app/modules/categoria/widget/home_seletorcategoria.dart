@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/categs/categs_controller.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_category.dart';
 
@@ -13,7 +14,7 @@ class SeletorCategoriaHome extends StatefulWidget {
 }
 
 class _SeletorCategoriaState extends State<SeletorCategoriaHome> {
-  final CategsController _categsController = AppModule.to.get();
+  final CategsController _categsController = Modular.get();
 
   @override
   void initState() {

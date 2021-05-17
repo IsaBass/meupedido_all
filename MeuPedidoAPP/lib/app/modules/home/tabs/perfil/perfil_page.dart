@@ -12,9 +12,9 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
-  final AuthController _authController = AppModule.to.get<AuthController>();
-  final AppController _appController = AppModule.to.get<AppController>();
-  final CartController _cartController = AppModule.to.get<CartController>();
+  final AuthController _authController = Modular.get<AuthController>();
+  final AppController _appController = Modular.get<AppController>();
+  final CartController _cartController = Modular.get<CartController>();
   final shapeCards =
       RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
 

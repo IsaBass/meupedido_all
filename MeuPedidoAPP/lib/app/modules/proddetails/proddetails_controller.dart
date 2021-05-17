@@ -1,6 +1,5 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-
-import 'package:MeuPedido/app/app_module.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
 
@@ -13,8 +12,8 @@ part 'proddetails_controller.g.dart';
 class ProddetailsController = _ProddetailsBase with _$ProddetailsController;
 
 abstract class _ProddetailsBase with Store {
-  final CNPJSController _cnpjsController = AppModule.to.get();
-  final CategsController _categsController = AppModule.to.get();
+  final CNPJSController _cnpjsController = Modular.get();
+  final CategsController _categsController = Modular.get();
   final IProddetailsRepository _repository;
   //
   _ProddetailsBase(this._repository);

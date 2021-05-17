@@ -7,13 +7,13 @@ class SplashModule extends Module {
   List<Bind> get binds => [];
 
   @override
-  List<ModularRoute> get routers => [
-        ModuleRoute('/', child: (_, args) => SplashPage(identificador: '')),
-        ModuleRoute('/lj/:identif',
-            child: (_, args) => SplashPage(
-                  identificador: args.params['identif'],
-                )),
-      ];
+  List<ModularRoute> routers = [
+    ChildRoute('/', child: (_, args) => SplashPage(identificador: '')),
+    ChildRoute('/lj/:identif',
+        child: (_, args) => SplashPage(
+              identificador: args.params['identif'],
+            )),
+  ];
 
-  static Inject get to => Inject<SplashModule>.of();
+  // static Inject get to => Inject<SplashModule>.of();
 }

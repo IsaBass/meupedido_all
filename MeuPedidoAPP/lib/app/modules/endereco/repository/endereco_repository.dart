@@ -7,7 +7,7 @@ import 'package:dio/dio.dart';
 import 'endereco_interf_repository.dart';
 
 class EnderecoRepository extends Disposable implements IEnderecoRepository {
-  final AppController _appController = AppModule.to.get();
+  final AppController _appController = Modular.get();
 
   //>>>>>  SECAO ENDERECO E BUSCA CEP  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ///
 

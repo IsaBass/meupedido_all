@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:MeuPedido/app/widgets/produtos/card.produto.dart';
@@ -24,7 +25,7 @@ class CategoriaPage extends StatefulWidget {
 }
 
 class _CategoriaPageState extends State<CategoriaPage> {
-  final CategoriaController _controller = CategoriaModule.to.get();
+  final CategoriaController _controller = Modular.get();
 
   bool tipoLista = false;
 

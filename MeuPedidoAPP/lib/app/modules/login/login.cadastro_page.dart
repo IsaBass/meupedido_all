@@ -7,7 +7,6 @@ import 'package:meupedido_core/meupedido_core.dart';
 import 'widgets/wid.login-textfield.dart';
 import 'widgets/wid.passwordfield.dart';
 
-
 class LoginCadastroPage extends StatefulWidget {
   final String title;
   const LoginCadastroPage({Key key, this.title = "Novo Usuário"})
@@ -23,8 +22,8 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
   final TextEditingController _senhaCont = TextEditingController();
   final TextEditingController _nomeCont = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
-  final AuthController _authController = AppModule.to.get<AuthController>();
-  final CartController _cartController = AppModule.to.get<CartController>();
+  final AuthController _authController = Modular.get<AuthController>();
+  final CartController _cartController = Modular.get<CartController>();
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +106,11 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
                               )
                             : Text(
                                 'Cadastrar',
-                                style: TextStyle(color:  Theme.of(context).primaryTextTheme.bodyText1.color),
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .primaryTextTheme
+                                        .bodyText1
+                                        .color),
                               ),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
@@ -140,7 +143,7 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
 
     Future.delayed(Duration(milliseconds: 500)).then((_) async {
       // Modular.to.pushReplacementNamed('/home');
-       await _cartController.carregaCarrinhoUser();
+      await _cartController.carregaCarrinhoUser();
       Modular.to.pop<bool>(true);
     });
   }

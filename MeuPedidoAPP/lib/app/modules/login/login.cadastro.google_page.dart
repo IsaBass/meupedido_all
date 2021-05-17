@@ -22,8 +22,8 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nomeContr = TextEditingController();
-  final AuthController _authController = AppModule.to.get<AuthController>();
-  final CartController _cartController = AppModule.to.get<CartController>();
+  final AuthController _authController = Modular.get<AuthController>();
+  final CartController _cartController = Modular.get<CartController>();
 
   @override
   void initState() {
@@ -121,7 +121,7 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
 
     Future.delayed(Duration(milliseconds: 500)).then((_) {
       // Modular.to.pushReplacementNamed('/home');
-       _cartController.carregaCarrinhoUser();
+      _cartController.carregaCarrinhoUser();
       Modular.to.pop<bool>(true);
     });
   }

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +22,11 @@ abstract class _CarrinhoBase with Store {
     enderecos = <EnderecoModel>[].asObservable();
   }
 
-  final CartController _cartController = AppModule.to.get<CartController>();
-  final AppController _appController = AppModule.to.get<AppController>();
-  final AuthController _authController = AppModule.to.get<AuthController>();
+  final CartController _cartController = Modular.get<CartController>();
+  final AppController _appController = Modular.get<AppController>();
+  final AuthController _authController = Modular.get<AuthController>();
   final PageController pageController = PageController();
-  final FCMFirebase _fcmFirebase = AppModule.to.get<FCMFirebase>();
+  final FCMFirebase _fcmFirebase = Modular.get<FCMFirebase>();
 
   @observable
   bool isLoading = false;
@@ -94,7 +95,9 @@ abstract class _CarrinhoBase with Store {
       codAutorizacao: '',
       descricao: tipoPagamento == 'DIN'
           ? 'Dinheiro'
-          : tipoPagamento == 'CTCRED' ? 'Cartão Crédito' : 'Cartão Débito',
+          : tipoPagamento == 'CTCRED'
+              ? 'Cartão Crédito'
+              : 'Cartão Débito',
       bandeira: '',
       trocoPara: 0,
       valor: _cartController.cartAtual.valorTotal,

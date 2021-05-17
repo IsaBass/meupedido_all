@@ -21,8 +21,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  final AuthController _authController = AppModule.to.get<AuthController>();
-  final CartController _cartController = AppModule.to.get<CartController>();
+  final AuthController _authController = Modular.get<AuthController>();
+  final CartController _cartController = Modular.get<CartController>();
   final _contSenha = TextEditingController();
   final _contEmail = TextEditingController();
 
@@ -165,7 +165,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
   }
 
-  void _onSucces() async  {
+  void _onSucces() async {
     _scaffoldKey.currentState.showSnackBar(SnackBar(
       content: Text("Usuário LOGADO com Sucesso"),
       backgroundColor: Colors.blueAccent,

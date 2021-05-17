@@ -2,6 +2,7 @@ import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/widgets/rounded_bordered_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:meupedido_core/meupedido_core.dart';
@@ -18,10 +19,10 @@ class CardCartItem extends StatefulWidget {
 }
 
 class _CardCartItemState extends State<CardCartItem> {
-  // final AppController _appController = AppModule.to.get();
+  // final AppController _appController = Modular.get();
 
-  // final AuthController _authController = AppModule.to.get();
-  final CartController _cartController = AppModule.to.get();
+  // final AuthController _authController = Modular.get();
+  final CartController _cartController = Modular.get();
   @override
   Widget build(BuildContext context) {
     var item = widget.item;

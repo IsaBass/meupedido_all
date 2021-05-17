@@ -25,13 +25,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final HomeController _controller = HomeModule.to.get<HomeController>();
+  final HomeController _controller = Modular.get<HomeController>();
 
-  final CategsController _categsController =
-      AppModule.to.get<CategsController>();
-  final AuthController _authController = AppModule.to.get();
-  final CartController _cartController = AppModule.to.get();
-  final CNPJSController _cnpjsController = AppModule.to.get<CNPJSController>();
+  final CategsController _categsController = Modular.get<CategsController>();
+  final AuthController _authController = Modular.get();
+  final CartController _cartController = Modular.get();
+  final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
 
   //int _page = 1;
 
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
     _authController.loadCurrentUser().then((_) {
       if (_authController.estaLogado) {
         print('na tela home_page:: estaLogado com sucesso');
-        AppModule.to.get<CartController>().carregaCarrinhoUser();
+        Modular.get<CartController>().carregaCarrinhoUser();
       }
       _authController.setNoLoading();
     }).catchError((e) {
@@ -75,7 +74,7 @@ class _HomePageState extends State<HomePage> {
     print('build de home_page');
 
     ///
-    AppModule.to.get<FCMFirebase>().inicializeFCM(context);
+    Modular.get<FCMFirebase>().inicializeFCM(context);
 
     ///
     return
