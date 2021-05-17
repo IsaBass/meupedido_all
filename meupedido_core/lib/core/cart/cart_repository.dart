@@ -12,13 +12,13 @@ class CartRepository extends Disposable implements ICartRepository {
     @required String userAtualID,
   }) async {
     //
-    var query = await Firestore.instance
+    var query = await FirebaseFirestore.instance
         .collection("users")
-        .document(userAtualID)
+        .doc(userAtualID)
         .collection('cart$cnpjAtivo')
-        .getDocuments();
+        .get();
 
-    for (var doc in query.documents) {
+    for (var doc in query.docs) {
       doc.reference.delete();
     }
   }
@@ -29,13 +29,13 @@ class CartRepository extends Disposable implements ICartRepository {
     @required String userAtualID,
   }) async {
     //
-    var doc = await Firestore.instance
+    var doc = await FirebaseFirestore.instance
         .collection("users")
-        .document(userAtualID)
+        .doc(userAtualID)
         .collection('cart$cnpjAtivo')
         .add(data);
 
-    return doc.documentID;
+    return doc.id;
   }
 
   void removeCarrinho(
@@ -44,11 +44,11 @@ class CartRepository extends Disposable implements ICartRepository {
     @required String userAtualID,
   }) {
     //
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection("users")
-        .document(userAtualID)
+        .doc(userAtualID)
         .collection('cart$cnpjAtivo')
-        .document(idCart)
+        .doc(idCart)
         .delete();
     //
   }
@@ -60,14 +60,14 @@ class CartRepository extends Disposable implements ICartRepository {
     List<Map> lAux = [];
 
     //
-    var docs = await Firestore.instance
+    var docs = await FirebaseFirestore.instance
         .collection("users")
-        .document(userAtualID)
+        .doc(userAtualID)
         .collection('cart$cnpjAtivo')
-        .getDocuments();
+        .get();
     //
-    for (var doc in docs.documents) {
-      lAux.add(doc.data..['docId'] = doc.documentID);
+    for (var doc in docs.docs) {
+      lAux.add(doc.data()..['docId'] = doc.id);
     }
     return lAux;
   }
@@ -79,27 +79,27 @@ class CartRepository extends Disposable implements ICartRepository {
     String userAtualID,
   ) async {
     //
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
-        .document(userAtualID)
+        .doc(userAtualID)
         .collection('cart$cnpjAtivo')
-        .document(idCart)
-        .setData(data, merge: true);
+        .doc(idCart)
+        .set(data, SetOptions(merge: true));
     //
   }
 
   Future<Map<String, dynamic>> getProduto(
       String cnpjAtivo, String idProduto) async {
     //
-    var docP = await Firestore.instance
+    var docP = await FirebaseFirestore.instance
         .collection("CNPJS")
-        .document(cnpjAtivo)
+        .doc(cnpjAtivo)
         .collection('produtos')
-        .document(idProduto)
+        .doc(idProduto)
         .get();
     //
     if (docP != null) {
-      return docP.data..['docId'] = docP.documentID;
+      return docP.data()..['docId'] = docP.id;
     } else {
       return null;
     }

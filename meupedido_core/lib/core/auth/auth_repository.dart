@@ -15,43 +15,43 @@ class AuthRepository extends Disposable implements IAuthRepository {
   Future<Map<String, dynamic>> getUser(String uid) async {
     var doc =
         //await firestoreInstance.collection("users").document(uid).get();
-        await Firestore.instance.collection("users").document(uid).get();
+        await FirebaseFirestore.instance.collection("users").doc(uid).get();
 
     print(' >> AuthRepos.getUser : $uid ');
-    return doc.data..['docRef'] = doc.reference;
+    return doc.data()..['docRef'] = doc.reference;
   }
 
   Future<void> saveUserData(String uid, Map<String, dynamic> userData) async {
     // await firestoreInstance.collection("users").document(uid).set(userData);
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
-        .document(uid)
-        .setData(userData, merge: true);
+        .doc(uid)
+        .set(userData, SetOptions(merge: true));
     print(' >> AuthRepos.saveUserData : $uid ');
   }
 
   Future<void> saveFavoritos(String userId, List<String> favoritos) async {
     //
-    await Firestore.instance.collection("users").document(userId).setData(
+    await FirebaseFirestore.instance.collection("users").doc(userId).set(
       {"favoritos${_cnpjsController.cnpjAtivo.docId}": favoritos},
-      merge: true,
+      SetOptions(merge: true),
     );
     print(' >> AuthRepos.saveFavoritos : $favoritos ');
   }
 
   Future<void> saveEmpresaPadrao(String uid, String cnpj) async {
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
-        .document(uid)
-        .setData({'cnpjPadrao': cnpj}, merge: true);
+        .doc(uid)
+        .set({'cnpjPadrao': cnpj}, SetOptions(merge: true));
     print(' >> AuthRepos.saveEmpresaPadrao : $uid  $cnpj ');
   }
 
   Future<void> registreAcesso(String uid, {String descricao = 'acesso'}) async {
     // await firestoreInstance
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
-        .document(uid)
+        .doc(uid)
         .collection('acessos')
         .add({
       "dataHora": DateTime.now(),

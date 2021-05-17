@@ -110,7 +110,7 @@ abstract class _AuthControllerBase with Store {
         .createUserWithEmailAndPassword(email: userAtual.email, password: pass)
         .then((user) async {
       userAtual.firebasebUser = user.user;
-      userAtual.urlImg = userAtual.firebasebUser.photoUrl;
+      userAtual.urlImg = userAtual.firebasebUser.photoURL;
 
       // print('UUid = ' + userAtual.firebasebUser.uid);
       // print('Userdata nome = ' + userAtual.nome);
@@ -136,7 +136,7 @@ abstract class _AuthControllerBase with Store {
     isLoading = true;
 
     if (userAtual.firebasebUser == null) {
-      userAtual.firebasebUser = await _auth.currentUser();
+      userAtual.firebasebUser = _auth.currentUser;
     }
     if (userAtual.firebasebUser == null) await getLoginGoogle(logar: false);
     if (userAtual.firebasebUser != null) {
@@ -270,7 +270,7 @@ abstract class _AuthControllerBase with Store {
 
     var crredentials = await userGoogle.authentication;
 
-    var use = await _auth.signInWithCredential(GoogleAuthProvider.getCredential(
+    var use = await _auth.signInWithCredential(GoogleAuthProvider.credential(
         idToken: crredentials.idToken, accessToken: crredentials.accessToken));
 
     if (use != null) {
@@ -318,10 +318,9 @@ abstract class _AuthControllerBase with Store {
     if (user != null) {
       var crredentials = await googleSignIn.currentUser.authentication;
 
-      var use = await _auth.signInWithCredential(
-          GoogleAuthProvider.getCredential(
-              idToken: crredentials.idToken,
-              accessToken: crredentials.accessToken));
+      var use = await _auth.signInWithCredential(GoogleAuthProvider.credential(
+          idToken: crredentials.idToken,
+          accessToken: crredentials.accessToken));
 
       userAtual.nome = user.displayName;
       userAtual.urlImg = user.photoUrl;

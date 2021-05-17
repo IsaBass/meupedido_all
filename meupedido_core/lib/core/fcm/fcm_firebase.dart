@@ -6,8 +6,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:dio/dio.dart';
 
 class FCMFirebase extends Disposable {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
+  final _firebaseMessaging = FirebaseMessaging.instance;
   FCMFirebase() {
     //inicializeFCM();
     //getToken().then((value) => print('token = $value'));
@@ -16,30 +15,46 @@ class FCMFirebase extends Disposable {
   Future<String> getToken() async => await _firebaseMessaging.getToken();
 
   void inicializeFCM(BuildContext context) {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        _showItemDialog(message, context);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-        // _navigateToItemDetail(message);
-        //  _showItemDialog(message, context);
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-        // _navigateToItemDetail(message);
-        //  _showItemDialog(message, context);
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-      const IosNotificationSettings(
-          sound: true, badge: true, alert: true, provisional: true),
-    );
-    _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
+    //
+
+    // _firebaseMessaging.configure(
+    //   onMessage: (Map<String, dynamic> message) async {
+    //     print("onMessage: $message");
+    //     _showItemDialog(message, context);
+    //   },
+    //   onLaunch: (Map<String, dynamic> message) async {
+    //     print("onLaunch: $message");
+    //     // _navigateToItemDetail(message);
+    //     //  _showItemDialog(message, context);
+    //   },
+    //   onResume: (Map<String, dynamic> message) async {
+    //     print("onResume: $message");
+    //     // _navigateToItemDetail(message);
+    //     //  _showItemDialog(message, context);
+    //   },
+    // );
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("onMessage: $message");
+      _showItemDialog(message.data, context);
     });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("onMessageOpenedApp: ${message.data}");
+      // _showItemDialog(message.data, context);
+    });
+
+    ///
+    _firebaseMessaging.requestPermission(
+      sound: true,
+      badge: true,
+      alert: true,
+      provisional: true,
+    );
+
+    // _firebaseMessaging.onIosSettingsRegistered
+    //     .listen((IosNotificationSettings settings) {
+    //   print("Settings registered: $settings");
+    // });
   }
 
   void _showItemDialog(

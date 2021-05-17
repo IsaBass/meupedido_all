@@ -3,17 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 
-Future<File> agImageCropper(File imageFile) async {
+Future<File> agImageCropper(String imagePath) async {
   ///
   File croppedFile = await ImageCropper.cropImage(
-    sourcePath: imageFile.path,
+    sourcePath: imagePath,
     aspectRatioPresets: [
       CropAspectRatioPreset.square,
       CropAspectRatioPreset.ratio3x2,
       CropAspectRatioPreset.original,
       CropAspectRatioPreset.ratio4x3,
       CropAspectRatioPreset.ratio16x9
-
     ],
     androidUiSettings: AndroidUiSettings(
       toolbarTitle: 'Sua imagem',

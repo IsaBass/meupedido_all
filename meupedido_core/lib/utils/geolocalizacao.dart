@@ -13,7 +13,7 @@ Future<double> getGEO_Distancia(
       endLongitude == null) return null;
   //////
 
-  return await Geolocator().distanceBetween(
+  return Geolocator.distanceBetween(
     startLatitude,
     startLongitude,
     endLatitude,
@@ -24,37 +24,39 @@ Future<double> getGEO_Distancia(
 Future<List<double>> getGEO_DoEndereco(String endereco) async {
   if (endereco.isEmpty) return null;
 
-  List<Placemark> placemarks;
+  // List<Placemark> placemarks;
 
-  try {
-    placemarks = await Geolocator()
-        .placemarkFromAddress(endereco, localeIdentifier: 'pt_BR');
-  } catch (e) {
-    return null;
-  }
+  // try {
+  //   placemarks = await GeolocatorPlatform.placemarkFromAddress(endereco,
+  //       localeIdentifier: 'pt_BR');
+  // } catch (e) {
+  //   return null;
+  // }
 
-  List<double> result = [];
-  result.add(placemarks[0].position.latitude);
-  result.add(placemarks[0].position.longitude);
+  // List<double> result = [];
+  // result.add(placemarks[0].position.latitude);
+  // result.add(placemarks[0].position.longitude);
 
-  return result;
+  // return result;
+
+  return null;
 }
 
 Future<List<double>> getGEO_LocalAtual() async {
   //var permissao =
-   await Geolocator().checkGeolocationPermissionStatus();
+  await Geolocator.checkPermission();
 
   Position position;
 
   try {
-    final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+    // final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
     //
-    position = await geolocator.getCurrentPosition(
+    position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
   } catch (e) {
     return null;
   }
- 
+
   List<double> result = [];
   result.add(position.latitude);
   result.add(position.longitude);

@@ -11,7 +11,7 @@ enum Perfil { normal, superv, master, dev }
 class UserModel {
   final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
   //
-  FirebaseUser firebasebUser;
+  User firebasebUser;
   String nome;
   String email;
   Perfil perfil;

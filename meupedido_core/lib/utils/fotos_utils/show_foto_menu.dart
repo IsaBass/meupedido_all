@@ -210,7 +210,7 @@ Future<String> _chamaPickImg(
     ImageSource source,
     Function onNovoArquivo(String novaUrl)}) async {
   ///
-  var imgFile = await ImagePicker.pickImage(source: source);
+  var imgFile = await ImagePicker().getImage(source: source);
 
   if (imgFile == null) return null;
   //
@@ -218,7 +218,7 @@ Future<String> _chamaPickImg(
   // var newFile = await Navigator.of(context).push(MaterialPageRoute(
   //     builder: (context) => AgCropPage(fileOriginal: imgFile)));
   // //
-  var newFile = await agImageCropper(imgFile);
+  var newFile = await agImageCropper(imgFile.path);
   if (newFile == null) return null;
   //
   var url = await uploadStorage(inicioNome: inicioArquivo, file: newFile);

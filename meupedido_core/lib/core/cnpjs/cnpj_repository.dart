@@ -9,14 +9,15 @@ class CnpjRepository extends Disposable implements ICnpjRepository {
   //
   Future<Map<String, dynamic>> fetchCnpj(String cnpj) async {
     //var query = await Firestore.instance
-    var doc = await Firestore.instance.collection('CNPJS').document(cnpj).get();
+    var doc =
+        await FirebaseFirestore.instance.collection('CNPJS').doc(cnpj).get();
 
     print(' >> CNPJ Repository.fetchCnpj $cnpj ');
 
     if (doc != null) {
-      return doc.data
+      return doc.data()
         ..['docRef'] = doc.reference
-        ..['docId'] = doc.documentID;
+        ..['docId'] = doc.id;
     } else {
       return null;
     }
@@ -24,20 +25,20 @@ class CnpjRepository extends Disposable implements ICnpjRepository {
 
   Future<Map<String, dynamic>> fetchIdentificador(String identificador) async {
     //var query = await Firestore.instance
-    var doc = await Firestore.instance
+    var doc = await FirebaseFirestore.instance
         .collection('CNPJS')
         .where('identificador', isEqualTo: identificador)
         .limit(1)
-        .getDocuments();
+        .get();
 
-    if (doc == null || doc.documents == null || doc.documents.length == 0) {
+    if (doc == null || doc.docs == null || doc.docs.length == 0) {
       return null;
     }
 
     print(' >> CNPJ Repository.fetchIdentificador $identificador ');
-    return doc.documents[0].data
-      ..['docRef'] = doc.documents[0].reference
-      ..['docId'] = doc.documents[0].documentID;
+    return doc.docs[0].data()
+      ..['docRef'] = doc.docs[0].reference
+      ..['docId'] = doc.docs[0].id;
 
     // return doc.documents[0];
   }
@@ -46,26 +47,27 @@ class CnpjRepository extends Disposable implements ICnpjRepository {
     //var query = await Firestore.instance
     if (cnpj.isEmpty) return '';
 
-    var doc = await Firestore.instance.collection('CNPJS').document(cnpj).get();
+    var doc =
+        await FirebaseFirestore.instance.collection('CNPJS').doc(cnpj).get();
 
     print(' >> CNPJ Repository.descricaoCnpj $cnpj ');
 
     if (doc.data != null) {
-      return doc.data['descricao'];
+      return doc.data()['descricao'];
     } else {
       return '';
     }
   }
 
   Future<List<Map<String, dynamic>>> getAllCnpjs() async {
-    var query = await Firestore.instance.collection('CNPJS').getDocuments();
+    var query = await FirebaseFirestore.instance.collection('CNPJS').get();
 
     print(' >> CNPJ Repository.getAllCnpjs');
 
-    return query.documents
-        .map((e) => e.data
+    return query.docs
+        .map((e) => e.data()
           ..['docRef'] = e.reference
-          ..['docId'] = e.documentID)
+          ..['docId'] = e.id)
         .toList();
   }
 
@@ -83,10 +85,10 @@ class CnpjRepository extends Disposable implements ICnpjRepository {
 
   Future saveCNPJ(CnpjModel emp) async {
     // salva dados de CNPJS
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('CNPJS')
-        .document(emp.docId)
-        .setData(emp.toJson(), merge: true);
+        .doc(emp.docId)
+        .set(emp.toJson(), SetOptions(merge: true));
 
     // // atualiza todas as 'filiais'
     // for (var fil in emp.dadosFiliais) {
@@ -100,10 +102,10 @@ class CnpjRepository extends Disposable implements ICnpjRepository {
   }
 
   Future saveNovoCNPJ(CnpjModel emp) async {
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('CNPJS')
-        .document(emp.docId)
-        .setData(emp.toJson());
+        .doc(emp.docId)
+        .set(emp.toJson());
 
     // // atualiza todas as 'filiais'
     // for (var fil in emp.dadosFiliais) {

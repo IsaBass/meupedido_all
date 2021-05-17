@@ -11,11 +11,19 @@ Future<String> uploadStorage(
         .ref()
         .child(inicioNome + DateTime.now().millisecondsSinceEpoch.toString())
         .putFile(file);
-    var taskSnapshot = await task.onComplete;
-    return await taskSnapshot.ref.getDownloadURL();
+    // var taskSnapshot = await task.onComplete;
+
+    // task.then((tk) {
+    //   tk.ref.getDownloadURL();
+    // });
+
+    var tk = await task;
+
+    return await tk.ref.getDownloadURL();
   } catch (_) {
     return null;
   }
+
   ///
 }
 
