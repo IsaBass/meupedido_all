@@ -1,0 +1,8 @@
+# include: package:effective_dart/analysis_options.yaml
+
+# linter:
+#   rules:
+#     prefer_relative_imports: false
+#     public_member_api_docs: false
+#     lines_longer_than_80_chars: false
+#     use_setters_to_change_properties: false
