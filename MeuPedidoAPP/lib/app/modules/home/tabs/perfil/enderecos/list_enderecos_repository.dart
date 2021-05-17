@@ -12,13 +12,13 @@ class ListEnderecosRepository extends Disposable
   @override
   Future<List<Map>> getEnderecos() async {
     //
-    var docs = await _appController.userAtualDocRef
-        .collection('enderecos')
-        .getDocuments();
+    var docs =
+        await _appController.userAtualDocRef.collection('enderecos').get();
     //
     List<Map> lAux = [];
-    for (var doc in docs.documents) {
-      lAux.add(doc.data..['docId'] = doc.documentID);
+
+    for (var doc in docs.docs) {
+      lAux.add(doc.data()..['docId'] = doc.id);
     }
 
     return lAux;
@@ -29,7 +29,7 @@ class ListEnderecosRepository extends Disposable
   Future<void> excluiEndereco(String idEnd) async {
     await _appController.userAtualDocRef
         .collection('enderecos')
-        .document(idEnd)
+        .doc(idEnd)
         .delete();
   }
 

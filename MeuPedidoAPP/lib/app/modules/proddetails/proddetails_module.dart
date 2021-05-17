@@ -7,7 +7,7 @@ import 'proddetails_controller.dart';
 import 'proddetails_page.dart';
 import 'repository/proddetails_repository.dart';
 
-class ProddetailsModule extends ChildModule {
+class ProddetailsModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => ProddetailsRepository(AppModule.to.get<AppController>())),
@@ -15,8 +15,8 @@ class ProddetailsModule extends ChildModule {
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/:cod',
+  List<ModularRoute> get routers => [
+        ModuleRoute('/:cod',
             child: (_, args) =>
                 ProdDetailsPage(codigoProd: args.params['cod'])),
       ];

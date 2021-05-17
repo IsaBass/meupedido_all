@@ -12,7 +12,8 @@ class BtnFavorito extends StatefulWidget {
 }
 
 class _BtnFavoritoState extends State<BtnFavorito> {
-  final AuthController _authController = AppModule.to.get();
+  final AuthController _authController =
+      AppModule().getBind<AuthController>(typesInRequest: [AuthController]);
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(

@@ -1,3 +1,4 @@
+import 'package:MeuPedido/secrets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,10 +20,10 @@ class AGMercadoPago extends StatefulWidget {
 }
 
 class _AGMercadoPagoState extends State<AGMercadoPago> {
-  String _publickey = "TEST-124f0130-3003-4cd5-9c6d-a3c3313eb4cb";
-  //Access token:TEST-5617891484026182-050813-59e65d753c93194e992d2915fcd91bde-267638834
-  String _clientId = "5617891484026182";
-  String _clientSecret = "dtLwuCyi9oJ6NmgzsImriPttUrTy478P";
+  String _publickey = Secrets.mercadoPago_publicKey;
+
+  String _clientId = Secrets.mercadoPago_clientId;
+  String _clientSecret = Secrets.mercadoPago_clientSecret;
 
   static const channelMP =
       const MethodChannel("agMeuPedidoOnline.com/mercadoPago");
@@ -91,8 +92,6 @@ class _AGMercadoPagoState extends State<AGMercadoPago> {
 //  result['response']['message']
 //  result['response']['error']
 
-
-
     var result = await mp.createPreference(_criarPreference());
     if (result['response']['id'] == null) {
       print(' problema ao gerar o pedido inicial no Preference ');
@@ -133,7 +132,8 @@ class _AGMercadoPagoState extends State<AGMercadoPago> {
             Text('Requisitando Mercado Pago...'),
             Text('Aguarde...'),
             SizedBox(height: 20),
-            Icon(FontAwesomeIcons.creditCard, size: 80, color: Theme.of(context).accentColor  ),
+            Icon(FontAwesomeIcons.creditCard,
+                size: 80, color: Theme.of(context).accentColor),
             // FlatButton(
             //     onPressed: executeMercadoPagoCheckout,
             //     child: Text('Teste Venda')),

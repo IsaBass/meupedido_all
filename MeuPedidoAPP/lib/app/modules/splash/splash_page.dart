@@ -15,13 +15,14 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
- // final AuthController _authController = AppModule.to.get<AuthController>();
-  final CNPJSController _cnpjsController = AppModule.to.get<CNPJSController>();
+  // final AuthController _authController = AppModule.to.get<AuthController>();
+  final CNPJSController _cnpjsController =
+      AppModule().getBind<CNPJSController>(typesInRequest: [CNPJSController]);
 
   @override
   void initState() {
     print('inistate do splash_page');
-   // _authController.setLoading();
+    // _authController.setLoading();
     super.initState();
 
     // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela

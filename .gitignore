@@ -50,3 +50,4 @@ app.*.map.json
 **/web/init-firebase.js
 **/ios/Runner/GoogleService-Info.plist
 **/MeuPedido_coreTRUE
+**/secrets.dart

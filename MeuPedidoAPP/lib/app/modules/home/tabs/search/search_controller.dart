@@ -27,14 +27,12 @@ abstract class _SearchControllerBase with Store {
         .where('descricao', isLessThanOrEqualTo: '$filtro\uF7FF')
         .limit(30)
         .orderBy('descricao')
-        .getDocuments();
+        .get();
 
     if (docs != null) {
-      lAux.addAll(docs.documents.map((d) {
-        var m = d.data;
-        m['docId'] = d.documentID;
-        return ProdutoModel.fromJson(m);
-      }).toList());
+      lAux.addAll(docs.docs
+          .map((d) => ProdutoModel.fromJson(d.data()..['docId'] = d.id))
+          .toList());
     }
 
     prods = lAux.asObservable();

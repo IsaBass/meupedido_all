@@ -46,11 +46,11 @@ abstract class _ProddetailsBase with Store {
   Future<ProdutoModel> getProduto(String codigo) async {
     var dR = _cnpjsController.cnpjAtivo.docRef;
     //
-    var doc = await dR.collection('produtos').document(codigo).get();
+    var doc = await dR.collection('produtos').doc(codigo).get();
     if (doc == null) return null;
     //
-    var m = doc.data;
-    m['docId'] = doc.documentID;
+    var m = doc.data();
+    m['docId'] = doc.id;
     prod = ProdutoModel.fromJson(m);
 
     _getAdicionaisCateg();
@@ -91,8 +91,7 @@ abstract class _ProddetailsBase with Store {
           .firstWhere((element) => element.codCateg == prod.codCateg);
 
       if (categ?.grupoAdicionais != null && categ.grupoAdicionais.length > 0) {
-        prod.grupoAdicionais.addAll(categ.grupoAdicionais
-            .map((e) {
+        prod.grupoAdicionais.addAll(categ.grupoAdicionais.map((e) {
           var ad = AdicionalGrpModel.modelZero(e);
           ad.ordem += 50;
           return ad;

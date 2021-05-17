@@ -1,5 +1,6 @@
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/app_module.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
@@ -17,20 +18,17 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
     /////
     return _appController.cnpjAtivoDocRef
         .collection('pedidos')
-        .document(idPedido)
+        .doc(idPedido)
         .snapshots()
-        .map((doc) => doc.data..['docId'] = doc.documentID);
+        .map((doc) => doc.data()..['docId'] = doc.id);
     /////
   }
 
   void cancelePedido(String idPedido, String motivo, String statusAtual) {
     /////
-    _appController.cnpjAtivoDocRef
-        .collection('pedidos')
-        .document(idPedido)
-        .setData(
+    _appController.cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
       {"status": "CANCEL", "motivoCancelamento": motivo},
-      merge: true,
+      SetOptions(merge: true),
     );
     //
 
@@ -51,12 +49,9 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
   void cancelePendentePedido(
       String idPedido, String motivo, String statusAtual) {
     /////
-    _appController.cnpjAtivoDocRef
-        .collection('pedidos')
-        .document(idPedido)
-        .setData(
+    _appController.cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
       {"status": "CANCEL.P", "motivoCancelamento": motivo},
-      merge: true,
+      SetOptions(merge: true),
     );
     //
 
@@ -81,7 +76,7 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
       String valorAnterior}) {
     //
     Map<String, dynamic> mapHistorico = {
-      "userId": _appController.userAtualDocRef.documentID,
+      "userId": _appController.userAtualDocRef.id,
       "userName": _authController.userAtual.nome,
       "origem": "App", //  "App" OR "PC"
       "dataHora": DateTime.now().millisecondsSinceEpoch,
@@ -92,7 +87,7 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
 
     _appController.cnpjAtivoDocRef
         .collection('pedidos')
-        .document(idPedido)
+        .doc(idPedido)
         .collection('historico')
         .add(mapHistorico);
 

@@ -11,9 +11,9 @@ class FavoritosRepository extends Disposable implements FavoritosRepositoryI {
   Future<Map<String, dynamic>> getProdutoFav(String idProd) async {
     var dR = _appController.cnpjAtivoDocRef;
 
-    var doc = await dR.collection('produtos').document(idProd).get();
+    var doc = await dR.collection('produtos').doc(idProd).get();
     if (doc != null) {
-      return doc.data..['docId'] = doc.documentID;
+      return doc.data()..['docId'] = doc.id;
     } else {
       return null;
     }

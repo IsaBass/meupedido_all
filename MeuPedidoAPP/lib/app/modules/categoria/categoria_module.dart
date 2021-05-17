@@ -5,7 +5,7 @@ import 'categoria_page.dart';
 import 'categoria_start.dart';
 import 'repository/categoria_repository.dart';
 
-class CategoriaModule extends ChildModule {
+class CategoriaModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => CategoriaRepository()),
@@ -13,9 +13,9 @@ class CategoriaModule extends ChildModule {
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/', child: (_, args) => CategoriaStart()),
-        ModularRouter(
+  List<ModularRoute> get routers => [
+        ModuleRoute('/', child: (_, args) => CategoriaStart()),
+        ModuleRoute(
           '/categ/:codcateg',
           child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
         ),

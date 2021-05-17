@@ -5,19 +5,19 @@ import 'login.cadastro_page.dart';
 import 'login.reset_page.dart';
 import 'login_page.dart';
 
-class LoginModule extends ChildModule {
+class LoginModule extends Module {
   @override
   List<Bind> get binds => [
         // Bind((i) => LoginController()),
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/', child: (_, args) => LoginPage()),
-        ModularRouter('/cadastro', child: (_, args) => LoginCadastroPage()),
-        ModularRouter('/cadastrogoogle',
+  List<ModularRoute> get routers => [
+        ModuleRoute('/', child: (_, args) => LoginPage()),
+        ModuleRoute('/cadastro', child: (_, args) => LoginCadastroPage()),
+        ModuleRoute('/cadastrogoogle',
             child: (_, args) => LoginCadastroGooglePage()),
-        ModularRouter('/reset', child: (_, args) => LoginResetPage()),
+        ModuleRoute('/reset', child: (_, args) => LoginResetPage()),
       ];
 
   static Inject get to => Inject<LoginModule>.of();

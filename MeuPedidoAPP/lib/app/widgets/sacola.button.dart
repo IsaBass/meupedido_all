@@ -11,19 +11,20 @@ class SacolaButton extends StatefulWidget {
 }
 
 class _SacolaButtonState extends State<SacolaButton> {
-  final CartController _cartController = AppModule.to.get();
+  final CartController _cartController =
+      AppModule().getBind<CartController>(typesInRequest: [CartController]);
   @override
   Widget build(BuildContext context) {
     return IconButton(
-            icon: Observer(builder: (_) {
-              return IconBadge(
-                icon: FontAwesomeIcons.shoppingBasket,
-                size: 24.0,
-                numero: _cartController.cartAtual?.qtdItens ?? 0,
-                // numero: _appController.   cartAtual?.qtdItens ?? 0,
-              );
-            }),
-            onPressed: () => Modular.to.pushNamed('/cart'),
-          );
+      icon: Observer(builder: (_) {
+        return IconBadge(
+          icon: FontAwesomeIcons.shoppingBasket,
+          size: 24.0,
+          numero: _cartController.cartAtual?.qtdItens ?? 0,
+          // numero: _appController.   cartAtual?.qtdItens ?? 0,
+        );
+      }),
+      onPressed: () => Modular.to.pushNamed('/cart'),
+    );
   }
 }

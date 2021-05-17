@@ -5,7 +5,7 @@ import 'endereco_page.dart';
 import 'endx_controller.dart';
 import 'repository/endereco_repository.dart';
 
-class EnderecoModule extends ChildModule {
+class EnderecoModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => EnderecoRepository()),
@@ -13,13 +13,13 @@ class EnderecoModule extends ChildModule {
       ];
 
   @override
-  List<ModularRouter> get routers => [
+  List<ModularRoute> get routers => [
         //Router('/', child: (_, args) => EnderecoPage()),
-        ModularRouter('/edit',
+        ModuleRoute('/edit',
             child: (_, args) => EnderecoPage(
                   endereco: args.data['endereco'],
                 )),
-        ModularRouter('/novo', child: (_, args) => EnderecoPage()),
+        ModuleRoute('/novo', child: (_, args) => EnderecoPage()),
       ];
 
   static Inject get to => Inject<EnderecoModule>.of();

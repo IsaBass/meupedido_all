@@ -15,7 +15,7 @@ import 'tabs/perfil/enderecos/list_enderecos_controller.dart';
 import 'tabs/perfil/enderecos/list_enderecos_repository.dart';
 import 'tabs/search/search_controller.dart';
 
-class HomeModule extends ChildModule {
+class HomeModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => HomeRepository()),
@@ -30,10 +30,10 @@ class HomeModule extends ChildModule {
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/', child: (_, args) => HomePage()),
-        ModularRouter('/editusuario', child: (_, args) => PerfilEditUsuario()),
-        ModularRouter('/listenderecos',
+  List<ModularRoute> get routers => [
+        ModuleRoute('/', child: (_, args) => HomePage()),
+        ModuleRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
+        ModuleRoute('/listenderecos',
             child: (_, args) => PerfilListaEnderecos()),
       ];
 

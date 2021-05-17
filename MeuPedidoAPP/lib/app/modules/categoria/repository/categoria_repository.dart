@@ -6,7 +6,7 @@ import 'categoria_interf_repository.dart';
 
 class CategoriaRepository extends Disposable implements ICategoriaRepository {
   ///
-  final AppController _appController = AppModule.to.get<AppController>();
+  final AppController _appController = AppModule().getBind<AppController>();
 
   Future<List<Map>> prodsCategoria(int codCateg) async {
     List<Map> lAux = [];
@@ -14,12 +14,12 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
     var docs = await _appController.cnpjAtivoDocRef
         .collection('produtos')
         .where('codCateg', isEqualTo: codCateg)
-        .getDocuments();
+        .get();
 
     if (docs == null) return lAux;
 
-    for (var doc in docs.documents) {
-      lAux.add(doc.data..['docId'] = doc.documentID);
+    for (var doc in docs.docs) {
+      lAux.add(doc.data()..['docId'] = doc.id);
     }
 
     print(' >>> CATEG REPOSITORY ---- prods da CATEGORIA $codCateg ');
@@ -31,11 +31,11 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
     var docs = await _appController.cnpjAtivoDocRef
         .collection('produtos')
         .where('destaqueGeral', isEqualTo: true)
-        .getDocuments();
+        .get();
 
-    for (var doc in docs.documents) {
-      var m = doc.data;
-      m['docId'] = doc.documentID;
+    for (var doc in docs.docs) {
+      var m = doc.data();
+      m['docId'] = doc.id;
       lAux.add(m);
     }
     return lAux;
@@ -46,11 +46,11 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
     var docs = await _appController.cnpjAtivoDocRef
         .collection('produtos')
         .where('destaqueCateg', isEqualTo: true)
-        .getDocuments();
+        .get();
 
-    for (var doc in docs.documents) {
-      var m = doc.data;
-      m['docId'] = doc.documentID;
+    for (var doc in docs.docs) {
+      var m = doc.data();
+      m['docId'] = doc.id;
       lAux.add(m);
     }
     return lAux;

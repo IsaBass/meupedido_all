@@ -8,20 +8,19 @@ class MeusPedidosRepository extends Disposable {
 
   Future<List<Map>> getPedidos() async {
     var docs = await _appController.userAtualDocRef
-        .collection('pedidos${_appController.cnpjAtivoDocRef.documentID}')
+        .collection('pedidos${_appController.cnpjAtivoDocRef.id}')
         .orderBy('dataHora', descending: true)
-        .getDocuments();
+        .get();
     //
     List<Map> lAux = [];
-    for (var doc in docs.documents) {
-      lAux.add(doc.data);
-    }
+
+    lAux.addAll(docs.docs.map((e) => e.data()).toList());
 
     return lAux;
   }
 
   Stream<QuerySnapshot> streamPedidos() => _appController.userAtualDocRef
-      .collection('pedidos${_appController.cnpjAtivoDocRef.documentID}')
+      .collection('pedidos${_appController.cnpjAtivoDocRef.id}')
       .orderBy('dataHora', descending: true)
       .limit(10)
       .snapshots();
@@ -29,7 +28,7 @@ class MeusPedidosRepository extends Disposable {
   Stream<DocumentSnapshot> streamPedidoUnico(String idPedido) =>
       _appController.cnpjAtivoDocRef
           .collection('pedidos')
-          .document(idPedido)
+          .doc(idPedido)
           .snapshots();
 
   @override

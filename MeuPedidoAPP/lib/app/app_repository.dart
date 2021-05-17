@@ -9,12 +9,11 @@ class AppRepository extends Disposable implements IAppRepository {
 
   Future<Map<String, dynamic>> getCnpjConfigs() async {
     //
-    var docs = await _cnpjsController.cnpjAtivo.docRef
-        .collection('cadastro')
-        .getDocuments();
-        
-    if (docs.documents.isNotEmpty) {
-      return docs.documents[0].data;
+    var docs =
+        await _cnpjsController.cnpjAtivo.docRef.collection('cadastro').get();
+
+    if (docs.docs.isNotEmpty) {
+      return docs.docs[0].data();
     } else {
       return {};
     }

@@ -18,7 +18,8 @@ class BarraCompraDet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController = AppModule.to.get<AuthController>();
+    final AuthController _authController =
+        AppModule().getBind<AuthController>();
     var formatMoeda = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
     return Observer(builder: (_) {
@@ -140,13 +141,13 @@ class BarraCompraDet extends StatelessWidget {
       //     gravity: Toast.CENTER,
       //     backgroundColor: Colors.teal[700]);
 
-        Modular.to.pop();
+      Modular.to.pop();
     }
     ;
   }
 
   void _adicionarProd() {
-    AppModule.to.get<CartController>().adicionarCarrinho(
+    AppModule().getBind<CartController>().adicionarCarrinho(
           CartItemModel(
             idProduto: prod.codigo,
             quant: controller.quantidade,

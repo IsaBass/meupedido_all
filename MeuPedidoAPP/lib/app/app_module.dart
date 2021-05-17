@@ -23,7 +23,7 @@ import 'modules/splash/splash_module.dart';
 import 'utils/card_type/cardtype_repository.dart';
 import 'utils/mercado_pago/ag.mercado_pago.dart';
 
-class AppModule extends MainModule {
+class AppModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => CnpjRepository()),
@@ -37,28 +37,28 @@ class AppModule extends MainModule {
         Bind((i) => CardTypeRepository()),
         Bind((i) => CategsRepository()),
         Bind((i) => CategsController(i.get<CategsRepository>())),
-        Bind((i) => FCMFirebase(), lazy: false),
+        Bind((i) => FCMFirebase(), isLazy: false),
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/', module: SplashModule()),
-        ModularRouter('/login', module: LoginModule()),
-        ModularRouter('/home', module: HomeModule()),
-        ModularRouter('/proddetail', module: ProddetailsModule()),
-        ModularRouter('/cart', module: CarrinhoModule()),
-        ModularRouter('/endereco', module: EnderecoModule()),
-        ModularRouter('/pedido', module: PedidoModule()),
-        ModularRouter('/categoria', module: CategoriaModule()),
-        ModularRouter('/agmercadopago', child: (_, args) => AGMercadoPago()),
-        ModularRouter(
+  List<ModularRoute> get routers => [
+        ModuleRoute('/', module: SplashModule()),
+        ModuleRoute('/login', module: LoginModule()),
+        ModuleRoute('/home', module: HomeModule()),
+        ModuleRoute('/proddetail', module: ProddetailsModule()),
+        ModuleRoute('/cart', module: CarrinhoModule()),
+        ModuleRoute('/endereco', module: EnderecoModule()),
+        ModuleRoute('/pedido', module: PedidoModule()),
+        ModuleRoute('/categoria', module: CategoriaModule()),
+        ModuleRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
+        ModuleRoute(
           'categoria/categ/:codcateg',
           child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
         ),
       ];
 
-  @override
-  Widget get bootstrap => AppWidget();
+  // @override
+  // Widget get bootstrap => AppWidget();
 
-  static Inject get to => Inject<AppModule>.of();
+  // static Inject get to => Inject<AppModule>.of();
 }

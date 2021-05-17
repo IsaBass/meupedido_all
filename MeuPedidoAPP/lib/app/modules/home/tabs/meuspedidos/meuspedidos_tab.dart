@@ -61,10 +61,10 @@ class _MeusPedidosTabState
         return ListView.builder(
           //primary: false,
           shrinkWrap: true,
-          itemCount: snapshot.data.documents.length,
+          itemCount: snapshot.data.docs.length,
           itemBuilder: (ctx, idx) {
             //List aux = snapshot.data.documents.toList();
-            var p = MeuPedido.fromJson(snapshot.data.documents[idx].data);
+            var p = MeuPedido.fromJson(snapshot.data.docs[idx].data());
             return _cardPedido(p);
           },
         );
@@ -152,7 +152,7 @@ class _MeusPedidosTabState
         if ((snapshot.data.data) == null) {
           return Center(child: Text('N1'));
         }
-        if ((snapshot.data?.data['status'] ?? null) == null) {
+        if ((snapshot.data?.data()['status'] ?? null) == null) {
           return Center(child: Text('N2'));
         }
         /////////////////////////////////////////

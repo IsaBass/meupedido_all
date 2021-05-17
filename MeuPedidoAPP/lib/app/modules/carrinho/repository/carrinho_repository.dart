@@ -1,5 +1,6 @@
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/app_module.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
@@ -21,10 +22,10 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
     try {
       if (pedido['docId'] == null) {
         var doc = await docRef.collection('pedidos').add(pedido);
-        docId = doc.documentID;
+        docId = doc.id;
       } else {
         docId = pedido['docId'];
-        await docRef.collection('pedidos').document(docId).setData(pedido);
+        await docRef.collection('pedidos').doc(docId).set(pedido);
       }
     } catch (e) {
       return null;
@@ -55,9 +56,9 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
   Future<void> _registraNoUsuario(Map pedido, String docId) async {
     //
     await _appController.userAtualDocRef
-        .collection('pedidos${_appController.cnpjAtivoDocRef.documentID}')
-        .document(docId)
-        .setData({
+        .collection('pedidos${_appController.cnpjAtivoDocRef.id}')
+        .doc(docId)
+        .set({
       "idPedido": docId,
       "dataHora": pedido['dataHora'],
       "totalFinal": pedido['totalFinal'],
@@ -75,14 +76,14 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
         .collection('pedidos')
         .add({"temporario": true});
     //
-    return doc.documentID;
+    return doc.id;
   }
 
   Future<void> excluiPedidoTemporario(String idPedido) async {
     //
     await _appController.cnpjAtivoDocRef
         .collection('pedidos')
-        .document(idPedido)
+        .doc(idPedido)
         .delete();
     //
   }
@@ -108,7 +109,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
       String valorAnterior}) async {
     //
     Map<String, dynamic> mapHistorico = {
-      "userId": _appController.userAtualDocRef.documentID,
+      "userId": _appController.userAtualDocRef.id,
       "userName": _authController.userAtual.nome,
       "origem": "App", //  "App" OR "PC"
       "dataHora": DateTime.now().millisecondsSinceEpoch,
@@ -119,7 +120,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
     await _appController.cnpjAtivoDocRef
         .collection('pedidos')
-        .document(idPedido)
+        .doc(idPedido)
         .collection('historico')
         .add(mapHistorico);
 
@@ -131,14 +132,13 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<List<Map>> getEnderecos() async {
     //
-    var docs = await _appController.userAtualDocRef
-        .collection('enderecos')
-        .getDocuments();
+    var docs =
+        await _appController.userAtualDocRef.collection('enderecos').get();
     //
     List<Map> lAux = [];
-    for (var doc in docs.documents) {
-      var m = doc.data;
-      m['docId'] = doc.documentID;
+    for (var doc in docs.docs) {
+      var m = doc.data();
+      m['docId'] = doc.id;
       lAux.add(m);
     }
 
@@ -150,19 +150,16 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
     //
     var doc =
         await _appController.userAtualDocRef.collection('enderecos').add(dados);
-    return doc.documentID;
+    return doc.id;
     //
   }
 
   Future<void> alteraEndereco(
       {String id, String numero, String complem}) async {
     //
-    await _appController.userAtualDocRef
-        .collection('enderecos')
-        .document(id)
-        .setData(
+    await _appController.userAtualDocRef.collection('enderecos').doc(id).set(
       {"numero": numero, "complemento": complem},
-      merge: true,
+      SetOptions(merge: true),
     );
     //
   }
@@ -171,7 +168,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
     //
     await _appController.userAtualDocRef
         .collection('enderecos')
-        .document(id)
+        .doc(id)
         .delete();
     //
   }
@@ -193,13 +190,13 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
     var docs = await _appController.cnpjAtivoDocRef
         .collection('cupomdesconto')
         .where('tagCupom', isEqualTo: tagCupom.toUpperCase())
-        .getDocuments();
+        .get();
     //
-    if (docs == null || (docs.documents?.length ?? 0) == 0) {
+    if (docs == null || (docs.docs?.length ?? 0) == 0) {
       return null;
     }
 
-    return (docs.documents[0].data)..['idCupom'] = docs.documents[0].documentID;
+    return (docs.docs[0].data())..['idCupom'] = docs.docs[0].id;
     //
   }
 

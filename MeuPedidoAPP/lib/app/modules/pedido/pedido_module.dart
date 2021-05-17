@@ -9,7 +9,7 @@ import 'pedido_controller.dart';
 import 'pedido_page.dart';
 import 'repository/pedido_repository.dart';
 
-class PedidoModule extends ChildModule {
+class PedidoModule extends Module {
   @override
   List<Bind> get binds => [
         Bind((i) => PedidoRepository(AppModule.to.get<AppController>(),
@@ -18,8 +18,8 @@ class PedidoModule extends ChildModule {
       ];
 
   @override
-  List<ModularRouter> get routers => [
-        ModularRouter('/:id',
+  List<ModularRoute> get routers => [
+        ModuleRoute('/:id',
             child: (_, args) => PedidoPage(
                   idPedido: args.params['id'],
                 )),

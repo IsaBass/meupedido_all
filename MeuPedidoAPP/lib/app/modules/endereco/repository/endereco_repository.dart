@@ -1,5 +1,6 @@
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/app_module.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:dio/dio.dart';
 
@@ -31,24 +32,26 @@ class EnderecoRepository extends Disposable implements IEnderecoRepository {
     //
     var doc =
         await _appController.userAtualDocRef.collection('enderecos').add(dados);
-    return doc.documentID;
+    return doc.id;
     //
   }
 
-  Future<void> alteraEndereco(
-      {String id, String numero, String complem, double coordLat, double coordLong,}) async {
+  Future<void> alteraEndereco({
+    String id,
+    String numero,
+    String complem,
+    double coordLat,
+    double coordLong,
+  }) async {
     //
-    await _appController.userAtualDocRef
-        .collection('enderecos')
-        .document(id)
-        .setData(
+    await _appController.userAtualDocRef.collection('enderecos').doc(id).set(
       {
         "numero": numero,
         "complemento": complem,
         "coordLat": coordLat,
         "coordLong": coordLong
       },
-      merge: true,
+      SetOptions(merge: true),
     );
     //
   }
@@ -57,7 +60,7 @@ class EnderecoRepository extends Disposable implements IEnderecoRepository {
     //
     await _appController.userAtualDocRef
         .collection('enderecos')
-        .document(id)
+        .doc(id)
         .delete();
     //
   }
