@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
-import 'package:MeuPedido/app/app_module.dart';
 
 class SplashPage extends StatefulWidget {
   final String title;
@@ -16,27 +16,26 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   // final AuthController _authController = AppModule.to.get<AuthController>();
-  final CNPJSController _cnpjsController =
-      AppModule().getBind<CNPJSController>(typesInRequest: [CNPJSController]);
+  final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
 
-  @override
-  void initState() {
-    print('inistate do splash_page');
-    // _authController.setLoading();
-    super.initState();
+  // @override
+  // void initState() {
+  //   print('inistate do splash_page');
+  //   // _authController.setLoading();
+  //   super.initState();
 
-    // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela
-    Future.delayed(Duration(milliseconds: 100)).then((_) async {
-      //
-      await carregaEmpresaAtiva();
-      //
+  //   // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela
+  //   Future.delayed(Duration(milliseconds: 2000)).then((_) async {
+  //     //
+  //     await carregaEmpresaAtiva();
+  //     //
 
-      //await carregaUsuario();
-      //
-      //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); // ---retira ocupa toda tela
-      Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-    });
-  }
+  //     //await carregaUsuario();
+  //     //
+  //     //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); // ---retira ocupa toda tela
+  //     Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
+  //   });
+  // }
 
   // Future<void> carregaUsuario() async {
   //   _authController.setLoading();
@@ -87,6 +86,18 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 2000)).then((_) async {
+        //
+        await carregaEmpresaAtiva();
+        //
+
+        //await carregaUsuario();
+        //
+        //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); // ---retira ocupa toda tela
+        Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
+      });
+    });
     print('build splash_page');
     return Scaffold(
       body: Column(

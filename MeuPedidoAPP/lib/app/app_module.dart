@@ -25,23 +25,24 @@ import 'utils/mercado_pago/ag.mercado_pago.dart';
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => CnpjRepository()),
-        Bind((i) => CNPJSController(i.get())),
-        Bind((i) => AuthRepository(i.get())),
-        Bind((i) => AuthController(i.get(), i.get())),
-        Bind((i) => AppRepository(i.get<CNPJSController>())),
-        Bind((i) => AppController(i.get(), i.get(), i.get<AppRepository>())),
-        Bind((i) => CartRepository()),
-        Bind((i) => CartController(i.get(), i.get(), i.get())),
-        Bind((i) => CardTypeRepository()),
-        Bind((i) => CategsRepository()),
-        Bind((i) => CategsController(i.get<CategsRepository>())),
-        Bind((i) => FCMFirebase(), isLazy: false),
+        Bind.singleton((i) => CnpjRepository()),
+        Bind.singleton((i) => CNPJSController(i.get())),
+        Bind.singleton((i) => AuthRepository()),
+        Bind.singleton((i) => AuthController(i.get(), i.get())),
+        Bind.singleton((i) => AppRepository(i.get<CNPJSController>())),
+        Bind.singleton(
+            (i) => AppController(i.get(), i.get(), i.get<AppRepository>())),
+        Bind.singleton((i) => CartRepository()),
+        Bind.singleton((i) => CartController(i.get(), i.get(), i.get())),
+        Bind.singleton((i) => CardTypeRepository()),
+        Bind.singleton((i) => CategsRepository()),
+        Bind.singleton((i) => CategsController(i.get<CategsRepository>())),
+        Bind.singleton((i) => FCMFirebase()),
       ];
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute('/', module: SplashModule()),
+    // ModuleRoute('/', module: SplashModule()),
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/home', module: HomeModule()),
     ModuleRoute('/proddetail', module: ProddetailsModule()),

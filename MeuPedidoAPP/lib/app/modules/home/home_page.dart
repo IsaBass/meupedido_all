@@ -1,6 +1,5 @@
 import 'package:MeuPedido/app/categs/categs_controller.dart';
-import 'package:MeuPedido/app/modules/carrinho/carrinho_module.dart';
-import 'package:MeuPedido/app/modules/categoria/categoria_module.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -37,22 +36,24 @@ class _HomePageState extends State<HomePage> {
     print('inistate do home_page');
     super.initState();
     // _controller.fetchProdsDestaqueGeral();
-    _categsController.recarregaAllCategs();
-
-    //_cartController.carregaCarrinhoUser();
-    if (_cnpjsController.cnpjAtivo == null) {
-      print('homepage::: nao tenho cnpj ativo');
-      Modular.to.popAndPushNamed('/');
-      return;
-    }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print('entrou do init');
       carregaUsuario();
+      _categsController.recarregaAllCategs();
+
+      //_cartController.carregaCarrinhoUser();
+      if (_cnpjsController.cnpjAtivo == null) {
+        print('homepage::: nao tenho cnpj ativo');
+        Modular.to.popAndPushNamed('/');
+        return;
+      }
     });
   }
 
-  void carregaUsuario() {
+  void carregaUsuario() async {
+    _cnpjsController.cnpjAtivo =
+        await _cnpjsController.getCnpjM(MyConst().cnpjEmpresaFixa);
     _authController.setLoading();
 
     _authController.loadCurrentUser().then((_) {
@@ -90,13 +91,16 @@ class _HomePageState extends State<HomePage> {
         controller: _controller.pageController,
         onPageChanged: _controller.setTabActive, //onPageChanged,
         children: <Widget>[
-          RouterOutlet(module: CategoriaModule()),
+          // RouterOutlet(module: CategoriaModule()),
+          Container(),
           FavoritosTab(),
-          RouterOutlet(module: CarrinhoModule()),
+          // RouterOutlet(module: CarrinhoModule()),
+          Container(),
           MeusPedidosTab(),
           PerfilTab(),
         ],
       ),
+
       bottomNavigationBar: bottomAppBar(),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -135,11 +139,19 @@ class _HomePageState extends State<HomePage> {
             currentIndex: _controller.tabActive,
             onTap: (index) {
               _controller.pageController.jumpToPage(index);
+
               // _controller.pageController.animateToPage(
               //   index,
               //   duration: Duration(milliseconds: 200),
               //   curve: Curves.easeOut,
               // );
+
+              if (index == 0) {
+                Modular.to.navigate('/categoria/');
+              }
+              if (index == 2) {
+                Modular.to.navigate('/carrinho/');
+              }
             },
             items: [
               BottomNavigationBarItem(

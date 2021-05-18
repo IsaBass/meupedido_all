@@ -187,6 +187,13 @@ class UserModel {
 
     return listAux;
   }
+
+  void addEmpresa({CnpjModel cnpjM, String status = 'PEND'}) {
+    if (!estaLogado) return;
+    this.empresas.add(
+          UserEmpresa(cnpjM: cnpjM, status: status),
+        );
+  }
 }
 
 class UserEmpresa {

@@ -8,9 +8,8 @@ import 'auth_repository_interf.dart';
 
 class AuthRepository extends Disposable implements IAuthRepository {
   ///
-  final CNPJSController _cnpjsController;
+  //final CNPJSController _cnpjsController;
 
-  AuthRepository(this._cnpjsController);
 
   Future<Map<String, dynamic>> getUser(String uid) async {
     var doc =
@@ -30,10 +29,10 @@ class AuthRepository extends Disposable implements IAuthRepository {
     print(' >> AuthRepos.saveUserData : $uid ');
   }
 
-  Future<void> saveFavoritos(String userId, List<String> favoritos) async {
+  Future<void> saveFavoritos({required String userId, required List<String> favoritos, required String cnpj,}) async {
     //
     await FirebaseFirestore.instance.collection("users").doc(userId).set(
-      {"favoritos${_cnpjsController.cnpjAtivo.docId}": favoritos},
+      {"favoritos${cnpj}": favoritos},
       SetOptions(merge: true),
     );
     print(' >> AuthRepos.saveFavoritos : $favoritos ');

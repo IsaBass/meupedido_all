@@ -17,7 +17,9 @@ class AuthController = _AuthControllerBase with _$AuthController;
 
 abstract class _AuthControllerBase with Store {
   final IAuthRepository _repository;
-  final CNPJSController _cnpjsController;
+  // final CNPJSController _cnpjsController;
+
+  
   // final CartController _cartController;
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -49,13 +51,6 @@ abstract class _AuthControllerBase with Store {
   @action
   void setNaoEstaLogado() => estaLogado = false;
 
-  void addEmpresa({CnpjModel cnpjM, String status = 'PEND'}) {
-    if (!estaLogado) return;
-    userAtual.empresas.add(
-      UserEmpresa(cnpjM: cnpjM, status: status),
-    );
-  }
-
   @action
   Future<void> changeFavorito(String idProduto) async {
     isFavorito(idProduto)
@@ -71,11 +66,12 @@ abstract class _AuthControllerBase with Store {
   bool isFavorito(String idProd) => favoritos.contains(idProd);
 
   @action
-  void loginEmailSenha(
-      {@required String email,
-      @required String pass,
-      @required VoidCallback onSucces,
-      @required VoidCallback onFail}) {
+  void loginEmailSenha({
+    required String email,
+    required String pass,
+    required VoidCallback onSucces,
+    required VoidCallback onFail,
+  }) {
     isLoading = false;
 
     _auth
@@ -101,9 +97,9 @@ abstract class _AuthControllerBase with Store {
 
   @action
   void createLoginEmailSenha(
-      {@required String pass,
-      @required VoidCallback onSucces,
-      @required VoidCallback onFail}) {
+      {required String pass,
+      required VoidCallback onSucces,
+      required VoidCallback onFail}) {
     isLoading = true;
 
     _auth
@@ -152,9 +148,9 @@ abstract class _AuthControllerBase with Store {
         favoritos = userAtual.favoritos.asObservable();
 
         userAtual.empresas = [];
-        for (Map emp in docUser["empresas"]) {
+        for (Map<String, dynamic> emp in docUser["empresas"]) {
           var pj = await _cnpjsController.getCnpjM(emp['cnpj']);
-          addEmpresa(cnpjM: pj, status: emp['status']);
+          userAtual.addEmpresa(cnpjM: pj, status: emp['status']);
           // if (emp['cnpj'] == userAtual.cnpjPadrao) setCnpjAtivo(pj);
         }
 
