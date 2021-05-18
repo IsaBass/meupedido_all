@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class DefaultTextFormField extends StatefulWidget {
   final Key fieldKey;
@@ -27,7 +28,7 @@ class DefaultTextFormField extends StatefulWidget {
     this.onsubmitted,
     this.iconData,
     this.enabled = true,
-    this.inputFormatters = [],
+    this.inputFormatters = const <TextInputFormatter>[],
     this.textCapitalization = TextCapitalization.none,
   });
 
