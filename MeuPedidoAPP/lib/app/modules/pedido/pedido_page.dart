@@ -1,4 +1,4 @@
-import 'package:date_format/date_format.dart';
+// import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -67,7 +67,7 @@ class _PedidoPageState extends ModularState<PedidoPage, PedidoController> {
         }
 
         var ped = controller.pedido.value;
-        if (ped == null || ped.length == 0 ) {
+        if (ped == null || ped.length == 0) {
           return Center(child: Text('Pedido Não encontrado!'));
         }
 
@@ -125,9 +125,15 @@ class _PedidoPageState extends ModularState<PedidoPage, PedidoController> {
 
   Card _cardCabecalhoPedido(Pedido pedido, NumberFormat moeda) {
     ////////
-    var dataFormatada = formatDate(
-        DateTime.fromMillisecondsSinceEpoch(pedido.dataHora),
-        [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
+    String _formataData(int data) {
+      return DateFormat(DateFormat.YEAR_NUM_MONTH_DAY, 'pt_Br')
+          .format(DateTime.fromMillisecondsSinceEpoch(data));
+    }
+
+    var dataFormatada = _formataData(pedido.dataHora);
+    // formatDate(
+    //     DateTime.fromMillisecondsSinceEpoch(pedido.dataHora),
+    //     [dd, '/', mm, '/', yyyy, ' ', HH, ':', nn]);
 
     ///////////
     return Card(
@@ -356,10 +362,10 @@ class _PedidoPageState extends ModularState<PedidoPage, PedidoController> {
             ),
             ButtonBar(
               children: [
-                FlatButton(
+                TextButton(
                     onPressed: () => _motivoCancelController.text = '',
                     child: Text('Desistir')),
-                FlatButton(
+                TextButton(
                   child: Text('Pedir Cancelamento'),
                   onPressed: () => botaoCancelamento(pedido),
                 ),

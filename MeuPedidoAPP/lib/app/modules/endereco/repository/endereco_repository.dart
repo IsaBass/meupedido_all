@@ -1,5 +1,5 @@
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:dio/dio.dart';

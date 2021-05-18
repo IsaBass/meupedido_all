@@ -14,7 +14,7 @@ class BtnsCarrinho extends StatelessWidget {
       padding: EdgeInsets.all(8),
       width: MediaQuery.of(context).size.width,
       height: 60,
-      child: RaisedButton.icon(
+      child: ElevatedButton.icon(
         icon: Icon(
           icone,
           color: Theme.of(context).primaryTextTheme.bodyText1.color,
@@ -28,7 +28,8 @@ class BtnsCarrinho extends StatelessWidget {
             ),
           ),
         ),
-        color: Theme.of(context).primaryColor,
+        style:
+            ElevatedButton.styleFrom(primary: Theme.of(context).primaryColor),
         onPressed: onPressed,
       ),
     );

@@ -5,8 +5,6 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
 
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'widgets/wid.login-textfield.dart';
 import 'widgets/wid.passwordfield.dart';
 
@@ -83,8 +81,10 @@ class _LoginPageState extends State<LoginPage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(4),
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColor,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).primaryColor,
+                        ),
                         child: Text(
                           'Entrar com e-mail',
                           style: TextStyle(
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Modular.to.pushNamed('/login/cadastro');
                             },
@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                                   TextStyle(color: Colors.blue, fontSize: 12),
                             ),
                           ),
-                          FlatButton(
+                          TextButton(
                             onPressed: () {
                               Modular.to.pushNamed('/login/reset');
                             },
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onSucces() async {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Usuário LOGADO com Sucesso"),
       backgroundColor: Colors.blueAccent,
       duration: Duration(milliseconds: 500),
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onFail() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Falha ao LOGAR Usuário"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),

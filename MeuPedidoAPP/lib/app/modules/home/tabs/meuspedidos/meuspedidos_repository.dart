@@ -1,5 +1,4 @@
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -25,7 +24,8 @@ class MeusPedidosRepository extends Disposable {
       .limit(10)
       .snapshots();
 
-  Stream<DocumentSnapshot> streamPedidoUnico(String idPedido) =>
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamPedidoUnico(
+          String idPedido) =>
       _appController.cnpjAtivoDocRef
           .collection('pedidos')
           .doc(idPedido)

@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -98,8 +97,8 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(4),
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColor,
+                      child: ElevatedButton(
+                        //color: Theme.of(context).primaryColor,
                         child: _authController.isLoading == true
                             ? Center(
                                 child: CircularProgressIndicator(),
@@ -135,7 +134,7 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
   }
 
   void _onSucces() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Usuário LOGADO com Sucesso"),
       backgroundColor: Colors.blueAccent,
       duration: Duration(milliseconds: 500),
@@ -149,7 +148,7 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
   }
 
   void _onFail() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Falha ao Criar Usuário"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),

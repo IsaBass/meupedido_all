@@ -7,7 +7,7 @@ class SplashModule extends Module {
   List<Bind> get binds => [];
 
   @override
-  List<ModularRoute> routers = [
+  final List<ModularRoute> routes = [
     ChildRoute('/', child: (_, args) => SplashPage(identificador: '')),
     ChildRoute('/lj/:identif',
         child: (_, args) => SplashPage(

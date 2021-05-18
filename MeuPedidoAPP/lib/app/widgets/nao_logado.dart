@@ -32,8 +32,8 @@ class NaoLogado extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-      child: RaisedButton.icon(
-        color: Theme.of(context).primaryColor,
+      child: ElevatedButton.icon(
+        // color: Theme.of(context).primaryColor,
         icon: Icon(
           FontAwesomeIcons.userShield,
           color: Theme.of(context).primaryTextTheme.bodyText1.color,

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'proddetails_controller.dart';
-import 'proddetails_module.dart';
+
 import 'widgets/barra_compra.dart';
 
 class ProdDetailsPage extends StatefulWidget {

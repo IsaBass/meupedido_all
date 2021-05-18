@@ -5,7 +5,6 @@ import 'package:mobx/mobx.dart';
 import 'package:flutter/material.dart';
 
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
 

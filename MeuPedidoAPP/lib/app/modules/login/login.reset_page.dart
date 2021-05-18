@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
-import 'package:MeuPedido/app/app_module.dart';
 
 import 'widgets/wid.login-textfield.dart';
 
@@ -56,8 +55,8 @@ class _LoginResetPageState extends State<LoginResetPage> {
                     Container(
                       width: MediaQuery.of(context).size.width,
                       padding: EdgeInsets.all(4),
-                      child: RaisedButton(
-                        color: Theme.of(context).primaryColor,
+                      child: ElevatedButton(
+                        // color: Theme.of(context).primaryColor,
                         child: Text('Redefinir Senha',
                             style: TextStyle(
                                 color: Theme.of(context)
@@ -86,7 +85,7 @@ class _LoginResetPageState extends State<LoginResetPage> {
   }
 
   void _onSucces() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("O e-mail para redefinir senha foi enviado."),
       backgroundColor: Colors.blueAccent,
       duration: Duration(milliseconds: 1000),
@@ -98,7 +97,7 @@ class _LoginResetPageState extends State<LoginResetPage> {
   }
 
   void _onFail() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Falha ao localizar Usuário"),
       backgroundColor: Colors.redAccent,
       duration: Duration(seconds: 2),

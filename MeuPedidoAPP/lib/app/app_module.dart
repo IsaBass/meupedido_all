@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:meupedido_core/core/cart/cart_repository.dart';
@@ -6,7 +5,7 @@ import 'package:meupedido_core/meupedido_core.dart';
 
 import 'app_controller.dart';
 import 'app_repository.dart';
-import 'app_widget.dart';
+
 import 'categs/categs_controller.dart';
 import 'categs/categs_repository.dart';
 
@@ -41,21 +40,21 @@ class AppModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routers => [
-        ModuleRoute('/', module: SplashModule()),
-        ModuleRoute('/login', module: LoginModule()),
-        ModuleRoute('/home', module: HomeModule()),
-        ModuleRoute('/proddetail', module: ProddetailsModule()),
-        ModuleRoute('/cart', module: CarrinhoModule()),
-        ModuleRoute('/endereco', module: EnderecoModule()),
-        ModuleRoute('/pedido', module: PedidoModule()),
-        ModuleRoute('/categoria', module: CategoriaModule()),
-        ChildRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
-        ChildRoute(
-          'categoria/categ/:codcateg',
-          child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
-        ),
-      ];
+  final List<ModularRoute> routes = [
+    ModuleRoute('/', module: SplashModule()),
+    ModuleRoute('/login', module: LoginModule()),
+    ModuleRoute('/home', module: HomeModule()),
+    ModuleRoute('/proddetail', module: ProddetailsModule()),
+    ModuleRoute('/cart', module: CarrinhoModule()),
+    ModuleRoute('/endereco', module: EnderecoModule()),
+    ModuleRoute('/pedido', module: PedidoModule()),
+    ModuleRoute('/categoria', module: CategoriaModule()),
+    ChildRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
+    ChildRoute(
+      'categoria/categ/:codcateg',
+      child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
+    ),
+  ];
 
   // @override
   // Widget get bootstrap => AppWidget();

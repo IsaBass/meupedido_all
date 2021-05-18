@@ -41,6 +41,7 @@ abstract class _MeusPedidosControllerBase with Store {
   Stream<QuerySnapshot> streamMeusPedidos() => _repository.streamPedidos();
 
   @action
-  Stream<DocumentSnapshot> streamPedidoUnico(String idPedido) =>
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamPedidoUnico(
+          String idPedido) =>
       _repository.streamPedidoUnico(idPedido);
 }

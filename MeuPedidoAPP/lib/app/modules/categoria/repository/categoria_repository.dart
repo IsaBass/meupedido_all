@@ -1,12 +1,12 @@
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'categoria_interf_repository.dart';
 
 class CategoriaRepository extends Disposable implements ICategoriaRepository {
   ///
-  final AppController _appController = AppModule().getBind<AppController>();
+  final AppController _appController = Modular.get<AppController>();
 
   Future<List<Map>> prodsCategoria(int codCateg) async {
     List<Map> lAux = [];

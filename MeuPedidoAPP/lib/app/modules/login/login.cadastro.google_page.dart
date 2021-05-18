@@ -3,8 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'widgets/wid.login-textfield.dart';
@@ -113,7 +111,7 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
   }
 
   void _onSucces() {
-    _scaffoldKey.currentState.showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("Usuário LOGADO com Sucesso"),
       backgroundColor: Colors.blueAccent,
       duration: Duration(milliseconds: 500),

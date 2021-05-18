@@ -1,7 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'home_controller.dart';
 import 'home_page.dart';
 import 'repository/home_repository.dart';
@@ -30,12 +28,11 @@ class HomeModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routers => [
-        ChildRoute('/', child: (_, args) => HomePage()),
-        ChildRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
-        ChildRoute('/listenderecos',
-            child: (_, args) => PerfilListaEnderecos()),
-      ];
+  final List<ModularRoute> routes = [
+    ChildRoute('/', child: (_, args) => HomePage()),
+    ChildRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
+    ChildRoute('/listenderecos', child: (_, args) => PerfilListaEnderecos()),
+  ];
 
   // static Inject get to => Inject<HomeModule>.of();
 }

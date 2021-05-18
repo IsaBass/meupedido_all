@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
 
 import 'pedido_controller.dart';
 import 'pedido_page.dart';
@@ -18,12 +17,12 @@ class PedidoModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routers => [
-        ChildRoute('/:id',
-            child: (_, args) => PedidoPage(
-                  idPedido: args.params['id'],
-                )),
-      ];
+  final List<ModularRoute> routes = [
+    ChildRoute('/:id',
+        child: (_, args) => PedidoPage(
+              idPedido: args.params['id'],
+            )),
+  ];
 
   // static Inject get to => Inject<PedidoModule>.of();
 }

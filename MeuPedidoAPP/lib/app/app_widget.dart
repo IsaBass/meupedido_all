@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:meupedido_core/core/constantes.dart';
 
 import 'app_controller.dart';
-import 'app_module.dart';
 
 class AppWidget extends StatelessWidget {
   //
@@ -24,9 +23,9 @@ class AppWidget extends StatelessWidget {
             constraints: kIsWeb
                 ? MyConst.boxConstraints
                 : BoxConstraints(maxWidth: double.infinity, minWidth: 0),
-            child: GetMaterialApp(
+            child: MaterialApp(
               // home: HomePage(),
-              navigatorKey: Modular.navigatorKey,
+              //navigatorKey: Modular.navigatorDelegate,
               debugShowCheckedModeBanner: false,
               title: 'Meu Pedido',
               theme: _appController.getTheme,
@@ -37,14 +36,14 @@ class AppWidget extends StatelessWidget {
               // ),
 
               initialRoute: '/',
-              onGenerateRoute: Modular.generateRoute,
+              // onGenerateRoute: Modular,
               localizationsDelegates: [
                 GlobalCupertinoLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate
               ],
               supportedLocales: [const Locale('pt', 'BR')],
-            ),
+            ).modular(),
           ));
     });
   }

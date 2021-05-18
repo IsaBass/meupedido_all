@@ -54,8 +54,10 @@ class _PainelPagamMercadoPagoState extends State<PainelPagamMercadoPago> {
                     SizedBox(height: 10),
                   ],
                 ),
-          RaisedButton.icon(
-            color: Theme.of(context).primaryColor,
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              primary: Theme.of(context).primaryColor,
+            ),
             icon: Icon(
               FontAwesomeIcons.creditCard,
               color: Theme.of(context).primaryTextTheme.bodyText1.color,

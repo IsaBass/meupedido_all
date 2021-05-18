@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:masked_controller/mask.dart';
-import 'package:masked_controller/masked_controller.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+// import 'package:masked_controller/mask.dart';
+// import 'package:masked_controller/masked_controller.dart';
 import 'package:toast/toast.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
-import 'package:meupedido_core/utils/geolocalizacao.dart';
-
-import 'package:MeuPedido/app/app_module.dart';
 
 class EnderecoPage extends StatefulWidget {
   final String title;
@@ -34,8 +32,18 @@ class _EnderecoPageState extends State<EnderecoPage> {
   final TextEditingController _bairroCont = TextEditingController();
   final TextEditingController _cidadeCont = TextEditingController();
   final TextEditingController _ufCont = TextEditingController();
-  final MaskedController _cepMaskedCont =
-      MaskedController(mask: Mask(mask: 'NN.NNN-NNN'));
+  final _cepMaskedCont = TextEditingController();
+  // final MaskedController _cepMaskedCont =
+  //     MaskedController(mask: Mask(mask: 'NN.NNN-NNN'));
+
+  var maskFormatterCEP = new MaskTextInputFormatter(
+    mask: '##.###-###',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
+  // var maskFormatterCEP = new MaskTextInputFormatter(
+  //   mask: '+# (###) ###-##-##',
+  //   filter: {"#": RegExp(r'[0-9]')},
+  // );
 
   final AuthController _authController = Modular.get<AuthController>();
   //
@@ -139,11 +147,12 @@ class _EnderecoPageState extends State<EnderecoPage> {
   }
 
   Widget _btnBuscaCep(BuildContext context) {
-    return FlatButton.icon(
+    return TextButton.icon(
       icon: Icon(FontAwesomeIcons.searchLocation),
       label: Text('completar...'),
       onPressed: () async {
-        var resp = await controller.buscaCEP(_cepMaskedCont.unmaskedText);
+        var resp =
+            await controller.buscaCEP(maskFormatterCEP.getUnmaskedText());
         if (resp['erro'] != null) {
           Toast.show('CEP não encontrado', context,
               gravity: Toast.TOP, backgroundColor: Colors.red);
@@ -161,6 +170,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
   DefaultTextFormField _editCEP() {
     return DefaultTextFormField(
       textController: _cepMaskedCont,
+      inputFormatters: [maskFormatterCEP],
       enabled: !modoEdicao,
       keyboarType: TextInputType.text,
       iconData: FontAwesomeIcons.mailBulk,
@@ -263,7 +273,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
 
       var novoId = await controller.gravaEndereco(
         EnderecoModel(
-          cep: _cepMaskedCont.unmaskedText,
+          cep: maskFormatterCEP.getUnmaskedText(),
           logradouro: _ruaCont.text,
           numero: _numeroCont.text,
           complemento: _complemCont.text,
@@ -303,8 +313,10 @@ class _EnderecoPageState extends State<EnderecoPage> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),
-      child: RaisedButton.icon(
-        color: Theme.of(context).primaryColor,
+      child: ElevatedButton.icon(
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).primaryColor,
+        ),
         icon: Icon(
           FontAwesomeIcons.save,
           color: Theme.of(context).primaryTextTheme.bodyText1.color,

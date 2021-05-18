@@ -51,7 +51,7 @@ mixin _$MeusPedidosController on _MeusPedidosControllerBase, Store {
       ActionController(name: '_MeusPedidosControllerBase');
 
   @override
-  Stream<QuerySnapshot> streamMeusPedidos() {
+  Stream<QuerySnapshot<Object>> streamMeusPedidos() {
     final _$actionInfo = _$_MeusPedidosControllerBaseActionController
         .startAction(name: '_MeusPedidosControllerBase.streamMeusPedidos');
     try {
@@ -62,7 +62,8 @@ mixin _$MeusPedidosController on _MeusPedidosControllerBase, Store {
   }
 
   @override
-  Stream<DocumentSnapshot> streamPedidoUnico(String idPedido) {
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamPedidoUnico(
+      String idPedido) {
     final _$actionInfo = _$_MeusPedidosControllerBaseActionController
         .startAction(name: '_MeusPedidosControllerBase.streamPedidoUnico');
     try {

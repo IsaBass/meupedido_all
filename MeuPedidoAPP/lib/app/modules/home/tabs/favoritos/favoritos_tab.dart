@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/widgets/nao_logado.dart';
 import 'package:MeuPedido/app/widgets/produtos/card.produto.dart';
 import 'package:flutter/material.dart';

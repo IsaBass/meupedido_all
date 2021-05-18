@@ -13,14 +13,14 @@ class EnderecoModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routers => [
-        //Router('/', child: (_, args) => EnderecoPage()),
-        ChildRoute('/edit',
-            child: (_, args) => EnderecoPage(
-                  endereco: args.data['endereco'],
-                )),
-        ChildRoute('/novo', child: (_, args) => EnderecoPage()),
-      ];
+  final List<ModularRoute> routes = [
+    //Router('/', child: (_, args) => EnderecoPage()),
+    ChildRoute('/edit',
+        child: (_, args) => EnderecoPage(
+              endereco: args.data['endereco'],
+            )),
+    ChildRoute('/novo', child: (_, args) => EnderecoPage()),
+  ];
 
   // static Inject get to => Inject<EnderecoModule>.of();
 }

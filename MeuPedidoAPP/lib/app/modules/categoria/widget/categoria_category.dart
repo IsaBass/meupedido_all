@@ -6,7 +6,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import '../categoria_controller.dart';
-import '../categoria_module.dart';
 
 class CategCategory extends StatefulWidget {
   final CategoriaModel categ;

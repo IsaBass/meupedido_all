@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/categs/categs_controller.dart';
 import 'package:MeuPedido/app/modules/carrinho/carrinho_module.dart';
 import 'package:MeuPedido/app/modules/categoria/categoria_module.dart';
@@ -9,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'home_controller.dart';
-import 'home_module.dart';
 import 'tabs/favoritos/favoritos_tab.dart';
 import 'tabs/meuspedidos/meuspedidos_tab.dart';
 import 'tabs/perfil/perfil_tab.dart';
@@ -146,14 +144,14 @@ class _HomePageState extends State<HomePage> {
             items: [
               BottomNavigationBarItem(
                 icon: Icon(Icons.home, size: 24.0),
-                title: Text('Home'),
+                label: 'Home',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.favorite, size: 24.0),
-                title: Text('Favoritos'),
+                label: 'Favoritos',
               ),
               BottomNavigationBarItem(
-                title: Text('Carrinho'),
+                label: 'Carrinho',
                 icon: Icon(
                   Icons.shopping_cart,
                   size: 24.0,
@@ -162,11 +160,11 @@ class _HomePageState extends State<HomePage> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(FontAwesomeIcons.listUl, size: 24.0),
-                title: Text('Compras'),
+                label: 'Compras',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person, size: 24.0),
-                title: Text('Perfil'),
+                label: 'Perfil',
               ),
             ],
           );

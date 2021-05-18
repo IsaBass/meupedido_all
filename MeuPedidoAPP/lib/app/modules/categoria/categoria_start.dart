@@ -6,12 +6,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
+
 import 'package:MeuPedido/app/widgets/produtos/grid_product.dart';
 import 'package:MeuPedido/app/widgets/produtos/slider_item.dart';
 
 import 'categoria_controller.dart';
-import 'categoria_module.dart';
+
 import 'widget/home_seletorcategoria.dart';
 
 class CategoriaStart extends StatefulWidget {

@@ -133,7 +133,7 @@ class PerfilListaEnderecosState
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text('Endereços cadastrados:'),
-        FlatButton(
+        TextButton(
           onPressed: () async {
             var ret = await Modular.to.pushNamed('endereco/novo');
 

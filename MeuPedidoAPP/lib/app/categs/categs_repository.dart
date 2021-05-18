@@ -1,11 +1,11 @@
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'categs_interf_repository.dart';
 
 class CategsRepository extends Disposable implements ICategsRepository {
-  final AppController _appController = AppModule().getBind<AppController>();
+  final AppController _appController = Modular.get<AppController>();
 
   Future<List<Map<String, dynamic>>> allCategorias() async {
     var docRef = _appController.cnpjAtivoDocRef;

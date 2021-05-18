@@ -1,5 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'package:MeuPedido/app/modules/home/tabs/perfil/perfil_page.dart';
 import 'package:MeuPedido/app/widgets/nao_logado.dart';
 import 'package:flutter/material.dart';

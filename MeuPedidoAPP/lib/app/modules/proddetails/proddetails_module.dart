@@ -1,7 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:MeuPedido/app/app_controller.dart';
-import 'package:MeuPedido/app/app_module.dart';
 
 import 'proddetails_controller.dart';
 import 'proddetails_page.dart';
@@ -15,11 +14,10 @@ class ProddetailsModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routers => [
-        ChildRoute('/:cod',
-            child: (_, args) =>
-                ProdDetailsPage(codigoProd: args.params['cod'])),
-      ];
+  final List<ModularRoute> routes = [
+    ChildRoute('/:cod',
+        child: (_, args) => ProdDetailsPage(codigoProd: args.params['cod'])),
+  ];
 
   // static Inject get to => Inject<ProddetailsModule>.of();
 }

@@ -11,7 +11,7 @@ import 'package:MeuPedido/app/widgets/produtos/slider_item.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'categoria_controller.dart';
-import 'categoria_module.dart';
+
 import 'widget/seletorcategoria.dart';
 
 class CategoriaPage extends StatefulWidget {

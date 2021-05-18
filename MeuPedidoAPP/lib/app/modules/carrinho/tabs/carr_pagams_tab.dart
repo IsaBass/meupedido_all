@@ -7,7 +7,7 @@ import 'package:toast/toast.dart';
 
 import '../carrinho_controller.dart';
 import '../widget/painel_formapagam.dart';
-import '../widget/pnl_cartao_cielo.dart';
+// import '../widget/pnl_cartao_cielo.dart';
 import '../widget/painel_tippag_entrega.dart';
 
 class CarrinhoPagamentoTab extends StatefulWidget {
@@ -29,7 +29,7 @@ class _CarrinhoPagamentoTabState extends State<CarrinhoPagamentoTab> {
         PainelTipPagEntrega(),
         //PainelPagamMercadoPago(),
         //  PainelTipPagOnline(),
-        PainelCartaoCielo(),
+        //PainelCartaoCielo(),
         _botaoSalvar(context),
       ],
     );

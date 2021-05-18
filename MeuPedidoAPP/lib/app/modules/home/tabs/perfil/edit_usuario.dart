@@ -1,5 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -117,8 +115,13 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
           ),
           Expanded(
             flex: 2,
-            child: FlatButton.icon(
-              shape: Border.all(color: Colors.grey, width: 0.5),
+            child: TextButton.icon(
+              style: TextButton.styleFrom(
+                elevation: 2,
+
+                // shape:
+                //    Border.fromBorderSide(color: Colors.grey, width: 0.5),
+              ),
               onPressed: _selectDataNascimento,
               icon: Icon(Icons.date_range),
               label: Text('Escolher'),
@@ -231,9 +234,11 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
     );
   }
 
-  RaisedButton _botaoSalvar(BuildContext context) {
-    return RaisedButton(
-      color: Theme.of(context).primaryColor,
+  ElevatedButton _botaoSalvar(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).primaryColor,
+      ),
       child: Text('Salvar',
           style: TextStyle(
               color: Theme.of(context).primaryTextTheme.bodyText1.color)),

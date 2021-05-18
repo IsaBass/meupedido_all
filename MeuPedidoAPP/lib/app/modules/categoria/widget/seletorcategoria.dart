@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/categs/categs_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:MeuPedido/app/modules/proddetails/proddetails_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -18,8 +17,7 @@ class BarraCompraDet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final AuthController _authController =
-        AppModule().getBind<AuthController>();
+    final _authController = Modular.get<AuthController>();
     var formatMoeda = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
     return Observer(builder: (_) {
@@ -50,7 +48,7 @@ class BarraCompraDet extends StatelessWidget {
   Widget _btnLogarCompra(NumberFormat formatMoeda, BuildContext context) {
     return Container(
       //margin: EdgeInsets.all(10),
-      child: RaisedButton.icon(
+      child: ElevatedButton.icon(
         icon: Icon(Icons.add_shopping_cart, color: Colors.white),
         label: Container(
           padding: EdgeInsets.all(6),
@@ -61,7 +59,7 @@ class BarraCompraDet extends StatelessWidget {
             ),
           ),
         ),
-        color: Theme.of(context).primaryColor,
+        // color: Theme.of(context).primaryColor,
         onPressed: controller.quantidade <= 0.00
             ? null
             : () => _actLogarComprar(context),
@@ -69,8 +67,9 @@ class BarraCompraDet extends StatelessWidget {
     );
   }
 
-  RaisedButton _btnCompra(NumberFormat formatMoeda, BuildContext context) {
-    return RaisedButton.icon(
+  ElevatedButton _btnCompra(NumberFormat formatMoeda, BuildContext context) {
+    return ElevatedButton.icon(
+      // color: Theme.of(context).primaryColor,
       icon: Icon(Icons.add_shopping_cart, color: Colors.white),
       label: Text(
         "Adicionar   (${formatMoeda.format(controller.valorTotal)})",
@@ -78,7 +77,6 @@ class BarraCompraDet extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      color: Theme.of(context).primaryColor,
       onPressed:
           controller.quantidade <= 0.00 ? null : () => _actComprar(context),
     );
@@ -147,13 +145,13 @@ class BarraCompraDet extends StatelessWidget {
   }
 
   void _adicionarProd() {
-    AppModule().getBind<CartController>().adicionarCarrinho(
-          CartItemModel(
-            idProduto: prod.codigo,
-            quant: controller.quantidade,
-            produto: prod,
-            //vlrUnit: prod.precoAtual
-          ),
-        );
+    Modular.get<CartController>().adicionarCarrinho(
+      CartItemModel(
+        idProduto: prod.codigo,
+        quant: controller.quantidade,
+        produto: prod,
+        //vlrUnit: prod.precoAtual
+      ),
+    );
   }
 }

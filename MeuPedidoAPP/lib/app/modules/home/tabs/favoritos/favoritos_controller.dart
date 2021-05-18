@@ -1,4 +1,4 @@
-import 'package:MeuPedido/app/app_module.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 import 'package:mobx/mobx.dart';
 

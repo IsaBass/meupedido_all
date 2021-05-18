@@ -13,6 +13,7 @@ class DefaultTextFormField extends StatefulWidget {
   final FormFieldValidator<String> validator;
   final Function(String) onchanged;
   final Function(String) onsubmitted;
+  final List<TextInputFormatter> inputFormatters;
 
   const DefaultTextFormField({
     this.fieldKey,
@@ -26,6 +27,7 @@ class DefaultTextFormField extends StatefulWidget {
     this.onsubmitted,
     this.iconData,
     this.enabled = true,
+    this.inputFormatters = [],
     this.textCapitalization = TextCapitalization.none,
   });
 
@@ -37,6 +39,7 @@ class _DefaultTextFormFieldState extends State<DefaultTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      inputFormatters: widget.inputFormatters,
       textCapitalization: widget.textCapitalization,
       enabled: widget.enabled,
       key: widget.fieldKey,

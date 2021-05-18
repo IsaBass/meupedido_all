@@ -1,8 +1,6 @@
-import 'package:MeuPedido/app/app_module.dart';
-
 import 'package:MeuPedido/app/widgets/nao_logado.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:date_format/date_format.dart';
+// import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,7 +18,7 @@ class MeusPedidosTab extends StatefulWidget {
 
 class _MeusPedidosTabState
     extends ModularState<MeusPedidosTab, MeusPedidosController> {
-  final AuthController _authController = AppModule.to.get<AuthController>();
+  final AuthController _authController = Modular.get<AuthController>();
   // String userId;
   // String cnpj;
 
@@ -74,9 +72,17 @@ class _MeusPedidosTabState
 
   Card _cardPedido(MeuPedido e) {
     ////////
-    var dataFormatada = formatDate(
-        DateTime.fromMillisecondsSinceEpoch(e.dataHora),
-        [dd, '/', mm, '/', yy, ' ', HH, ':', nn]);
+    ///
+
+    String _formataData(int data) {
+      return DateFormat(DateFormat.YEAR_NUM_MONTH_DAY, 'pt_Br')
+          .format(DateTime.fromMillisecondsSinceEpoch(data));
+    }
+
+    var dataFormatada = _formataData(e.dataHora);
+    //formatDate(
+    //     DateTime.fromMillisecondsSinceEpoch(e.dataHora),
+    //     [dd, '/', mm, '/', yy, ' ', HH, ':', nn]);
 
     ///////////
     final moeda = NumberFormat.simpleCurrency(locale: 'pt_BR');
@@ -123,7 +129,7 @@ class _MeusPedidosTabState
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          FlatButton(
+          TextButton(
             onPressed: () => Modular.to.pushNamed('pedido/$idPedido'),
             child: Text(
               'DETALHES',
@@ -137,7 +143,7 @@ class _MeusPedidosTabState
 
   StreamBuilder<DocumentSnapshot> _statusPedido(MeuPedido e) {
     ////
-    return StreamBuilder<DocumentSnapshot>(
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
       stream: controller.streamPedidoUnico(e.idPedido),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -149,14 +155,14 @@ class _MeusPedidosTabState
         if (!snapshot.hasData) {
           return Center(child: Text('N'));
         }
-        if ((snapshot.data.data) == null) {
+        if ((snapshot.data.data()) == null) {
           return Center(child: Text('N1'));
         }
-        if ((snapshot.data?.data()['status'] ?? null) == null) {
+        if ((snapshot.data.data()['status'] ?? null) == null) {
           return Center(child: Text('N2'));
         }
         /////////////////////////////////////////
-        var status = snapshot.data.data['status'];
+        var status = snapshot.data.data()['status'];
         return Padding(
           padding: const EdgeInsets.all(4.5),
           child: StatusPedido(status),
