@@ -2,14 +2,12 @@
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:meupedido_core/core/cnpjs/cnpjs_controller.dart';
 
 import 'auth_repository_interf.dart';
 
 class AuthRepository extends Disposable implements IAuthRepository {
   ///
   //final CNPJSController _cnpjsController;
-
 
   Future<Map<String, dynamic>> getUser(String uid) async {
     var doc =
@@ -29,10 +27,11 @@ class AuthRepository extends Disposable implements IAuthRepository {
     print(' >> AuthRepos.saveUserData : $uid ');
   }
 
-  Future<void> saveFavoritos({required String userId, required List<String> favoritos, required String cnpj,}) async {
+  Future<void> saveFavoritos(
+      {String userId, List<String> favoritos, String cnpj}) async {
     //
     await FirebaseFirestore.instance.collection("users").doc(userId).set(
-      {"favoritos${cnpj}": favoritos},
+      {"favoritos$cnpj": favoritos},
       SetOptions(merge: true),
     );
     print(' >> AuthRepos.saveFavoritos : $favoritos ');
@@ -59,6 +58,21 @@ class AuthRepository extends Disposable implements IAuthRepository {
       "cordenadaLO": 0
     });
     print(' >> AuthRepos.registreAcesso ');
+  }
+
+  Future<Map<String, dynamic>> fetchCnpj(String cnpj) async {
+    var doc =
+        await FirebaseFirestore.instance.collection('CNPJS').doc(cnpj).get();
+
+    print(' >> Auth Repository.fetchCnpj $cnpj ');
+
+    if (doc != null) {
+      return doc.data()
+        // ..['docRef'] = doc.reference
+        ..['docId'] = doc.id;
+    } else {
+      return null;
+    }
   }
 
   // Future<Map<String, dynamic>> fetchCnpj(String cnpj) async {

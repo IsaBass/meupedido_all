@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 
 CnpjModel cnpjModelFromJson(String str) => CnpjModel.fromJson(json.decode(str));
 
@@ -8,7 +8,7 @@ String cnpjModelToJson(CnpjModel data) => json.encode(data.toJson());
 
 class CnpjModel {
   String docId;
-  DocumentReference docRef;
+  // DocumentReference docRef;
   bool ativo;
   String descricao;
   String tipo;
@@ -16,19 +16,20 @@ class CnpjModel {
   String cChave;
   //List<Filial> dadosFiliais;
 
-  CnpjModel(
-      {this.docId,
-      this.ativo,
-      this.descricao,
-      // this.dadosFiliais,
-      this.tipo,
-      this.identificador,
-      this.cChave,
-      this.docRef});
+  CnpjModel({
+    this.docId,
+    this.ativo,
+    this.descricao,
+    // this.dadosFiliais,
+    this.tipo,
+    this.identificador,
+    this.cChave,
+    // this.docRef
+  });
 
   factory CnpjModel.fromJson(Map<String, dynamic> json) => CnpjModel(
         docId: json["docId"] == null ? null : json["docId"],
-        docRef: json["docRef"] == null ? null : json["docRef"],
+        // docRef: json["docRef"] == null ? null : json["docRef"],
         ativo: json["ativo"] == null ? null : json["ativo"],
         descricao: json["descricao"] == null ? null : json["descricao"],
         // filiais: json["filiais"] == null

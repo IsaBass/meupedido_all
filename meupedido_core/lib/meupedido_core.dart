@@ -1,7 +1,7 @@
 library meupedido_core;
 
 export 'core/auth/auth_controller.dart';
-export 'core/auth/auth_repository.dart';
+export 'core/auth/repositories/auth_repository.dart';
 export 'core/auth/user_model.dart';
 export 'core/cart/cart_controller.dart';
 export 'core/cart/model_mobx/cart.item_model.dart';
@@ -37,12 +37,3 @@ export 'widgets/default_textformfield.dart';
 export 'widgets/exibe.carregando.dart';
 export 'widgets/make_slider_header.dart';
 export 'widgets/status_pedido.dart';
-
-
-
-
-
-
-
-
-

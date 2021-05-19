@@ -1,17 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:meupedido_core/core/cnpjs/cnpj_model.dart';
-import 'package:meupedido_core/core/cnpjs/cnpjs_controller.dart';
+// import 'package:meupedido_core/core/cnpjs/cnpjs_controller.dart';
 
 enum Perfil { normal, superv, master, dev }
 
 class UserModel {
-  final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
+  // final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
   //
-  User firebasebUser;
+  // User firebasebUser;
+  String uid;
   String nome;
   String email;
   Perfil perfil;
@@ -24,7 +24,7 @@ class UserModel {
   List<String> favoritos;
 
   int idxEmpresaAtual;
-  DocumentReference docRef;
+  // DocumentReference docRef;
 
   void clear() {
     nome = '';
@@ -38,11 +38,12 @@ class UserModel {
     perfil = Perfil.normal;
   }
 
-  void carregaDoMap(Map<String, dynamic> docUser) {
-    nome = docUser['nome'] == null ? null : docUser['nome'];
-    email = docUser['email'] == null ? null : docUser['email'];
-    urlImg = docUser['urlImg'] == null ? null : docUser['urlImg'];
-    docRef = docUser['docRef'] == null ? null : docUser['docRef'];
+  void carregaDoMap(Map<String, dynamic> docUser, String cnpj) {
+    uid = docUser['uid'] ?? "";
+    nome = docUser['nome'] ?? "";
+    email = docUser['email'] ?? "";
+    urlImg = docUser['urlImg'] ?? "";
+    // docRef = docUser['docRef'] == null ? null : docUser['docRef'];
     telefone = docUser['telefone'] == null ? '' : docUser['telefone'];
 
     //if (kIsWeb)   print(' é web kisweb');
@@ -90,19 +91,18 @@ class UserModel {
     perfil =
         perfilFromString(docUser['perfil'] == null ? '' : docUser['perfil']);
 
-    if (_cnpjsController.cnpjAtivo?.docId != null)
-      favoritos =
-          docUser['favoritos${_cnpjsController.cnpjAtivo.docId}'] == null
-              ? []
-              : docUser['favoritos${_cnpjsController.cnpjAtivo.docId}']
-                  .cast<String>();
+    if (cnpj != null)
+      favoritos = docUser['favoritos$cnpj'] == null
+          ? []
+          : docUser['favoritos$cnpj'].cast<String>();
     else
       favoritos = [];
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap(String cnpj) {
     Map<String, dynamic> userData = {};
 
+    userData['uid'] = uid;
     userData['nome'] = nome;
     userData['email'] = email;
     userData['dataNascimento'] = dataNascimento;
@@ -116,8 +116,7 @@ class UserModel {
     userData['tokenCelular'] = tokenCelular;
     userData['urlImg'] = urlImg;
     userData['perfil'] = perfilString();
-    if (_cnpjsController.cnpjAtivo?.docId != null)
-      userData['favoritos${_cnpjsController.cnpjAtivo.docId}'] = favoritos;
+    if (cnpj != "") userData['favoritos$cnpj'] = favoritos;
 
     return userData;
   }
@@ -160,7 +159,7 @@ class UserModel {
     }
   }
 
-  List<DropdownMenuItem> empresasDropDownMenuItens() {
+  List<DropdownMenuItem> empresasDropDownMenuItens(String cnpjAtivo) {
     List<DropdownMenuItem> listAux = [];
 
     // listAux.add( DropdownMenuItem<String>(value: 'Todos', child: Text('Exibir Todos')));
@@ -174,7 +173,7 @@ class UserModel {
                     Icon(
                       Icons.business,
                       size: 20,
-                      color: _cnpjsController.cnpjAtivo == empresa.cnpjM
+                      color: cnpjAtivo == empresa.cnpjM.docId
                           ? Colors.teal[800]
                           : Colors.grey,
                     ),
@@ -189,7 +188,6 @@ class UserModel {
   }
 
   void addEmpresa({CnpjModel cnpjM, String status = 'PEND'}) {
-    if (!estaLogado) return;
     this.empresas.add(
           UserEmpresa(cnpjM: cnpjM, status: status),
         );
@@ -201,5 +199,5 @@ class UserEmpresa {
 
   String status;
 
-  UserEmpresa({this.cnpjM, this.status});
+  UserEmpresa({@required this.cnpjM, @required this.status});
 }

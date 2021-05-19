@@ -3,12 +3,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meupedido_core/core/cnpjs/cnpj_model.dart';
-import 'package:meupedido_core/core/cnpjs/cnpjs_controller.dart';
+import 'package:meupedido_core/core/auth/services/auth_service_interface.dart';
+
 import 'package:meupedido_core/core/fcm/fcm_firebase.dart';
+import 'package:meupedido_core/meupedido_core.dart';
+import 'package:meupedido_core/rsp.dart';
 import 'package:mobx/mobx.dart';
 
-import 'auth_repository_interf.dart';
+import 'repositories/auth_repository_interf.dart';
 import 'user_model.dart';
 
 part 'auth_controller.g.dart';
@@ -19,20 +21,20 @@ abstract class _AuthControllerBase with Store {
   final IAuthRepository _repository;
   // final CNPJSController _cnpjsController;
 
-  
   // final CartController _cartController;
 
-  final GoogleSignIn googleSignIn = GoogleSignIn();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final IAuthService _service;
 
-  @observable
-  UserModel userAtual;
+  // @observable
+  // UserModel userAtual;
   @observable
   ObservableList<String> favoritos;
 
-  _AuthControllerBase(this._repository, this._cnpjsController) {
-    userAtual = UserModel();
-    userAtual.clear();
+  _AuthControllerBase(this._repository, this._service
+      //, this._cnpjsController
+      ) {
+    // userAtual = UserModel();
+    // userAtual.clear();
     favoritos = <String>[].asObservable();
   }
 
@@ -52,54 +54,105 @@ abstract class _AuthControllerBase with Store {
   void setNaoEstaLogado() => estaLogado = false;
 
   @action
-  Future<void> changeFavorito(String idProduto) async {
+  Future<void> changeFavorito(String idProduto, String cnpj) async {
+    //
     isFavorito(idProduto)
         ? userAtual.favoritos.remove(idProduto)
         : userAtual.favoritos.add(idProduto);
+    //
+
     await _repository.saveFavoritos(
-      userAtual.firebasebUser.uid,
-      userAtual.favoritos,
-    );
+        userId: userAtual.uid, favoritos: userAtual.favoritos, cnpj: cnpj);
     favoritos = userAtual.favoritos.asObservable();
   }
 
   bool isFavorito(String idProd) => favoritos.contains(idProd);
 
+  Future<UserModel> preencheUserModel(String uid, String cnpj) async {
+    ////
+    var docUser = await _repository.getUser(uid);
+    ////
+    ///
+    if (docUser != null) {
+      // setEstaLogado();
+
+      var user = UserModel();
+      // carrega varias inform da base para a variavel userAtual
+      user.carregaDoMap(docUser, cnpj);
+      // favoritos = userAtual.favoritos.asObservable();
+
+      user.empresas = [];
+      for (Map<String, dynamic> emp in docUser["empresas"]) {
+        var pj = await _getCnpjM(emp['cnpj']);
+        user.addEmpresa(cnpjM: pj, status: emp['status']);
+      }
+
+      if (user.tokenCelular == null || user.tokenCelular.isEmpty) {
+        await saveUserData();
+      }
+    }
+  }
+
+  Future<CnpjModel> _getCnpjM(String cnpj, {bool carregaFiliais = true}) async {
+    //
+    if (cnpj.isEmpty) return null;
+    //
+    var doc = await _repository.fetchCnpj(cnpj);
+    //
+    if (doc == null) return null;
+    //
+    return CnpjModel.fromJson(doc);
+    //
+
+    // cnpjModel.dadosFiliais = [];
+    // if (carregaFiliais == true) {
+    //   ///
+    //   await refreshFiliais(cnpjModel);
+    //   //
+    // }
+
+    // return cnpjModel;
+  }
+
   @action
-  void loginEmailSenha({
-    required String email,
-    required String pass,
-    required VoidCallback onSucces,
-    required VoidCallback onFail,
-  }) {
+  Future<Rsp<UserModel>> loginEmailSenha({
+    @required String email,
+    @required String pass,
+    @required String cnpj,
+  }) async {
     isLoading = false;
 
-    _auth
-        .signInWithEmailAndPassword(email: email, password: pass)
-        .then((user) async {
-      userAtual.firebasebUser = user.user;
+    try {
+      ///
+      var rsp = await _service.loginEmailSenha(email: email, pass: pass);
 
-      await _repository.registreAcesso(userAtual.firebasebUser.uid);
-      await loadCurrentUser();
+      ///
+      if (rsp.resp == RspType.ok) {
+        var user = await preencheUserModel(rsp.data['uid'], cnpj);
+        //
+        await _repository.registreAcesso(user.uid);
+        //
 
-      setEstaLogado();
-
-      onSucces();
-      isLoading = false;
-    }).catchError((e) {
-      print(e);
-      setNaoEstaLogado();
-      userAtual.clear();
-      onFail();
-      isLoading = false;
-    });
+        return Rsp()
+          ..resp = RspType.ok
+          ..data = user;
+      } else {
+        return Rsp()
+          ..resp = RspType.error
+          ..error = rsp.error;
+      }
+    } catch (e) {
+      return Rsp()
+        ..resp = RspType.error
+        ..error = e.toString();
+    }
   }
 
   @action
   void createLoginEmailSenha(
-      {required String pass,
-      required VoidCallback onSucces,
-      required VoidCallback onFail}) {
+      {@required String pass,
+      @required VoidCallback onSucces,
+      @required VoidCallback onFail}) {
     isLoading = true;
 
     _auth
@@ -127,7 +180,7 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action //// traz info da tabela user e carrega na variavel global userAtual
-  Future<Null> loadCurrentUser() async {
+  Future<UserModel> loadCurrentUser() async {
     print('entrou em loadCurrentUser');
     isLoading = true;
 
@@ -182,7 +235,7 @@ abstract class _AuthControllerBase with Store {
       for (Map emp in docUser["empresas"]) {
         var pj = await _cnpjsController.getCnpjM(emp['cnpj']);
 
-        addEmpresa(cnpjM: pj, status: emp['status']);
+        userAtual.addEmpresa(cnpjM: pj, status: emp['status']);
 
         // if(pj.docId == userAtual.cnpjAtivo.docId)
         // userAtual.cnpjAtivo = pj;
