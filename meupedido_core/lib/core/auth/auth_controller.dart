@@ -1,7 +1,4 @@
-//import 'package:MeuPedido/app/auth/auth.google_controller.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meupedido_core/core/auth/services/auth_service_interface.dart';
 
@@ -24,13 +21,14 @@ abstract class _AuthControllerBase with Store {
   // final CartController _cartController;
 
   final IAuthService _service;
+  final FCMFirebase _fcmFirebase;
 
   // @observable
   // UserModel userAtual;
   @observable
   ObservableList<String> favoritos;
 
-  _AuthControllerBase(this._repository, this._service
+  _AuthControllerBase(this._repository, this._service, this._fcmFirebase
       //, this._cnpjsController
       ) {
     // userAtual = UserModel();
@@ -250,7 +248,7 @@ abstract class _AuthControllerBase with Store {
     userData = userAtual.toMap(cnpj);
     if (userAtual.tokenCelular == null || userAtual.tokenCelular.isEmpty) {
       try {
-        userAtual.tokenCelular = await Modular.get<FCMFirebase>().getToken();
+        userAtual.tokenCelular = await _fcmFirebase.getToken();
         userData['tokenCelular'] = userAtual.tokenCelular;
       } catch (_) {}
     }
