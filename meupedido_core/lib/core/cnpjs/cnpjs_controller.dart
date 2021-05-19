@@ -1,12 +1,12 @@
 import 'cnpj_model.dart';
-import 'cnpj_repository_interf.dart';
+import 'repositories/cnpj_repository_interf.dart';
 
 class CNPJSController {
   final ICnpjRepository _cnpjRepository;
 
   CNPJSController(this._cnpjRepository);
 
-  CnpjModel cnpjAtivo;
+  // CnpjModel cnpjAtivo;
 
   Future<CnpjModel> getCnpjM(String cnpj, {bool carregaFiliais = true}) async {
     //

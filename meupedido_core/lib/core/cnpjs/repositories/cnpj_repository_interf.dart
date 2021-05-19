@@ -1,4 +1,4 @@
-import 'cnpj_model.dart';
+import '../cnpj_model.dart';
 
 abstract class ICnpjRepository {
   ///

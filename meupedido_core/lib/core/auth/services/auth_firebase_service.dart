@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meupedido_core/core/auth/services/auth_service_interface.dart';
 import 'package:meupedido_core/rsp.dart';
 
-class AuthFirebaseService implements IAuthService {
+class AuthFirebaseService extends Disposable implements IAuthService {
   final GoogleSignIn googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -219,6 +220,9 @@ class AuthFirebaseService implements IAuthService {
     //   isLoading = false;
     // }
   }
+
+  @override
+  void dispose() {}
 
   /////////////.  FIM CLASS
 }

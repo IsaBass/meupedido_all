@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'cnpj_model.dart';
+import '../cnpj_model.dart';
 import 'cnpj_repository_interf.dart';
 
 class CnpjRepository extends Disposable implements ICnpjRepository {
