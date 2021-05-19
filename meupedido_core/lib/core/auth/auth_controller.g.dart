@@ -39,21 +39,6 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
-  final _$estaLogadoAtom = Atom(name: '_AuthControllerBase.estaLogado');
-
-  @override
-  bool get estaLogado {
-    _$estaLogadoAtom.reportRead();
-    return super.estaLogado;
-  }
-
-  @override
-  set estaLogado(bool value) {
-    _$estaLogadoAtom.reportWrite(value, super.estaLogado, () {
-      super.estaLogado = value;
-    });
-  }
-
   final _$changeFavoritoAsyncAction =
       AsyncAction('_AuthControllerBase.changeFavorito');
 
@@ -187,33 +172,10 @@ mixin _$AuthController on _AuthControllerBase, Store {
   }
 
   @override
-  void setEstaLogado() {
-    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
-        name: '_AuthControllerBase.setEstaLogado');
-    try {
-      return super.setEstaLogado();
-    } finally {
-      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void setNaoEstaLogado() {
-    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
-        name: '_AuthControllerBase.setNaoEstaLogado');
-    try {
-      return super.setNaoEstaLogado();
-    } finally {
-      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 favoritos: ${favoritos},
-isLoading: ${isLoading},
-estaLogado: ${estaLogado}
+isLoading: ${isLoading}
     ''';
   }
 }
