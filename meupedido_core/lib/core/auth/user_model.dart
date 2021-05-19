@@ -26,6 +26,7 @@ class UserModel {
 
   void clear() {
     nome = '';
+    uid = '';
     //firebasebUser = null;
     email = '';
     tokenCelular = '';

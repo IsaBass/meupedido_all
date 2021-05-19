@@ -11,10 +11,9 @@ part 'cart_controller.g.dart';
 class CartController = _CartBase with _$CartController;
 
 abstract class _CartBase with Store {
-  // final CNPJSController _cnpjsController;
-  // final AuthController _authController;
+  //
   final ICartRepository _repository;
-  // final AppController _appController = AppModule.to.get();
+  //
 
   @observable
   CartModel cartAtual;
@@ -70,6 +69,7 @@ abstract class _CartBase with Store {
 
   @action
   Future<void> incrementItem(CartItemModel item) async {
+    if (_uid == "" || _cnpj == "") return;
     //
     item.incrementQtd();
 
@@ -93,6 +93,7 @@ abstract class _CartBase with Store {
 
   @action
   Future<void> decrementItem(CartItemModel item) async {
+    if (_uid == "" || _cnpj == "") return;
     //
     item.decrementQtd();
 
@@ -120,6 +121,7 @@ abstract class _CartBase with Store {
 
   @action
   Future<void> carregaCarrinhoUser() async {
+    if (_uid == "" || _cnpj == "") return;
     /////
     limparCarrinho();
     var query = await _repository.getCarrinho(
@@ -172,6 +174,8 @@ abstract class _CartBase with Store {
   void setCupomDesconto(CupomDesconto cupom) => cartAtual.cupomAplicado = cupom;
 
   Future<void> excluiCarrinho() async {
+    if (_uid == "" || _cnpj == "") return;
+
     await _repository.excluiCarrinho(
       userAtualID: _uid,
       cnpjAtivo: _cnpj,

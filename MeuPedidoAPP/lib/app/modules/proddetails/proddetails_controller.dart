@@ -1,3 +1,5 @@
+import 'package:MeuPedido/app/app_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
@@ -12,7 +14,8 @@ part 'proddetails_controller.g.dart';
 class ProddetailsController = _ProddetailsBase with _$ProddetailsController;
 
 abstract class _ProddetailsBase with Store {
-  final CNPJSController _cnpjsController = Modular.get();
+  //
+  final AppController _appController = Modular.get();
   final CategsController _categsController = Modular.get();
   final IProddetailsRepository _repository;
   //
@@ -35,17 +38,21 @@ abstract class _ProddetailsBase with Store {
     if (quantidade >= 1) quantidade--;
   }
 
-  Future<void> criarCopiaProduto(ProdutoModel prod) async {
-    var dR = _cnpjsController.cnpjAtivo.docRef;
+  DocumentReference get cnpjAtivoDocRef => FirebaseFirestore.instance
+      .collection("CNPJS")
+      .doc(_appController.cnpjAtivo.docId);
 
-    await dR.collection('produtos').add(prod.toJson());
+  Future<void> criarCopiaProduto(ProdutoModel prod) async {
+    // var dR = _appController.cnpjAtivo.docRef;
+
+    await cnpjAtivoDocRef.collection('produtos').add(prod.toJson());
   }
 
   @action
   Future<ProdutoModel> getProduto(String codigo) async {
-    var dR = _cnpjsController.cnpjAtivo.docRef;
+    // var dR = _cnpjsController.cnpjAtivo.docRef;
     //
-    var doc = await dR.collection('produtos').doc(codigo).get();
+    var doc = await cnpjAtivoDocRef.collection('produtos').doc(codigo).get();
     if (doc == null) return null;
     //
     var m = doc.data();

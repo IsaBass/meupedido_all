@@ -1,15 +1,14 @@
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'repository/endereco_interf_repository.dart';
 
 class EnderecoController extends GetxController {
-  final IEnderecoRepository _repository = Modular.get();
+  final IEnderecoRepository _repository;
 
   final isLoading = false.obs;
 
-  EnderecoController();
+  EnderecoController(this._repository);
 
   Future<String> gravaEndereco(EnderecoModel end) async {
     isLoading.value = true;

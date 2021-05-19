@@ -7,7 +7,13 @@ import 'package:dio/dio.dart';
 import 'endereco_interf_repository.dart';
 
 class EnderecoRepository extends Disposable implements IEnderecoRepository {
-  final AppController _appController = Modular.get();
+  final AppController _appController;
+
+  EnderecoRepository(this._appController);
+
+  DocumentReference get userAtualDocRef => FirebaseFirestore.instance
+      .collection("users")
+      .doc(_appController.userAtual.uid);
 
   //>>>>>  SECAO ENDERECO E BUSCA CEP  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ///
 
@@ -30,8 +36,7 @@ class EnderecoRepository extends Disposable implements IEnderecoRepository {
 
   Future<String> gravaEndereco(Map dados) async {
     //
-    var doc =
-        await _appController.userAtualDocRef.collection('enderecos').add(dados);
+    var doc = await userAtualDocRef.collection('enderecos').add(dados);
     return doc.id;
     //
   }
@@ -44,7 +49,7 @@ class EnderecoRepository extends Disposable implements IEnderecoRepository {
     double coordLong,
   }) async {
     //
-    await _appController.userAtualDocRef.collection('enderecos').doc(id).set(
+    await userAtualDocRef.collection('enderecos').doc(id).set(
       {
         "numero": numero,
         "complemento": complem,
@@ -58,10 +63,7 @@ class EnderecoRepository extends Disposable implements IEnderecoRepository {
 
   Future<void> excluiEndereco(String id) async {
     //
-    await _appController.userAtualDocRef
-        .collection('enderecos')
-        .doc(id)
-        .delete();
+    await userAtualDocRef.collection('enderecos').doc(id).delete();
     //
   }
 

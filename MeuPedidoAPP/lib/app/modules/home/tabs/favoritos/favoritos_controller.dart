@@ -1,4 +1,4 @@
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 import 'package:mobx/mobx.dart';
 
@@ -9,11 +9,12 @@ part 'favoritos_controller.g.dart';
 class FavoritosController = _FavoritosBase with _$FavoritosController;
 
 abstract class _FavoritosBase with Store {
-  final AuthController _authController = Modular.get();
+  final AppController _appController;
+
   //
   final FavoritosRepositoryI _repository;
   //
-  _FavoritosBase(this._repository);
+  _FavoritosBase(this._repository, this._appController);
 
   @observable
   ObservableList<ProdutoModel> favs;
@@ -27,7 +28,7 @@ abstract class _FavoritosBase with Store {
     //
     var lAux = <ProdutoModel>[];
 
-    for (var p in _authController.favoritos) {
+    for (var p in _appController.getFavoritos) {
       var doc = await _repository.getProdutoFav(p);
       if (doc != null) {
         lAux.add(ProdutoModel.fromJson(doc));
@@ -40,7 +41,7 @@ abstract class _FavoritosBase with Store {
 
   @action
   void excluirFavorito(ProdutoModel prod) {
-    _authController.changeFavorito(prod.codigo);
+    _appController.changeFavorito(prod.codigo);
     favs.remove(prod);
   }
 }

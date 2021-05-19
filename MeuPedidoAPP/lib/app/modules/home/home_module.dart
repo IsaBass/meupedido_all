@@ -1,8 +1,9 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_controller.dart';
 import 'home_page.dart';
-import 'repository/home_repository.dart';
+
 import 'tabs/favoritos/favoritos_controller.dart';
 import 'tabs/favoritos/favoritos_repository.dart';
 import 'tabs/meuspedidos/meuspedidos_controller.dart';
@@ -16,15 +17,18 @@ import 'tabs/search/search_controller.dart';
 class HomeModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => HomeRepository()),
+        // Bind((i) => HomeRepository()),
         Bind((i) => HomeController()),
-        Bind((i) => FavoritosController(i.get<FavoritosRepository>())),
-        Bind((i) => FavoritosRepository(Modular.get())),
-        Bind((i) => SearchController()),
-        Bind((i) => ListEnderecosRepository()),
-        Bind((i) => ListEnderecosController(i.get<ListEnderecosRepository>())),
-        Bind((i) => MeusPedidosController(i.get())),
-        Bind((i) => MeusPedidosRepository()),
+        Bind((i) => FavoritosRepository(Modular.get<AppController>())),
+        Bind((i) => FavoritosController(i(), Modular.get())),
+        Bind((i) => SearchController(Modular.get())),
+        Bind(
+          (i) => ListEnderecosController(
+            ListEnderecosRepository(Modular.get<AppController>()),
+          ),
+        ),
+        Bind((i) => MeusPedidosRepository(Modular.get<AppController>())),
+        Bind((i) => MeusPedidosController(i())),
       ];
 
   @override

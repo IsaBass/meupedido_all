@@ -11,9 +11,13 @@ import 'repository/pedido_repository.dart';
 class PedidoModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => PedidoRepository(
-            Modular.get<AppController>(), Modular.get<AuthController>())),
-        Bind((i) => PedidoController(i.get<PedidoRepository>())),
+        Bind.singleton(
+          (i) => PedidoRepository(
+            Modular.get<AppController>(),
+            Modular.get<FCMFirebase>(),
+          ),
+        ),
+        Bind.singleton((i) => PedidoController(i.get<PedidoRepository>())),
       ];
 
   @override

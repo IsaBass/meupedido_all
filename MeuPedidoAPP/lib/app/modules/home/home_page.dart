@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/categs/categs_controller.dart';
 
 import 'package:flutter/material.dart';
@@ -22,12 +23,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //
   final HomeController _controller = Modular.get<HomeController>();
-
   final CategsController _categsController = Modular.get<CategsController>();
-  final AuthController _authController = Modular.get();
   final CartController _cartController = Modular.get();
+  final AppController _appController = Modular.get();
   final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
+  //
 
   //int _page = 1;
 
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
       _categsController.recarregaAllCategs();
 
       //_cartController.carregaCarrinhoUser();
-      if (_cnpjsController.cnpjAtivo == null) {
+      if (_appController.cnpjAtivo == null) {
         print('homepage::: nao tenho cnpj ativo');
         Modular.to.popAndPushNamed('/');
         return;
@@ -52,19 +54,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void carregaUsuario() async {
-    _cnpjsController.cnpjAtivo =
+    _appController.cnpjAtivo =
         await _cnpjsController.getCnpjM(MyConst().cnpjEmpresaFixa);
-    _authController.setLoading();
 
-    _authController.loadCurrentUser().then((_) {
-      if (_authController.estaLogado) {
+    _appController.loadCurrentUser().then((_) {
+      if (_appController.estaLogado) {
         print('na tela home_page:: estaLogado com sucesso');
-        Modular.get<CartController>().carregaCarrinhoUser();
       }
-      _authController.setNoLoading();
     }).catchError((e) {
-      print('erro ao logar na tela splach');
-      _authController.setNoLoading();
+      print('erro ao logar na carregaUsuario da home_page: ${e.toString()} ');
     });
   }
 

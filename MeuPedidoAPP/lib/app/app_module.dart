@@ -1,6 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:meupedido_core/core/auth/services/auth_firebase_service.dart';
 
 import 'package:meupedido_core/core/cart/cart_repository.dart';
+import 'package:meupedido_core/core/meus_temas/theme_controller.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
 import 'app_controller.dart';
@@ -25,15 +27,25 @@ import 'utils/mercado_pago/ag.mercado_pago.dart';
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind.singleton((i) => CnpjRepository()),
-        Bind.singleton((i) => CNPJSController(i.get())),
-        Bind.singleton((i) => AuthRepository()),
-        Bind.singleton((i) => AuthController(i.get(), i.get())),
-        Bind.singleton((i) => AppRepository(i.get<CNPJSController>())),
+        Bind.singleton((i) => ThemeController()),
+        Bind.singleton((i) => CNPJSController(CnpjRepository())),
+        Bind.singleton((i) => AuthFirebaseService()),
         Bind.singleton(
-            (i) => AppController(i.get(), i.get(), i.get<AppRepository>())),
-        Bind.singleton((i) => CartRepository()),
-        Bind.singleton((i) => CartController(i.get(), i.get(), i.get())),
+          (i) => AuthController(
+            AuthRepository(),
+            i.get<AuthFirebaseService>(),
+            i<FCMFirebase>(),
+          ),
+        ),
+        Bind.singleton(
+          (i) => AppController(
+            i.get<AuthController>(),
+            i.get<CNPJSController>(),
+            AppRepository(),
+            i<CartController>(),
+          ),
+        ),
+        Bind.singleton((i) => CartController(CartRepository())),
         Bind.singleton((i) => CardTypeRepository()),
         Bind.singleton((i) => CategsRepository()),
         Bind.singleton((i) => CategsController(i.get<CategsRepository>())),

@@ -1,3 +1,3 @@
 abstract class IAppRepository {
-  Future<Map<String, dynamic>> getCnpjConfigs() ;
+  Future<Map<String, dynamic>> getCnpjConfigs(String cnpj);
 }

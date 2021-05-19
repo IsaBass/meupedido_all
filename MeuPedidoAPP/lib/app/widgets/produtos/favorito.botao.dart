@@ -1,7 +1,7 @@
-import 'package:MeuPedido/app/app_module.dart';
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:meupedido_core/meupedido_core.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class BtnFavorito extends StatefulWidget {
   final String codigoProduto;
@@ -12,13 +12,15 @@ class BtnFavorito extends StatefulWidget {
 }
 
 class _BtnFavoritoState extends State<BtnFavorito> {
-  final AuthController _authController =
-      AppModule().getBind<AuthController>(typesInRequest: [AuthController]);
+  //
+  final AppController _appController = Modular.get();
+  //
+
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       onPressed: () {
-        _authController.changeFavorito(widget.codigoProduto);
+        _appController.changeFavorito(widget.codigoProduto);
       },
       fillColor: Colors.white,
       shape: CircleBorder(),
@@ -27,7 +29,7 @@ class _BtnFavoritoState extends State<BtnFavorito> {
         padding: EdgeInsets.all(5),
         child: Observer(builder: (_) {
           return Icon(
-            _authController.isFavorito(widget.codigoProduto)
+            _appController.isFavorito(widget.codigoProduto)
                 ? Icons.favorite
                 : Icons.favorite_border,
             color: Colors.red,

@@ -1,4 +1,5 @@
 import 'package:MeuPedido/app/app_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -8,10 +9,14 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
   ///
   final AppController _appController = Modular.get<AppController>();
 
+  DocumentReference get cnpjDocRef => FirebaseFirestore.instance
+      .collection("CNPJS")
+      .doc(_appController.cnpjAtivo.docId);
+
   Future<List<Map>> prodsCategoria(int codCateg) async {
     List<Map> lAux = [];
 
-    var docs = await _appController.cnpjAtivoDocRef
+    var docs = await cnpjDocRef
         .collection('produtos')
         .where('codCateg', isEqualTo: codCateg)
         .get();
@@ -28,7 +33,7 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
 
   Future<List<Map>> getProdsDestaqueGeral() async {
     List<Map> lAux = [];
-    var docs = await _appController.cnpjAtivoDocRef
+    var docs = await cnpjDocRef
         .collection('produtos')
         .where('destaqueGeral', isEqualTo: true)
         .get();
@@ -43,7 +48,7 @@ class CategoriaRepository extends Disposable implements ICategoriaRepository {
 
   Future<List<Map>> getProdsTodosDestaque() async {
     List<Map> lAux = [];
-    var docs = await _appController.cnpjAtivoDocRef
+    var docs = await cnpjDocRef
         .collection('produtos')
         .where('destaqueCateg', isEqualTo: true)
         .get();

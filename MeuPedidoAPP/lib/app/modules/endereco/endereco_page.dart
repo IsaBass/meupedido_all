@@ -47,8 +47,8 @@ class _EnderecoPageState extends State<EnderecoPage> {
 
   final AuthController _authController = Modular.get<AuthController>();
   //
-  final EnderecoController controller =
-      Get.put<EnderecoController>(EnderecoController());
+  final EnderecoController controller = Modular.get();
+
   //
 
   EnderecoModel endereco;
@@ -264,7 +264,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
       double long;
 
       controller.isLoading.value = true;
-      var locs = await getGEO_DoEndereco(
+      var locs = await getGeoDoEndereco(
           " ${_ruaCont.text}, ${_numeroCont.text}, ${_bairroCont.text}, ${_cidadeCont.text}, ${_ufCont.text}  ");
       if (locs != null) {
         lat = locs[0];
@@ -290,7 +290,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
 
     _acaoSalvarAlteracao() async {
       controller.isLoading.value = true;
-      var locs = await getGEO_DoEndereco(
+      var locs = await getGeoDoEndereco(
           " ${_ruaCont.text}, ${_numeroCont.text}, ${_bairroCont.text}, ${_cidadeCont.text}, ${_ufCont.text}  ");
       if (locs != null) {
         endereco.coordLat = locs[0];

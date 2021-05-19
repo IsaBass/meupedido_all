@@ -38,18 +38,18 @@ abstract class _AuthControllerBase with Store {
 
   @observable
   bool isLoading = false;
-  @observable
-  bool estaLogado = false;
+  // @observable
+  // bool estaLogado = false;
 
   @action
   void setLoading() => isLoading = true;
   @action
   void setNoLoading() => isLoading = false;
 
-  @action
-  void setEstaLogado() => estaLogado = true;
-  @action
-  void setNaoEstaLogado() => estaLogado = false;
+  // @action
+  // void setEstaLogado() => estaLogado = true;
+  // @action
+  // void setNaoEstaLogado() => estaLogado = false;
 
   @action
   Future<void> changeFavorito(

@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -12,20 +13,23 @@ class PerfilEditUsuario extends StatefulWidget {
 class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  //
   final TextEditingController _dateCont = TextEditingController();
   final TextEditingController _nomeCont = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
   final TextEditingController _telefoneCont = TextEditingController();
-  final AuthController _controller = Modular.get();
-
+  //
+  final AppController _appController = Modular.get();
+  //
   DateTime _selectedDataNascimento;
+  //
 
   @override
   void initState() {
-    _nomeCont.text = _controller.userAtual.nome;
-    _emailCont.text = _controller.userAtual.email;
-    _telefoneCont.text = _controller.userAtual.telefone;
-    _selectedDataNascimento = _controller.userAtual.dataNascimento;
+    _nomeCont.text = _appController.userAtual.nome;
+    _emailCont.text = _appController.userAtual.email;
+    _telefoneCont.text = _appController.userAtual.telefone;
+    _selectedDataNascimento = _appController.userAtual.dataNascimento;
     if (_selectedDataNascimento != null)
       _dateCont.text = DateFormat(DateFormat.YEAR_NUM_MONTH_DAY, 'pt_Br')
           .format(_selectedDataNascimento);
@@ -66,7 +70,7 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
                     height: 50,
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(4),
-                    child: _controller.isLoading == true
+                    child: _appController.isLoading == true
                         ? Container(
                             child: Center(child: CircularProgressIndicator()))
                         : _botaoSalvar(context),
@@ -90,7 +94,7 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
   //     ),
   //     //padding: EdgeInsets.all(8),
   //     child: Text(
-  //       'Perfil de Acesso: ${_controller.userAtual.perfilString().toUpperCase()}',
+  //       'Perfil de Acesso: ${_appController.userAtual.perfilString().toUpperCase()}',
   //       style: TextStyle(fontSize: 16),
   //     ),
   //   );
@@ -151,9 +155,9 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
   //           decoration: BoxDecoration(
   //             shape: BoxShape.circle,
   //             image: DecorationImage(
-  //               image: _controller.userAtual.urlImg != null
+  //               image: _appController.userAtual.urlImg != null
   //                   ? // FileImage(File(_editedContact.img))
-  //                   NetworkImage(_controller.userAtual.urlImg)
+  //                   NetworkImage(_appController.userAtual.urlImg)
   //                   : //AssetImage("images/person.png"),
   //                   NetworkImage(
   //                       'https://picsum.photos/150/150'), //('https://placehold.it/100'),
@@ -244,11 +248,11 @@ class _PerfilEditUsuarioState extends State<PerfilEditUsuario> {
               color: Theme.of(context).primaryTextTheme.bodyText1.color)),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
-          _controller.userAtual.nome = (_nomeCont.text);
-          _controller.userAtual.email = (_emailCont.text);
-          _controller.userAtual.telefone = (_telefoneCont.text);
-          _controller.userAtual.dataNascimento = (_selectedDataNascimento);
-          await _controller.saveUserData(alterarLoading: true);
+          _appController.userAtual.nome = (_nomeCont.text);
+          _appController.userAtual.email = (_emailCont.text);
+          _appController.userAtual.telefone = (_telefoneCont.text);
+          _appController.userAtual.dataNascimento = (_selectedDataNascimento);
+          await _appController.saveUserData(alterarLoading: true);
           // mySnackBar(context,
           //     texto: "Cadastro salvo com sucesso.",
           //     color: Colors.indigo[900],

@@ -1,22 +1,29 @@
 import 'package:MeuPedido/app/app_controller.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:meupedido_core/meupedido_core.dart';
 
 import 'carrinho_interf_repository.dart';
 
 class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
   //
-  final AppController _appController = Modular.get();
-  final AuthController _authController = Modular.get();
+  final AppController _appController;
+
+  CarrinhoRepository(this._appController);
+
+  DocumentReference get userAtualDocRef => FirebaseFirestore.instance
+      .collection("users")
+      .doc(_appController.userAtual.uid);
+
+  DocumentReference get cnpjAtivoDocRef => FirebaseFirestore.instance
+      .collection("CNPJS")
+      .doc(_appController.cnpjAtivo.docId);
 
   /// USAR APENAS PARA GRAVACAO DE NOVO PEDIDO
   @override
   Future<String> gravarPedido(Map pedido) async {
     //
-    var docRef = _appController.cnpjAtivoDocRef;
+    var docRef = cnpjAtivoDocRef;
 
     String docId;
     try {
@@ -55,8 +62,8 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<void> _registraNoUsuario(Map pedido, String docId) async {
     //
-    await _appController.userAtualDocRef
-        .collection('pedidos${_appController.cnpjAtivoDocRef.id}')
+    await userAtualDocRef
+        .collection('pedidos${_appController.cnpjAtivo.docId}')
         .doc(docId)
         .set({
       "idPedido": docId,
@@ -72,19 +79,15 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<String> gravarPedidoTemporario() async {
     //
-    var doc = await _appController.cnpjAtivoDocRef
-        .collection('pedidos')
-        .add({"temporario": true});
+    var doc =
+        await cnpjAtivoDocRef.collection('pedidos').add({"temporario": true});
     //
     return doc.id;
   }
 
   Future<void> excluiPedidoTemporario(String idPedido) async {
     //
-    await _appController.cnpjAtivoDocRef
-        .collection('pedidos')
-        .doc(idPedido)
-        .delete();
+    await cnpjAtivoDocRef.collection('pedidos').doc(idPedido).delete();
     //
   }
 
@@ -96,7 +99,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
       "ultAlteracao": DateTime.now().millisecondsSinceEpoch
     };
 
-    await _appController.cnpjAtivoDocRef.collection('limbo').add(mapLimbo);
+    await cnpjAtivoDocRef.collection('limbo').add(mapLimbo);
 
     print(' >> CARRINHO Repository.REGISTRA LIMBO LOJA ');
     //
@@ -109,8 +112,8 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
       String valorAnterior}) async {
     //
     Map<String, dynamic> mapHistorico = {
-      "userId": _appController.userAtualDocRef.id,
-      "userName": _authController.userAtual.nome,
+      "userId": _appController.userAtual.uid,
+      "userName": _appController.userAtual.nome,
       "origem": "App", //  "App" OR "PC"
       "dataHora": DateTime.now().millisecondsSinceEpoch,
       "campo": campoAlterado,
@@ -118,7 +121,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
       "novo": valorNovo,
     };
 
-    await _appController.cnpjAtivoDocRef
+    await cnpjAtivoDocRef
         .collection('pedidos')
         .doc(idPedido)
         .collection('historico')
@@ -132,8 +135,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<List<Map>> getEnderecos() async {
     //
-    var docs =
-        await _appController.userAtualDocRef.collection('enderecos').get();
+    var docs = await userAtualDocRef.collection('enderecos').get();
     //
     List<Map> lAux = [];
     for (var doc in docs.docs) {
@@ -148,8 +150,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<String> gravaEndereco(Map dados) async {
     //
-    var doc =
-        await _appController.userAtualDocRef.collection('enderecos').add(dados);
+    var doc = await userAtualDocRef.collection('enderecos').add(dados);
     return doc.id;
     //
   }
@@ -157,7 +158,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
   Future<void> alteraEndereco(
       {String id, String numero, String complem}) async {
     //
-    await _appController.userAtualDocRef.collection('enderecos').doc(id).set(
+    await userAtualDocRef.collection('enderecos').doc(id).set(
       {"numero": numero, "complemento": complem},
       SetOptions(merge: true),
     );
@@ -166,10 +167,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<void> excluiEndereco(String id) async {
     //
-    await _appController.userAtualDocRef
-        .collection('enderecos')
-        .doc(id)
-        .delete();
+    await userAtualDocRef.collection('enderecos').doc(id).delete();
     //
   }
 
@@ -187,7 +185,7 @@ class CarrinhoRepository extends Disposable implements ICarrinhoRepository {
 
   Future<Map> getCupomDesconto(String tagCupom) async {
     //
-    var docs = await _appController.cnpjAtivoDocRef
+    var docs = await cnpjAtivoDocRef
         .collection('cupomdesconto')
         .where('tagCupom', isEqualTo: tagCupom.toUpperCase())
         .get();

@@ -1,16 +1,16 @@
 import 'package:MeuPedido/app/app_repository_interf.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:meupedido_core/meupedido_core.dart';
 
 class AppRepository extends Disposable implements IAppRepository {
-  final CNPJSController _cnpjsController;
-
-  AppRepository(this._cnpjsController);
-
-  Future<Map<String, dynamic>> getCnpjConfigs() async {
+  @override
+  Future<Map<String, dynamic>> getCnpjConfigs(String cnpj) async {
     //
-    var docs =
-        await _cnpjsController.cnpjAtivo.docRef.collection('cadastro').get();
+    var docs = await FirebaseFirestore.instance
+        .collection("CNPJS")
+        .doc(cnpj)
+        .collection('cadastro')
+        .get();
 
     if (docs.docs.isNotEmpty) {
       return docs.docs[0].data();

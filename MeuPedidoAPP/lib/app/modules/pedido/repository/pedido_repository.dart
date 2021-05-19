@@ -8,15 +8,20 @@ import 'package:meupedido_core/meupedido_core.dart';
 import 'pedido_interf_repository.dart';
 
 class PedidoRepository extends Disposable implements IPedidoRepository {
+  //
   final AppController _appController;
-  final AuthController _authController;
-  final FCMFirebase _fcmFirebase = Modular.get<FCMFirebase>();
+  final FCMFirebase _fcmFirebase;
+  //
 
-  PedidoRepository(this._appController, this._authController);
+  PedidoRepository(this._appController, this._fcmFirebase);
+
+  DocumentReference get cnpjAtivoDocRef => FirebaseFirestore.instance
+      .collection("CNPJS")
+      .doc(_appController.cnpjAtivo.docId);
 
   Stream<Map<String, dynamic>> getPedido(String idPedido) {
     /////
-    return _appController.cnpjAtivoDocRef
+    return cnpjAtivoDocRef
         .collection('pedidos')
         .doc(idPedido)
         .snapshots()
@@ -26,7 +31,7 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
 
   void cancelePedido(String idPedido, String motivo, String statusAtual) {
     /////
-    _appController.cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
+    cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
       {"status": "CANCEL", "motivoCancelamento": motivo},
       SetOptions(merge: true),
     );
@@ -49,7 +54,7 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
   void cancelePendentePedido(
       String idPedido, String motivo, String statusAtual) {
     /////
-    _appController.cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
+    cnpjAtivoDocRef.collection('pedidos').doc(idPedido).set(
       {"status": "CANCEL.P", "motivoCancelamento": motivo},
       SetOptions(merge: true),
     );
@@ -76,8 +81,8 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
       String valorAnterior}) {
     //
     Map<String, dynamic> mapHistorico = {
-      "userId": _appController.userAtualDocRef.id,
-      "userName": _authController.userAtual.nome,
+      "userId": _appController.userAtual.uid,
+      "userName": _appController.userAtual.nome,
       "origem": "App", //  "App" OR "PC"
       "dataHora": DateTime.now().millisecondsSinceEpoch,
       "campo": campoAlterado,
@@ -85,7 +90,7 @@ class PedidoRepository extends Disposable implements IPedidoRepository {
       "novo": valorNovo,
     };
 
-    _appController.cnpjAtivoDocRef
+    cnpjAtivoDocRef
         .collection('pedidos')
         .doc(idPedido)
         .collection('historico')

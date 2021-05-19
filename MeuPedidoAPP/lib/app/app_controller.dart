@@ -1,12 +1,8 @@
-
 import 'package:MeuPedido/app/app_repository_interf.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
+import 'package:meupedido_core/rsp.dart';
 import 'package:mobx/mobx.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:meupedido_core/meupedido_core.dart';
-
 
 part 'app_controller.g.dart';
 
@@ -15,83 +11,108 @@ class AppController = _AppControllerBase with _$AppController;
 abstract class _AppControllerBase with Store {
   final AuthController _authController;
   final CNPJSController _cnpjsController;
+  final CartController _cartController;
   final IAppRepository _appRepository;
 
-  _AppControllerBase(this._authController, this._cnpjsController, this._appRepository) {
-    carregaTemaAbertura();
-  }
+  _AppControllerBase(this._authController, this._cnpjsController,
+      this._appRepository, this._cartController);
 
   @observable
-  bool temaDark = false;
+  CnpjModel cnpjAtivo;
   @observable
-  String codTemaAtual = "1";
+  UserModel userAtual;
+  @observable
+  bool isLoading = false;
+
+  @computed
+  bool get estaLogado => (userAtual?.uid ?? "") != "";
+
+  ////
+  // DocumentReference get userAtualDocRef => _authController.userAtual.docRef;
+  // DocumentReference get cnpjAtivoDocRef =>
+  //     FirebaseFirestore.instance.collection("CNPJS").doc(cnpjAtivo.docId);
+  String get userAtualDocId => userAtual.uid;
+  String get cnpjAtivoDocId => cnpjAtivo.docId; // docId é o CNPJ
+  ////
 
   @action
-  void setCodTemaAtual(String novo, {bool gravar = true}) {
-    codTemaAtual = novo;
+  Future<void> saveUserData({bool alterarLoading = false}) async {
+    isLoading = true;
 
-    if (gravar) setTheme();
+    await _authController.saveUserData(userAtual, cnpjAtivo.docId);
+
+    isLoading = false;
+  }
+
+  // SEÇÃO LOGAR ////////////////////////////////////////
+
+  @action
+  Future<void> loadCurrentUser() async {
+    isLoading = true;
+    //
+    var rsp = await _authController.loadCurrentUser(cnpjAtivo.docId);
+
+    if (rsp.resp == RspType.ok) {
+      //
+      userAtual = rsp.data;
+      //
+      _cartController.setVariables(userAtual.uid, cnpjAtivo.docId);
+      _cartController.carregaCarrinhoUser();
+      //
+    } else {
+      //
+      _cartController.limparCarrinho();
+      _cartController.clearVariables();
+      //
+      userAtual.clear();
+      userAtual = userAtual;
+    }
+
+    //
+    isLoading = false;
   }
 
   @action
-  void setTemaDark(bool dark, {bool gravar = true}) {
-    temaDark = dark;
-    if (gravar) setTheme();
+  Future<void> signOut() async {
+    isLoading = true;
+    var rsp = await _authController.signOut();
+
+    if (rsp.resp == RspType.error) {
+      // mensagem que nao conseguiu deslogar
+      return;
+    }
+    //
+    _cartController.limparCarrinho();
+    _cartController.clearVariables();
+    //
+
+    userAtual.clear();
+    userAtual = userAtual;
+
+    isLoading = false;
   }
 
+  // SEÇÃO FAVORITOS ////////////////////////////////////////
   @action
-  void setTheme() {
-    SharedPreferences.getInstance().then((prefs) {
-      prefs.setBool('themeDark', temaDark ?? false);
-      prefs.setString('codTheme', codTemaAtual ?? "1");
-    });
+  Future<void> changeFavorito(String idProduto) async {
+    isLoading = true;
+    await _authController.changeFavorito(userAtual, idProduto, cnpjAtivo.docId);
+    isLoading = false;
   }
 
   @computed
-  ThemeData get getTheme {
-    var tm = MeusTemas.meusTemas.firstWhere(
-      (t) => t.codigo == (codTemaAtual ?? "1"),
-      orElse: () => MeusTemas.meusTemas[0],
-    );
+  List<String> get getFavoritos => _authController.favoritos;
 
-    return (temaDark ?? false) ? tm.darkTheme : tm.lightTheme;
-  }
+  @computed
+  bool isFavorito(String idProd) => _authController.isFavorito(idProd);
+  //
+  ////////////////////////////////////////////////////////
 
-  void carregaTemaAbertura() async {
-    var cd = await _getThemePrefCod();
-    setCodTemaAtual(cd, gravar: false);
-    var dk = await _getThemePrefDark();
-    setTemaDark(dk, gravar: false);
-  }
-
-  Future<bool> _getThemePrefDark() async {
-    var prefs = await SharedPreferences.getInstance();
-    if (prefs == null) return false;
-
-    var b = prefs.getBool('themeDark');
-    return b ?? false;
-  }
-
-  Future<String> _getThemePrefCod() async {
-    var prefs = await SharedPreferences.getInstance();
-    if (prefs == null) return "1";
-
-    var s = prefs.getString('codTheme');
-    return s ?? "1";
-  }
-
-  ////
-  DocumentReference get userAtualDocRef => _authController.userAtual.docRef;
-  DocumentReference get cnpjAtivoDocRef => _cnpjsController.cnpjAtivo.docRef;
-  String get userAtualDocId => _authController.userAtual.firebasebUser.uid;
-  String get cnpjAtivoDocId => _cnpjsController.cnpjAtivo.docId;  // docId é o CNPJ
-  ////
-
-
+  //
   Future<CnpjConfigsModel> getCnpjConfigs() async {
     //
-    var map = await  _appRepository.getCnpjConfigs();
-    
+    var map = await _appRepository.getCnpjConfigs(cnpjAtivo.docId);
+
     return CnpjConfigsModel.fromJson(map);
     //
   }

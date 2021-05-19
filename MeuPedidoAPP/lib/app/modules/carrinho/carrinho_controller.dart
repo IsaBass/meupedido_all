@@ -15,17 +15,24 @@ part 'carrinho_controller.g.dart';
 class CarrinhoController = _CarrinhoBase with _$CarrinhoController;
 
 abstract class _CarrinhoBase with Store {
+  //
   final ICarrinhoRepository _carrinhoRepository;
 
-  _CarrinhoBase(this._carrinhoRepository) {
+  //
+  final CartController _cartController; // = Modular.get<CartController>();
+  final AppController _appController; // = Modular.get<AppController>();
+  final FCMFirebase _fcmFirebase; // = Modular.get<FCMFirebase>();
+  //
+
+  _CarrinhoBase(
+    this._carrinhoRepository,
+    this._cartController,
+    this._appController,
+    this._fcmFirebase,
+  ) {
     enderecos = <EnderecoModel>[].asObservable();
   }
-
-  final CartController _cartController = Modular.get<CartController>();
-  final AppController _appController = Modular.get<AppController>();
-  final AuthController _authController = Modular.get<AuthController>();
   final PageController pageController = PageController();
-  final FCMFirebase _fcmFirebase = Modular.get<FCMFirebase>();
 
   @observable
   bool isLoading = false;
@@ -83,7 +90,7 @@ abstract class _CarrinhoBase with Store {
     ped.prods = _cartController.cartAtual.itens
         .map((e) => ProdPedidoModel.fromCartItem(e))
         .toList();
-    ped.usuario = UsuarioModel.fromUserModel(_authController.userAtual);
+    ped.usuario = UsuarioModel.fromUserModel(_appController.userAtual);
     if (idEndereco != null && idEndereco.isNotEmpty) {
       ped.endereco = enderecos.firstWhere((e) => e.docId == idEndereco);
     }
@@ -261,7 +268,7 @@ abstract class _CarrinhoBase with Store {
     if (end.coordLat == null || end.coordLong == null) {
       var enderecoOrig =
           " ${end.logradouro}, ${end.numero}, ${end.bairro}, ${end.cidade}, ${end.uf}";
-      var destino = await getGEO_DoEndereco(enderecoOrig);
+      var destino = await getGeoDoEndereco(enderecoOrig);
       if (destino == null) {
         _cartController.cartAtual.setVlrFrete(0.00);
         isLoading = false;
@@ -278,7 +285,7 @@ abstract class _CarrinhoBase with Store {
       return;
     }
     //
-    var distancia = await getGEO_Distancia(
+    var distancia = await getGeoDistancia(
         configs.coordLat, configs.coordLong, end.coordLat, end.coordLong);
     //
     var vlrFrete = 0.0;

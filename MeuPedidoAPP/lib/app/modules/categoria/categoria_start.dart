@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
+import 'package:meupedido_core/core/meus_temas/theme_controller.dart';
 import 'package:meupedido_core/meupedido_core.dart';
-
-import 'package:MeuPedido/app/app_controller.dart';
-
 import 'package:MeuPedido/app/widgets/produtos/grid_product.dart';
 import 'package:MeuPedido/app/widgets/produtos/slider_item.dart';
 
 import 'categoria_controller.dart';
-
 import 'widget/home_seletorcategoria.dart';
 
 class CategoriaStart extends StatefulWidget {
@@ -22,7 +18,7 @@ class CategoriaStart extends StatefulWidget {
 class CategoriaStartState extends State<CategoriaStart> {
   ///
   final CategoriaController _controller = Modular.get();
-  final AppController _appController = Modular.get();
+  final ThemeController _themeController = Modular.get();
 
   List<T> map<T>(List list, Function handler) {
     var result = [];
@@ -95,15 +91,15 @@ class CategoriaStartState extends State<CategoriaStart> {
                       ListTile(
                         title: Text('Selecione o Tema'),
                         trailing: DropdownButton<String>(
-                          value: _appController.codTemaAtual,
+                          value: _themeController.codTemaAtual,
                           items: MeusTemas.listDDTemas,
-                          onChanged: _appController.setCodTemaAtual,
+                          onChanged: _themeController.setCodTemaAtual,
                         ),
                       ),
                       SwitchListTile(
                         title: Text('Dark Mode'),
-                        value: _appController.temaDark ?? false,
-                        onChanged: _appController.setTemaDark,
+                        value: _themeController.temaDark ?? false,
+                        onChanged: _themeController.setTemaDark,
                       ),
                     ],
                   ),

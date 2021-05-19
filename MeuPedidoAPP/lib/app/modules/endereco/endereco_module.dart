@@ -8,8 +8,8 @@ import 'repository/endereco_repository.dart';
 class EnderecoModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => EnderecoRepository()),
-        Bind((i) => EnderecoController()),
+        Bind((i) => EnderecoRepository(Modular.get())),
+        Bind((i) => EnderecoController(i())),
       ];
 
   @override
