@@ -1,5 +1,5 @@
 //import 'package:MeuPedido/app/auth/auth.google_controller.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -54,21 +54,23 @@ abstract class _AuthControllerBase with Store {
   void setNaoEstaLogado() => estaLogado = false;
 
   @action
-  Future<void> changeFavorito(String idProduto, String cnpj) async {
+  Future<void> changeFavorito(
+      UserModel user, String idProduto, String cnpj) async {
     //
     isFavorito(idProduto)
-        ? userAtual.favoritos.remove(idProduto)
-        : userAtual.favoritos.add(idProduto);
+        ? user.favoritos.remove(idProduto)
+        : user.favoritos.add(idProduto);
     //
 
     await _repository.saveFavoritos(
-        userId: userAtual.uid, favoritos: userAtual.favoritos, cnpj: cnpj);
-    favoritos = userAtual.favoritos.asObservable();
+        userId: user.uid, favoritos: user.favoritos, cnpj: cnpj);
+    favoritos = user.favoritos.asObservable();
   }
 
   bool isFavorito(String idProd) => favoritos.contains(idProd);
 
   Future<UserModel> preencheUserModel(String uid, String cnpj) async {
+    var user = UserModel();
     ////
     var docUser = await _repository.getUser(uid);
     ////
@@ -76,7 +78,6 @@ abstract class _AuthControllerBase with Store {
     if (docUser != null) {
       // setEstaLogado();
 
-      var user = UserModel();
       // carrega varias inform da base para a variavel userAtual
       user.carregaDoMap(docUser, cnpj);
       // favoritos = userAtual.favoritos.asObservable();
@@ -88,9 +89,10 @@ abstract class _AuthControllerBase with Store {
       }
 
       if (user.tokenCelular == null || user.tokenCelular.isEmpty) {
-        await saveUserData();
+        await saveUserData(user, cnpj);
       }
     }
+    return user;
   }
 
   Future<CnpjModel> _getCnpjM(String cnpj, {bool carregaFiliais = true}) async {
@@ -133,116 +135,93 @@ abstract class _AuthControllerBase with Store {
         await _repository.registreAcesso(user.uid);
         //
 
-        return Rsp()
-          ..resp = RspType.ok
-          ..data = user;
+        return Rsp.ok(user);
       } else {
-        return Rsp()
-          ..resp = RspType.error
-          ..error = rsp.error;
+        return Rsp.error(rsp.error);
       }
     } catch (e) {
-      return Rsp()
-        ..resp = RspType.error
-        ..error = e.toString();
+      return Rsp.error(e.toString());
     }
   }
 
   @action
-  void createLoginEmailSenha(
-      {@required String pass,
+  Future<Rsp<UserModel>> createLoginEmailSenha(
+      {@required String email,
+      @required String pass,
+      @required String cnpj,
       @required VoidCallback onSucces,
-      @required VoidCallback onFail}) {
+      @required VoidCallback onFail}) async {
     isLoading = true;
 
-    _auth
-        .createUserWithEmailAndPassword(email: userAtual.email, password: pass)
-        .then((user) async {
-      userAtual.firebasebUser = user.user;
-      userAtual.urlImg = userAtual.firebasebUser.photoURL;
+    var rsp = await _service.createLoginEmailSenha(email: email, pass: pass);
 
-      // print('UUid = ' + userAtual.firebasebUser.uid);
-      // print('Userdata nome = ' + userAtual.nome);
+    if (rsp.resp == RspType.ok) {
+      var user = await preencheUserModel(rsp.data['uid'], cnpj);
+      user.urlImg = rsp.data['photoURL'];
 
-      await saveUserData();
-      await loadCurrentUser();
-      await _repository.registreAcesso(userAtual.firebasebUser.uid);
+      await saveUserData(user, cnpj);
+      await _repository.registreAcesso(user.uid);
 
-      setEstaLogado();
       onSucces();
-      isLoading = false;
-    }).catchError((e) {
-      setNaoEstaLogado();
-      userAtual.clear();
-      onFail();
-      isLoading = false;
-    });
+
+      return Rsp.ok(user);
+    } else {
+      return Rsp.error(rsp.error);
+    }
+
+    // _auth
+    //     .createUserWithEmailAndPassword(email: email, password: pass)
+    //     .then((user) async {
+    //   userAtual.firebasebUser = user.user;
+    //   userAtual.urlImg = userAtual.firebasebUser.photoURL;
+
+    //   // print('UUid = ' + userAtual.firebasebUser.uid);
+    //   // print('Userdata nome = ' + userAtual.nome);
+
+    //   await saveUserData();
+    //   await loadCurrentUser();
+    //   await _repository.registreAcesso(userAtual.firebasebUser.uid);
+
+    //   setEstaLogado();
+    //   onSucces();
+    //   isLoading = false;
+    // }).catchError((e) {
+    //   setNaoEstaLogado();
+    //   userAtual.clear();
+    //   onFail();
+    //   isLoading = false;
+    // });
   }
 
   @action //// traz info da tabela user e carrega na variavel global userAtual
-  Future<UserModel> loadCurrentUser() async {
+  Future<Rsp<UserModel>> loadCurrentUser(String cnpj) async {
     print('entrou em loadCurrentUser');
     isLoading = true;
 
-    if (userAtual.firebasebUser == null) {
-      userAtual.firebasebUser = _auth.currentUser;
+    var rsp = await _service.loadCurrentUser();
+
+    if (rsp.resp == RspType.empty) {
+      return Rsp.empty();
+    } else if (rsp.resp == RspType.ok) {
+      var user = await preencheUserModel(rsp.data['uid'], cnpj);
+      await saveUserData(user, cnpj);
+      return Rsp.ok(user);
+    } else {
+      return Rsp.error(rsp.error);
     }
-    if (userAtual.firebasebUser == null) await getLoginGoogle(logar: false);
-    if (userAtual.firebasebUser != null) {
-      ////
-      var docUser = await _repository.getUser(userAtual.firebasebUser.uid);
-      ////
-      ///
-      if (docUser != null) {
-        setEstaLogado();
 
-        // carrega varias inform da base para a variavel userAtual
-        userAtual.carregaDoMap(docUser);
-        favoritos = userAtual.favoritos.asObservable();
-
-        userAtual.empresas = [];
-        for (Map<String, dynamic> emp in docUser["empresas"]) {
-          var pj = await _cnpjsController.getCnpjM(emp['cnpj']);
-          userAtual.addEmpresa(cnpjM: pj, status: emp['status']);
-          // if (emp['cnpj'] == userAtual.cnpjPadrao) setCnpjAtivo(pj);
-        }
-
-        if (userAtual.tokenCelular == null || userAtual.tokenCelular.isEmpty) {
-          await saveUserData();
-        }
-
-        isLoading = false;
-      }
-
-      ///GetIt.I<CarrinhoMobx>().loadCurrentCart(GetIt.I<UserMobx>());
-      //}
-    }
-    isLoading = false;
+    ///GetIt.I<CarrinhoMobx>().loadCurrentCart(GetIt.I<UserMobx>());
+    //}
   }
 
   @action
-  Future<void> recarregaUserEmpresas() async {
+  Future<UserModel> recarregaUserEmpresas(String uid, String cnpj) async {
     isLoading = true;
-    ////
-    var docUser = await _repository.getUser(userAtual.firebasebUser.uid);
-
-    ///
-    if (docUser != null) {
-      // carrega varias inform da base para a variavel userAtual
-      userAtual.carregaDoMap(docUser);
-
-      userAtual.empresas = [];
-      for (Map emp in docUser["empresas"]) {
-        var pj = await _cnpjsController.getCnpjM(emp['cnpj']);
-
-        userAtual.addEmpresa(cnpjM: pj, status: emp['status']);
-
-        // if(pj.docId == userAtual.cnpjAtivo.docId)
-        // userAtual.cnpjAtivo = pj;
-      }
-      userAtual = userAtual;
-    }
+    //
+    var u = await preencheUserModel(uid, cnpj);
+    //
     isLoading = false;
+    return u;
   }
 
   // @action
@@ -253,13 +232,14 @@ abstract class _AuthControllerBase with Store {
   // }
 
   @action
-  Future tornarEmpresaPadrao(String cnpj) async {
+  Future tornarEmpresaPadrao(UserModel userAtual, String cnpj) async {
     userAtual.cnpjPadrao = cnpj;
-    userAtual = userAtual;
-    await _repository.saveEmpresaPadrao(userAtual.firebasebUser.uid, cnpj);
+    // userAtual = userAtual;
+    await _repository.saveEmpresaPadrao(userAtual.uid, cnpj);
   }
 
-  Future<void> saveUserData({bool alterarLoading = false}) async {
+  Future<void> saveUserData(UserModel userAtual, String cnpj,
+      {bool alterarLoading = false}) async {
     print(' entrou em save UserData');
     if (userAtual == null) return;
 
@@ -267,7 +247,7 @@ abstract class _AuthControllerBase with Store {
 
     Map<String, dynamic> userData = {};
 
-    userData = userAtual.toMap();
+    userData = userAtual.toMap(cnpj);
     if (userAtual.tokenCelular == null || userAtual.tokenCelular.isEmpty) {
       try {
         userAtual.tokenCelular = await Modular.get<FCMFirebase>().getToken();
@@ -275,144 +255,190 @@ abstract class _AuthControllerBase with Store {
       } catch (_) {}
     }
 
-    await _repository.saveUserData(userAtual.firebasebUser.uid, userData);
+    await _repository.saveUserData(userAtual.uid, userData);
     userAtual = userAtual;
     if (alterarLoading) isLoading = false;
   }
 
   @action
-  Future<void> signOut() async {
+  Future<Rsp> signOut() async {
     isLoading = true;
-    await _auth.signOut();
+    var rsp = await _service.signOut();
+    isLoading = false;
+    return rsp;
+
+    /*
     setNaoEstaLogado();
     userAtual.firebasebUser = null;
     userAtual.clear();
     userAtual = userAtual;
     //GetIt.I<CarrinhoMobx>().limpar();
-
-    isLoading = false;
+*/
   }
 
   @action
-  void recoveryPass(
+  Future<void> recoveryPass(
       {String email,
       @required VoidCallback onSucces,
-      @required VoidCallback onFail}) {
+      @required VoidCallback onFail}) async {
     isLoading = true;
-    _auth.sendPasswordResetEmail(email: email).then((value) {
-      onSucces();
-    }).catchError((e) {
+
+    var rsp = await _service.recoveryPass(email);
+    //
+    if (rsp.resp == RspType.error) {
       onFail();
-    });
+      return;
+    } else {
+      onSucces();
+    }
+
+    // _auth.sendPasswordResetEmail(email: email).then((value) {
+    // }).catchError((e) {
+    //   onFail();
+    // });
+
     isLoading = false;
   }
 
 // >>>>>  INICIO FUNCOES GOOGLE  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   @action
-  Future<void> createLoginGoogle(
+  Future<Rsp<UserModel>> createLoginGoogle(
       {@required GoogleSignInAccount userGoogle,
+      @required String cnpj,
       @required VoidCallback onSucces,
       @required VoidCallback onFail}) async {
     print('entrou em creteLoginGoogle');
     isLoading = true;
 
-    var crredentials = await userGoogle.authentication;
+    Rsp rsp; // = Rsp.empty();
+    Map<String, dynamic> use;
 
-    var use = await _auth.signInWithCredential(GoogleAuthProvider.credential(
-        idToken: crredentials.idToken, accessToken: crredentials.accessToken));
+    try {
+      rsp = await _service.createLoginGoogle(userGoogle);
+      if (rsp.resp == RspType.ok) {
+        use = (rsp.data as Map<String, dynamic>);
+      }
+    } catch (e) {
+      return Rsp.error(e);
+    }
+
+    if (rsp.resp == RspType.error) return Rsp.error(rsp.error);
+    if (rsp.resp == RspType.empty) return Rsp.empty();
 
     if (use != null) {
-      userAtual.firebasebUser = use.user;
-      userAtual.urlImg = userGoogle.photoUrl;
-      userAtual.email = userGoogle.email;
-
-      // print('UUid = ' + userAtual.firebasebUser.uid);
-      // print('Userdata nome = ' + userAtual.nome);
-
-      await saveUserData();
-      await loadCurrentUser();
-      await _repository.registreAcesso(userAtual.firebasebUser.uid);
-      setEstaLogado();
-      onSucces();
-      isLoading = false;
+      var user = await preencheUserModel(use['uid'], cnpj);
+      await saveUserData(user, cnpj);
+      return Rsp.ok(user);
     } else {
-      setNaoEstaLogado();
-      userAtual.clear();
-      onFail();
-      isLoading = false;
+      return Rsp.empty();
     }
+
+    //   userAtual.firebasebUser = use.user;
+    //   userAtual.urlImg = userGoogle.photoUrl;
+    //   userAtual.email = userGoogle.email;
+
+    //   // print('UUid = ' + userAtual.firebasebUser.uid);
+    //   // print('Userdata nome = ' + userAtual.nome);
+
+    //   await saveUserData();
+    //   await loadCurrentUser();
+    //   await _repository.registreAcesso(userAtual.firebasebUser.uid);
+    //   setEstaLogado();
+    //   onSucces();
+    //   isLoading = false;
+    // } else {
+    //   setNaoEstaLogado();
+    //   userAtual.clear();
+    //   onFail();
+    //   isLoading = false;
+    // }
   }
 
-  Future<GoogleSignInAccount> getContaGoogle({bool logar}) async {
-    print(' entrou em save getContaGoogle');
-    var user = googleSignIn.currentUser;
-    //
-    if (logar == true) {
-      if (user == null || user.id == null) {
-        if (user == null || user.id == null) {
-          user = await googleSignIn.signInSilently();
-        }
-        if (user == null || user.id == null) user = await googleSignIn.signIn();
-      }
-    }
-    return user;
-  }
+  // Future<GoogleSignInAccount> getContaGoogle({bool logar}) async {
+  //   print(' entrou em save getContaGoogle');
+  //   var user = googleSignIn.currentUser;
+  //   //
+  //   if (logar == true) {
+  //     if (user == null || user.id == null) {
+  //       if (user == null || user.id == null) {
+  //         user = await googleSignIn.signInSilently();
+  //       }
+  //       if (user == null || user.id == null) user = await googleSignIn.signIn();
+  //     }
+  //   }
+  //   return user;
+  // }
+
+  // @action
+  // Future getLoginGoogle({@required bool logar}) async {
+  //   print(' entrou em save getLoginGoogle');
+  //   var user = await getContaGoogle(logar: logar);
+
+  //   if (user != null) {
+  //     var crredentials = await googleSignIn.currentUser.authentication;
+
+  //     var use = await _auth.signInWithCredential(GoogleAuthProvider.credential(
+  //         idToken: crredentials.idToken,
+  //         accessToken: crredentials.accessToken));
+
+  //     userAtual.nome = user.displayName;
+  //     userAtual.urlImg = user.photoUrl;
+  //     userAtual.email = user.email;
+  //     userAtual.firebasebUser = use.user;
+  //   }
+  // }
 
   @action
-  Future getLoginGoogle({@required bool logar}) async {
-    print(' entrou em save getLoginGoogle');
-    var user = await getContaGoogle(logar: logar);
-
-    if (user != null) {
-      var crredentials = await googleSignIn.currentUser.authentication;
-
-      var use = await _auth.signInWithCredential(GoogleAuthProvider.credential(
-          idToken: crredentials.idToken,
-          accessToken: crredentials.accessToken));
-
-      userAtual.nome = user.displayName;
-      userAtual.urlImg = user.photoUrl;
-      userAtual.email = user.email;
-      userAtual.firebasebUser = use.user;
-    }
-  }
-
-  @action
-  Future<String> logarGoogle(
+  Future<Rsp<UserModel>> logarGoogle(
       //chamado pelo botao de login
-      {@required VoidCallback onSucces,
+      {@required String cnpj,
+      @required VoidCallback onSucces,
       @required VoidCallback onFail}) async {
     print(' entrou em save logarGoogle');
-    isLoading = true;
+    // isLoading = true;
 
-    await getLoginGoogle(logar: true); // forço logar com google
+    var rsp = await _service.logarGoogle();
 
-    if (userAtual.firebasebUser == null) {
-      // if nao logou entao dou fail e saio
-      setNaoEstaLogado();
-      isLoading = false;
-      onFail();
-      return 'naologado';
+    if (rsp.resp == RspType.error) {
+      return Rsp.error(rsp.error);
+    }
+    if (rsp.resp == RspType.empty) {
+      return Rsp.empty();
     }
 
-    //if chegou aqui é pq logou no google
-    // vou verificar se ja tem cadastro na base de dados
-    var docUser = await _repository.getUser(userAtual.firebasebUser.uid);
+    var user = await preencheUserModel(rsp.data['uid'], cnpj);
 
-    if (docUser != null) {
-      //ja tem cadastro no user da base
+    await saveUserData(user, cnpj);
+    await _repository.registreAcesso(user.uid);
 
-      await loadCurrentUser();
-      await _repository.registreAcesso(userAtual.firebasebUser.uid);
+    return Rsp.ok(user);
 
-      setEstaLogado();
-      onSucces();
-      isLoading = false;
-      return 'OK';
-    }
-    setNaoEstaLogado();
-    isLoading = false;
-    return 'NOVO';
+    // if (userAtual.firebasebUser == null) {
+    //   // if nao logou entao dou fail e saio
+    //   setNaoEstaLogado();
+    //   isLoading = false;
+    //   onFail();
+    //   return 'naologado';
+    // }
+
+    // //if chegou aqui é pq logou no google
+    // // vou verificar se ja tem cadastro na base de dados
+    // var docUser = await _repository.getUser(userAtual.firebasebUser.uid);
+
+    // if (docUser != null) {
+    //   //ja tem cadastro no user da base
+
+    //   await loadCurrentUser();
+    //   await _repository.registreAcesso(userAtual.firebasebUser.uid);
+
+    //   setEstaLogado();
+    //   onSucces();
+    //   isLoading = false;
+    //   return 'OK';
+    // }
+    // setNaoEstaLogado();
+    // isLoading = false;
+    // return 'NOVO';
   }
 }

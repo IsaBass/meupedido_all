@@ -1,5 +1,3 @@
-import 'package:meupedido_core/core/auth/auth_controller.dart';
-import 'package:meupedido_core/core/cnpjs/cnpjs_controller.dart';
 import 'package:meupedido_core/models/pedido/cupomdesconto_model.dart';
 import 'package:meupedido_core/models/produto_model.dart';
 import 'package:mobx/mobx.dart';
@@ -13,25 +11,41 @@ part 'cart_controller.g.dart';
 class CartController = _CartBase with _$CartController;
 
 abstract class _CartBase with Store {
-  final CNPJSController _cnpjsController;
-  final AuthController _authController;
+  // final CNPJSController _cnpjsController;
+  // final AuthController _authController;
   final ICartRepository _repository;
   // final AppController _appController = AppModule.to.get();
 
   @observable
   CartModel cartAtual;
 
-  _CartBase(this._repository, this._cnpjsController, this._authController) {
+  String _uid = "";
+  String _cnpj = "";
+
+  void setVariables(String uid, String cnpj) {
+    this._uid = uid;
+    this._cnpj = cnpj;
+  }
+
+  void clearVariables() {
+    this._uid = "";
+    this._cnpj = "";
+  }
+
+  _CartBase(this._repository) {
     cartAtual = CartModel();
   }
 
   @action
   Future<void> adicionarCarrinho(CartItemModel item) async {
+    if (_uid == "" || _cnpj == "") return;
     ////
     cartAtual.adicionarItem(item);
-    item.docId = await _repository.addCarrinho(item.toJson(),
-        userAtualID: _authController.userAtual.firebasebUser.uid,
-        cnpjAtivo: _cnpjsController.cnpjAtivo.docId);
+    item.docId = await _repository.addCarrinho(
+      item.toJson(),
+      userAtualID: _uid,
+      cnpjAtivo: _cnpj,
+    );
     //
   }
 
@@ -39,15 +53,16 @@ abstract class _CartBase with Store {
   void removeCarrinho(
       //DocumentReference userDocRef,
       CartItemModel item) {
+    if (_uid == "" || _cnpj == "") return;
     //
-    // _authController.userAtual.firebasebUser.uid
-    // _cnpjsController.cnpjAtivo.docId
+    // _uid
+    // _cnpj
 
     if (item.docId.isNotEmpty) {
       _repository.removeCarrinho(
         item.docId,
-        userAtualID: _authController.userAtual.firebasebUser.uid,
-        cnpjAtivo: _cnpjsController.cnpjAtivo.docId,
+        userAtualID: _uid,
+        cnpjAtivo: _cnpj,
       );
     }
     cartAtual.removerItem(item);
@@ -61,8 +76,8 @@ abstract class _CartBase with Store {
     if (item.docId.isEmpty) {
       item.docId = await _repository.addCarrinho(
         item.toJson(),
-        userAtualID: _authController.userAtual.firebasebUser.uid,
-        cnpjAtivo: _cnpjsController.cnpjAtivo.docId,
+        userAtualID: _uid,
+        cnpjAtivo: _cnpj,
         // cnpjAtivoDocRef: _cnpjsController.cnpjAtivo.docRef,
         // userAtualDocRef: _authController.userAtual.docRef,
       );
@@ -70,8 +85,8 @@ abstract class _CartBase with Store {
       _repository.updItemCarrinho(
         item.docId,
         item.toJson(),
-        _cnpjsController.cnpjAtivo.docId,
-        _authController.userAtual.firebasebUser.uid,
+        _cnpj,
+        _uid,
       );
     }
   }
@@ -85,8 +100,8 @@ abstract class _CartBase with Store {
       item.docId = await _repository.addCarrinho(
           // userDocRef,
           item.toJson(),
-          userAtualID: _authController.userAtual.firebasebUser.uid,
-          cnpjAtivo: _cnpjsController.cnpjAtivo.docId
+          userAtualID: _uid,
+          cnpjAtivo: _cnpj
           // cnpjAtivoDocRef: _cnpjsController.cnpjAtivo.docRef,
           // userAtualDocRef: _authController.userAtual.docRef,
           );
@@ -94,8 +109,8 @@ abstract class _CartBase with Store {
       _repository.updItemCarrinho(
         item.docId,
         item.toJson(),
-        _cnpjsController.cnpjAtivo.docId,
-        _authController.userAtual.firebasebUser.uid,
+        _cnpj,
+        _uid,
 
         // _authController.userAtual.docRef,
         // _cnpjsController.cnpjAtivo.docRef,
@@ -108,8 +123,8 @@ abstract class _CartBase with Store {
     /////
     limparCarrinho();
     var query = await _repository.getCarrinho(
-      userAtualID: _authController.userAtual.firebasebUser.uid,
-      cnpjAtivo: _cnpjsController.cnpjAtivo.docId,
+      userAtualID: _uid,
+      cnpjAtivo: _cnpj,
     );
 
     if (query == null) {
@@ -117,8 +132,7 @@ abstract class _CartBase with Store {
     }
     for (var doc in query) {
       var item = await cartItemModelfromJson(doc);
-      var docP = await _repository.getProduto(
-          _cnpjsController.cnpjAtivo.docId, item.idProduto);
+      var docP = await _repository.getProduto(_cnpj, item.idProduto);
       //
       if (docP != null && docP.isNotEmpty) {
         item.produto = ProdutoModel.fromJson(docP);
@@ -159,8 +173,8 @@ abstract class _CartBase with Store {
 
   Future<void> excluiCarrinho() async {
     await _repository.excluiCarrinho(
-      userAtualID: _authController.userAtual.firebasebUser.uid,
-      cnpjAtivo: _cnpjsController.cnpjAtivo.docId,
+      userAtualID: _uid,
+      cnpjAtivo: _cnpj,
     );
     limparCarrinho();
   }
