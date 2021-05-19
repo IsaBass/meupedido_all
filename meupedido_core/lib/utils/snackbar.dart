@@ -6,10 +6,10 @@ void mySnackBar(BuildContext context,
     Color color = const Color(0xFFBF3600) //Colors.deepOrange[900]
     }) {
   ///
-  Scaffold.of(context).showSnackBar(SnackBar(
+
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(texto),
     backgroundColor: color,
     duration: Duration(milliseconds: miliseconds),
   ));
 }
-

@@ -136,8 +136,10 @@ Widget _botaoOpcaoInferior(
         ],
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: RaisedButton(
-        color: Colors.white,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

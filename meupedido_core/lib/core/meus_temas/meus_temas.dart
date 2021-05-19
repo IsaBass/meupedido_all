@@ -34,42 +34,41 @@ class MeusTemas {
       .toList();
 
   ///////////
-  static ThemeData _purpleLight = 
-      ThemeData(
-        primaryColor: Colors.purple[800],
-        // primaryColorLight: Color(0xff3700b3) ,
-        // primaryColorDark: Color(0xff3700b3) ,
+  static ThemeData _purpleLight = ThemeData(
+    primaryColor: Colors.purple[800],
+    // primaryColorLight: Color(0xff3700b3) ,
+    // primaryColorDark: Color(0xff3700b3) ,
 
-        accentColor:
-            Color(0xff3700b3), //Colors.purple[900], // mais forte que primary
+    accentColor:
+        Color(0xff3700b3), //Colors.purple[900], // mais forte que primary
 
-        // colorScheme: ColorScheme(
-        //   primary: Colors.purple[800], //Color(0xff6200ee),
-        //   primaryVariant: Color(0xff38006B),
-        //   secondary: Color(0xff4A148C),
-        //   secondaryVariant: Color(0xff12005E),
-        //   surface: Color(0xffFFFFFF),
-        //   background: Color(0xffFFFFFF),
-        //   error: Color(0xffB00020),
-        //   onPrimary: Color(0xffFFFFFF),
-        //   onSecondary: Color(0xffFFFFFF),
-        //   onSurface: Color(0xffFFFFFF),
-        //   onBackground: Color(0xffFFFFFF),
-        //   onError: Color(0xffFFFFFF),
-        //   brightness: Brightness.light,
-        // ),
+    // colorScheme: ColorScheme(
+    //   primary: Colors.purple[800], //Color(0xff6200ee),
+    //   primaryVariant: Color(0xff38006B),
+    //   secondary: Color(0xff4A148C),
+    //   secondaryVariant: Color(0xff12005E),
+    //   surface: Color(0xffFFFFFF),
+    //   background: Color(0xffFFFFFF),
+    //   error: Color(0xffB00020),
+    //   onPrimary: Color(0xffFFFFFF),
+    //   onSecondary: Color(0xffFFFFFF),
+    //   onSurface: Color(0xffFFFFFF),
+    //   onBackground: Color(0xffFFFFFF),
+    //   onError: Color(0xffFFFFFF),
+    //   brightness: Brightness.light,
+    // ),
 
-        scaffoldBackgroundColor: Colors.grey[100],
-        backgroundColor: Colors.grey[500], //lightBG,
-        bottomAppBarColor: Colors.white,
-      );
+    scaffoldBackgroundColor: Colors.grey[100],
+    backgroundColor: Colors.grey[500], //lightBG,
+    bottomAppBarColor: Colors.white,
+  );
   static ThemeData _purpleDark = ThemeData(
-        brightness: Brightness.dark,
-        primaryColor: Colors.purple[800],
-        accentColor: Colors.purple[300], // mais fraco que primery
-        scaffoldBackgroundColor: Colors.black,
-        bottomAppBarColor: Colors.black,
-      );
+    brightness: Brightness.dark,
+    primaryColor: Colors.purple[800],
+    accentColor: Colors.purple[300], // mais fraco que primery
+    scaffoldBackgroundColor: Colors.black,
+    bottomAppBarColor: Colors.black,
+  );
   ////////////
   ///////////
   static ThemeData _vermelhoLight = ThemeData(
@@ -81,7 +80,7 @@ class MeusTemas {
   );
   static ThemeData _vermelhoDark = ThemeData(
     brightness: Brightness.dark,
-    primaryColor:  Color(0xFFBA3720),
+    primaryColor: Color(0xFFBA3720),
     accentColor: Color(0xFFC76718), // mais fraco que primery
     scaffoldBackgroundColor: Colors.black,
     bottomAppBarColor: Colors.black,
@@ -136,8 +135,10 @@ ThemeData buildAppTheme(MaterialColor primarySwatch, ThemeData theme) {
     accentColor: accentColor,
     primaryIconTheme: IconThemeData.fallback().copyWith(color: Colors.yellow),
     secondaryHeaderColor: primarySwatch[50],
-    textSelectionColor: primarySwatch[200],
-    textSelectionHandleColor: primarySwatch[300],
+    textSelectionTheme: TextSelectionThemeData(
+      selectionColor: primarySwatch[200],
+      selectionHandleColor: primarySwatch[300],
+    ),
     backgroundColor: primarySwatch[200],
     colorScheme: ColorScheme.fromSwatch(
       primarySwatch: primarySwatch,

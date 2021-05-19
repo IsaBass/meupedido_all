@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 
-Future<double> getGEO_Distancia(
+Future<double> getGeoDistancia(
   double startLatitude,
   double startLongitude,
   double endLatitude,
@@ -21,7 +21,7 @@ Future<double> getGEO_Distancia(
   );
 }
 
-Future<List<double>> getGEO_DoEndereco(String endereco) async {
+Future<List<double>> getGeoDoEndereco(String endereco) async {
   if (endereco.isEmpty) return null;
 
   // List<Placemark> placemarks;
@@ -42,7 +42,7 @@ Future<List<double>> getGEO_DoEndereco(String endereco) async {
   return null;
 }
 
-Future<List<double>> getGEO_LocalAtual() async {
+Future<List<double>> getGeoLocalAtual() async {
   //var permissao =
   await Geolocator.checkPermission();
 
