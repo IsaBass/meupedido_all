@@ -388,13 +388,9 @@ abstract class _AuthControllerBase with Store {
   // }
 
   @action
-  Future<Rsp<UserModel>> logarGoogle(
-      //chamado pelo botao de login
-      {@required String cnpj,
-      @required VoidCallback onSucces,
-      @required VoidCallback onFail}) async {
+  Future<Rsp<UserModel>> logarGoogle({@required String cnpj}) async {
     print(' entrou em save logarGoogle');
-    // isLoading = true;
+    isLoading = true;
 
     var rsp = await _service.logarGoogle();
 
@@ -405,38 +401,24 @@ abstract class _AuthControllerBase with Store {
       return Rsp.empty();
     }
 
-    var user = await preencheUserModel(rsp.data['uid'], cnpj);
-
-    await saveUserData(user, cnpj);
-    await _repository.registreAcesso(user.uid);
-
-    return Rsp.ok(user);
-
-    // if (userAtual.firebasebUser == null) {
-    //   // if nao logou entao dou fail e saio
-    //   setNaoEstaLogado();
-    //   isLoading = false;
-    //   onFail();
-    //   return 'naologado';
-    // }
-
     // //if chegou aqui é pq logou no google
     // // vou verificar se ja tem cadastro na base de dados
-    // var docUser = await _repository.getUser(userAtual.firebasebUser.uid);
+    var docUser = await _repository.getUser(rsp.data['uid']);
 
-    // if (docUser != null) {
-    //   //ja tem cadastro no user da base
+    if (docUser != null) {
+      //ja tem cadastro no user da base
 
-    //   await loadCurrentUser();
-    //   await _repository.registreAcesso(userAtual.firebasebUser.uid);
+      var user = await preencheUserModel(rsp.data['uid'], cnpj);
 
-    //   setEstaLogado();
-    //   onSucces();
-    //   isLoading = false;
-    //   return 'OK';
-    // }
-    // setNaoEstaLogado();
-    // isLoading = false;
-    // return 'NOVO';
+      await saveUserData(user, cnpj);
+      await _repository.registreAcesso(user.uid);
+
+      isLoading = false;
+      return Rsp.ok(user);
+    } else {
+      // nao tem cadastro em base...vou enviar a resposta "NOVO" para as telas prosseguirem
+      isLoading = false;
+      return Rsp.error("NOVO");
+    }
   }
 }

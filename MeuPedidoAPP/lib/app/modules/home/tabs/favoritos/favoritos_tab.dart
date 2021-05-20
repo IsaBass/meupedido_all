@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/widgets/nao_logado.dart';
 import 'package:MeuPedido/app/widgets/produtos/card.produto.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class FavoritosTab extends StatefulWidget {
 
 class _FavoritosTabState
     extends ModularState<FavoritosTab, FavoritosController> {
-  final AuthController _authController = Modular.get<AuthController>();
+  final AppController _appController = Modular.get();
 
   @override
   void initState() {
@@ -33,7 +34,7 @@ class _FavoritosTabState
     return Scaffold(
       appBar: AppBar(title: Text('Favoritos'), centerTitle: true),
       body: Observer(builder: (_) {
-        if (!_authController.estaLogado) return NaoLogado();
+        if (!_appController.estaLogado) return NaoLogado();
 
         if (controller.isLoading) {
           return Center(

@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:MeuPedido/app/app_controller.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -16,88 +20,38 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage> {
   // final AuthController _authController = AppModule.to.get<AuthController>();
-  final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
+  // final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
+  final AppController _appController = Modular.get();
 
-  // @override
-  // void initState() {
-  //   print('inistate do splash_page');
-  //   // _authController.setLoading();
-  //   super.initState();
+  @override
+  void initState() {
+    print('inistate do splash_page');
+    // _authController.setLoading();
+    super.initState();
 
-  //   // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela
-  //   Future.delayed(Duration(milliseconds: 2000)).then((_) async {
-  //     //
-  //     await carregaEmpresaAtiva();
-  //     //
-
-  //     //await carregaUsuario();
-  //     //
-  //     //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); // ---retira ocupa toda tela
-  //     Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-  //   });
-  // }
-
-  // Future<void> carregaUsuario() async {
-  //   _authController.setLoading();
-  //   // await Future.delayed(Duration(seconds: 10));
-  //   await _authController.loadCurrentUser().then((_) {
-  //     if (_authController.estaLogado) {
-  //       print('na tela splach:: estaLogado com sucesso');
-  //       AppModule.to.get<CartController>().carregaCarrinhoUser();
-  //     }
-  //     _authController.setNoLoading();
-
-  //     /// SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);// ---retira ocupa toda tela
-  //     if (_authController.estaLogado || MyConst.permiteSemLogar == true) {
-  //       Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-  //     } else {
-  //       Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
-  //     }
-  //   }).catchError((e) {
-  //     print('erro ao logar na tela splach');
-  //     _authController.setNoLoading();
-  //     if (MyConst.permiteSemLogar == true) {
-  //       Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-  //     } else {
-  //       Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
-  //     }
-  //   });
-  // }
-
-  Future<void> carregaEmpresaAtiva() async {
-    if (widget.identificador == null || widget.identificador == '') {
-      // if na web
-      // manda pra pag de erro ou de escolher qual cliente
-      // else , ou seja...em app mobile..sempre tem empresafixa
-      _cnpjsController.cnpjAtivo =
-          await _cnpjsController.getCnpjM(MyConst().cnpjEmpresaFixa);
-      print(
-          'na tela splach:: empresa ativa = ${_cnpjsController.cnpjAtivo.descricao}');
-    } else {
-      var cnpj =
-          await _cnpjsController.getCnpjMIdentificador(widget.identificador);
-      if (cnpj != null) {
-        _cnpjsController.cnpjAtivo = cnpj;
-      } else {
-        // direcionar pra pag de erro...empresa nao encontrada
+    // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela
+    Future.delayed(Duration(milliseconds: 2000)).then((_) async {
+      //
+      var resp = await _appController.carregaEmpresaAtiva(widget.identificador);
+      //
+      if (resp == false) {
+        // carrega pagina critica..nao pode entrar no sistema
+        // OU chama tela de escolher qual loja (1ª opção é o padrao)
       }
-    }
+
+      resp = await _appController.loadCurrentUser();
+
+      if (resp == true || MyConst.permiteSemLogar == true) {
+        Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
+      } else {
+        Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
+      }
+      //
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 2000)).then((_) async {
-        //
-        await carregaEmpresaAtiva();
-        //
-
-        //await carregaUsuario();
-        //
-        //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values); // ---retira ocupa toda tela
-        Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-      });
-    });
     print('build splash_page');
     return Scaffold(
       body: Column(

@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/modules/proddetails/proddetails_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -17,11 +18,11 @@ class BarraCompraDet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authController = Modular.get<AuthController>();
+    final _appController = Modular.get<AppController>();
     var formatMoeda = NumberFormat.simpleCurrency(locale: 'pt_BR');
 
     return Observer(builder: (_) {
-      return _authController.estaLogado
+      return _appController.estaLogado
           ? Container(
               height: 50.0,
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 5),

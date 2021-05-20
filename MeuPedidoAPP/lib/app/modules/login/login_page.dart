@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -19,7 +20,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  final AuthController _authController = Modular.get<AuthController>();
+  // final AuthController _authController = Modular.get<AuthController>();
+  final AppController _appController = Modular.get();
   final CartController _cartController = Modular.get<CartController>();
   final _contSenha = TextEditingController();
   final _contEmail = TextEditingController();
@@ -95,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            _authController.loginEmailSenha(
+                            _appController.loginEmailSenha(
                                 email: _contEmail.text,
                                 pass: _contSenha.text,
                                 onFail: _onFail,
@@ -109,14 +111,14 @@ class _LoginPageState extends State<LoginPage> {
                       builder: (_) => Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.all(4),
-                        child: _authController.isLoading
+                        child: _appController.isLoading
                             ? Center(child: CircularProgressIndicator())
                             : SignInButton(
                                 Buttons.Google,
                                 text: 'Login com Google',
                                 onPressed: () async {
                                   var resposta =
-                                      await _authController.logarGoogle(
+                                      await _appController.logarGoogle(
                                     onFail: _onFail,
                                     onSucces: _onSucces,
                                   );

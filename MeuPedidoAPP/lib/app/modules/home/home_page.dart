@@ -28,7 +28,6 @@ class _HomePageState extends State<HomePage> {
   final CategsController _categsController = Modular.get<CategsController>();
   final CartController _cartController = Modular.get();
   final AppController _appController = Modular.get();
-  final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
   //
 
   //int _page = 1;
@@ -41,7 +40,7 @@ class _HomePageState extends State<HomePage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print('entrou do init');
-      carregaUsuario();
+      // carregaUsuario();
       _categsController.recarregaAllCategs();
 
       //_cartController.carregaCarrinhoUser();
@@ -50,19 +49,6 @@ class _HomePageState extends State<HomePage> {
         Modular.to.popAndPushNamed('/');
         return;
       }
-    });
-  }
-
-  void carregaUsuario() async {
-    _appController.cnpjAtivo =
-        await _cnpjsController.getCnpjM(MyConst().cnpjEmpresaFixa);
-
-    _appController.loadCurrentUser().then((_) {
-      if (_appController.estaLogado) {
-        print('na tela home_page:: estaLogado com sucesso');
-      }
-    }).catchError((e) {
-      print('erro ao logar na carregaUsuario da home_page: ${e.toString()} ');
     });
   }
 

@@ -1,4 +1,5 @@
 import 'package:MeuPedido/app/app_repository_interf.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:meupedido_core/rsp.dart';
 import 'package:mobx/mobx.dart';
@@ -44,32 +45,166 @@ abstract class _AppControllerBase with Store {
     isLoading = false;
   }
 
+  Future<bool> setCnpjAtivo(String cnpj) async {
+    //
+    var rsp = await _cnpjsController.getCnpjM(cnpj);
+    //
+    if (rsp.resp == RspType.ok) {
+      cnpjAtivo = rsp.data;
+      return true;
+    } else {
+      cnpjAtivo.docId = "";
+      return false;
+    }
+  }
+
+  Future<bool> setCnpjAtivoByIdent(String identificador) async {
+    //
+    var rsp = await _cnpjsController.getCnpjMIdentificador(identificador);
+    //
+    if (rsp.resp == RspType.ok) {
+      cnpjAtivo = rsp.data;
+      return true;
+    } else {
+      cnpjAtivo.docId = "";
+      return false;
+    }
+  }
+
+  Future<bool> carregaEmpresaAtiva(String identificador) async {
+    if (kIsWeb) {
+      if (identificador == null || identificador == '') {
+        print("SPLASH: Na WEB E SEM IDENTIFICADOR!!! ");
+        return false;
+      } else {
+        var resp = await setCnpjAtivoByIdent(identificador);
+        if (resp == false) {
+          print("Empresa Não encontrada by Identif ${identificador}");
+          // direcionar pra pag de erro...empresa nao encontrada
+          return false;
+        }
+      }
+      return true;
+    } else {
+      //..em app mobile..sempre tem empresafixa
+      var resp = await setCnpjAtivo(MyConst.cnpjEmpresaFixa);
+      if (resp == false) {
+        print(
+            "splash Empresa Não encontrada by CNPJ ${MyConst.cnpjEmpresaFixa}");
+        // direcionar pra pag de erro...empresa nao encontrada
+        return false;
+      }
+      print(
+        'na tela splach:: empresa ativa = ${cnpjAtivo.descricao}',
+      );
+      return true;
+    }
+  }
+
   // SEÇÃO LOGAR ////////////////////////////////////////
 
   @action
-  Future<void> loadCurrentUser() async {
+  void _setUsuarioLogado(UserModel user) {
+    //
+    userAtual = user;
+    //
+    _cartController.setVariables(userAtual.uid, cnpjAtivo.docId);
+    _cartController.carregaCarrinhoUser();
+    //
+  }
+
+  @action
+  void _limpaIsuarioLogado() {
+    //
+    _cartController.limparCarrinho();
+    _cartController.clearVariables();
+    //
+    userAtual.clear();
+    userAtual = userAtual;
+    //
+  }
+
+  @action
+  Future<bool> loadCurrentUser() async {
     isLoading = true;
     //
     var rsp = await _authController.loadCurrentUser(cnpjAtivo.docId);
 
     if (rsp.resp == RspType.ok) {
-      //
-      userAtual = rsp.data;
-      //
-      _cartController.setVariables(userAtual.uid, cnpjAtivo.docId);
-      _cartController.carregaCarrinhoUser();
-      //
+      _setUsuarioLogado(rsp.data);
+      isLoading = false;
+      return true;
     } else {
       //
-      _cartController.limparCarrinho();
-      _cartController.clearVariables();
+      _limpaIsuarioLogado();
       //
-      userAtual.clear();
-      userAtual = userAtual;
+      isLoading = false;
+      return false;
     }
 
     //
-    isLoading = false;
+    // isLoading = false;
+  }
+
+  @action
+  Future<bool> loginEmailSenha({
+    @required String email,
+    @required String pass,
+    @required VoidCallback onSucces,
+    @required VoidCallback onFail,
+  }) async {
+    isLoading = true;
+
+    ///
+    var rsp = await _authController.loginEmailSenha(
+      email: email,
+      pass: pass,
+      cnpj: cnpjAtivo.docId,
+    );
+
+    ////////
+    if (rsp.resp == RspType.ok) {
+      //
+      _setUsuarioLogado(rsp.data);
+      //
+      isLoading = false;
+      onSucces();
+      return true;
+    } else {
+      isLoading = false;
+      onFail();
+      return false;
+    }
+    ////////
+  }
+
+  @action
+  Future<String> logarGoogle(
+      //chamado pelo botao de login
+      {@required VoidCallback onSucces,
+      @required VoidCallback onFail}) async {
+    print(' entrou em save logarGoogle');
+    // isLoading = true;
+
+    var rsp = await _authController.logarGoogle(cnpj: cnpjAtivo.docId);
+
+    /////////////
+    if (rsp.resp == RspType.ok) {
+      //
+      _setUsuarioLogado(rsp.data);
+      //
+      isLoading = false;
+      onSucces();
+      return "OK";
+    } else if (rsp.resp == RspType.error && rsp.error == "NOVO") {
+      isLoading = false;
+      return "NOVO";
+    } else {
+      isLoading = false;
+      onFail();
+      return "erro";
+    }
+    /////////////
   }
 
   @action
@@ -79,15 +214,11 @@ abstract class _AppControllerBase with Store {
 
     if (rsp.resp == RspType.error) {
       // mensagem que nao conseguiu deslogar
+      isLoading = false;
       return;
     }
     //
-    _cartController.limparCarrinho();
-    _cartController.clearVariables();
-    //
-
-    userAtual.clear();
-    userAtual = userAtual;
+    _limpaIsuarioLogado();
 
     isLoading = false;
   }
@@ -103,7 +234,7 @@ abstract class _AppControllerBase with Store {
   @computed
   List<String> get getFavoritos => _authController.favoritos;
 
-  @computed
+  // @computed
   bool isFavorito(String idProd) => _authController.isFavorito(idProd);
   //
   ////////////////////////////////////////////////////////

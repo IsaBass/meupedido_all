@@ -1,3 +1,5 @@
+import 'package:meupedido_core/rsp.dart';
+
 import 'cnpj_model.dart';
 import 'repositories/cnpj_repository_interf.dart';
 
@@ -8,15 +10,21 @@ class CNPJSController {
 
   // CnpjModel cnpjAtivo;
 
-  Future<CnpjModel> getCnpjM(String cnpj, {bool carregaFiliais = true}) async {
+  Future<Rsp<CnpjModel>> getCnpjM(String cnpj,
+      {bool carregaFiliais = true}) async {
     //
-    if (cnpj.isEmpty) return null;
+    if (cnpj.isEmpty) return Rsp.empty();
     //
-    var doc = await _cnpjRepository.fetchCnpj(cnpj);
+    Map<String, dynamic> doc = {};
+    try {
+      doc = await _cnpjRepository.fetchCnpj(cnpj);
+    } catch (e) {
+      Rsp.error(e.toString());
+    }
     //
-    if (doc == null) return null;
+    if (doc == null || doc == {}) return Rsp.empty();
     //
-    return CnpjModel.fromJson(doc);
+    return Rsp.ok(CnpjModel.fromJson(doc));
     //
 
     // cnpjModel.dadosFiliais = [];
@@ -29,17 +37,22 @@ class CNPJSController {
     // return cnpjModel;
   }
 
-  Future<CnpjModel> getCnpjMIdentificador(String identificador,
+  Future<Rsp<CnpjModel>> getCnpjMIdentificador(String identificador,
       {bool carregaFiliais = true}) async {
     //
-    if (identificador.isEmpty) return null;
+    if (identificador.isEmpty) return Rsp.empty();
     //
-    var doc = await _cnpjRepository.fetchIdentificador(identificador);
+    Map<String, dynamic> doc = {};
+    try {
+      doc = await _cnpjRepository.fetchIdentificador(identificador);
+    } catch (e) {
+      Rsp.error(e.toString());
+    }
     //
-    if (doc == null) return null;
+    if (doc == null || doc == {}) return Rsp.empty();
     //
 
-    return CnpjModel.fromJson(doc);
+    return Rsp.ok(CnpjModel.fromJson(doc));
   }
 
   Future<String> getDescricaoCnpj(String cnpj) async {

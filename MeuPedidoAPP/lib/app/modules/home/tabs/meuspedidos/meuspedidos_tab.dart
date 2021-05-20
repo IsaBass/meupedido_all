@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/widgets/nao_logado.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 // import 'package:date_format/date_format.dart';
@@ -18,7 +19,7 @@ class MeusPedidosTab extends StatefulWidget {
 
 class _MeusPedidosTabState
     extends ModularState<MeusPedidosTab, MeusPedidosController> {
-  final AuthController _authController = Modular.get<AuthController>();
+  final AppController _appController = Modular.get();
   // String userId;
   // String cnpj;
 
@@ -36,7 +37,7 @@ class _MeusPedidosTabState
       body: Observer(builder: (_) {
         return Padding(
           padding: EdgeInsets.all(5),
-          child: _authController.estaLogado ? stramBuilder() : NaoLogado(),
+          child: _appController.estaLogado ? stramBuilder() : NaoLogado(),
         );
       }),
     );

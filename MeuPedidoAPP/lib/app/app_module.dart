@@ -48,13 +48,16 @@ class AppModule extends Module {
         Bind.singleton((i) => CartController(CartRepository())),
         Bind.singleton((i) => CardTypeRepository()),
         Bind.singleton((i) => CategsRepository()),
-        Bind.singleton((i) => CategsController(i.get<CategsRepository>())),
+        Bind.singleton((i) => CategsController(
+              i.get<CategsRepository>(),
+              i(),
+            )),
         Bind.singleton((i) => FCMFirebase()),
       ];
 
   @override
   final List<ModularRoute> routes = [
-    // ModuleRoute('/', module: SplashModule()),
+    ModuleRoute('/', module: SplashModule()),
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/home', module: HomeModule()),
     ModuleRoute('/proddetail', module: ProddetailsModule()),
