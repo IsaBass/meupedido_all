@@ -15,7 +15,7 @@ class AuthRepository extends Disposable implements IAuthRepository {
         await FirebaseFirestore.instance.collection("users").doc(uid).get();
 
     print(' >> AuthRepos.getUser : $uid ');
-    return doc.data()..['docRef'] = doc.reference;
+    return doc.data()..['uid'] = doc.id;
   }
 
   Future<void> saveUserData(String uid, Map<String, dynamic> userData) async {

@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:meupedido_core/meupedido_core.dart';
@@ -30,6 +28,11 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
 
     // // SystemChrome.setEnabledSystemUIOverlays([]);  // ---ocupa toda tela
+
+    logaEmpresaEUsuario();
+  }
+
+  void logaEmpresaEUsuario() {
     Future.delayed(Duration(milliseconds: 2000)).then((_) async {
       //
       var resp = await _appController.carregaEmpresaAtiva(widget.identificador);
@@ -41,11 +44,14 @@ class _SplashPageState extends State<SplashPage> {
 
       resp = await _appController.loadCurrentUser();
 
-      if (resp == true || MyConst.permiteSemLogar == true) {
-        Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
-      } else {
-        Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
-      }
+      // WidgetsBinding.instance.addPostFrameCallback((_) {
+      //   if (resp == true || MyConst.permiteSemLogar == true) {
+      //     Modular.to.pushNamedAndRemoveUntil('/home', (route) => false);
+      //   } else {
+      //     Modular.to.pushNamedAndRemoveUntil('/login', (route) => false);
+      //   }
+      // });
+
       //
     });
   }
@@ -64,8 +70,11 @@ class _SplashPageState extends State<SplashPage> {
           ),
           SizedBox(height: 15),
           GestureDetector(
-            onTap: () =>
-                Modular.to.pushNamedAndRemoveUntil('/home', (route) => false),
+            onTap: () {
+              //  Modular.to
+              //   .pushNamedAndRemoveUntil('/home', ModalRoute.withName('/home'));
+              Modular.to.navigate('/home');
+            },
             child: Image.asset('assets/logoagsystem.png'),
           ),
         ],

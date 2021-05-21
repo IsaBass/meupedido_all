@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -16,13 +17,16 @@ class LoginCadastroPage extends StatefulWidget {
 }
 
 class _LoginCadastroPageState extends State<LoginCadastroPage> {
+  //
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  //
   final TextEditingController _senhaCont = TextEditingController();
   final TextEditingController _nomeCont = TextEditingController();
   final TextEditingController _emailCont = TextEditingController();
-  final AuthController _authController = Modular.get<AuthController>();
-  final CartController _cartController = Modular.get<CartController>();
+  //
+  final AppController _appController = Modular.get();
+  //
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +103,7 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
                       padding: EdgeInsets.all(4),
                       child: ElevatedButton(
                         //color: Theme.of(context).primaryColor,
-                        child: _authController.isLoading == true
+                        child: _appController.isLoading == true
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )
@@ -113,12 +117,16 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
                               ),
                         onPressed: () {
                           if (_formKey.currentState.validate()) {
-                            _authController.userAtual.nome = _nomeCont.text;
-                            _authController.userAtual.email = _emailCont.text;
-                            _authController.createLoginEmailSenha(
-                                pass: _senhaCont.text,
-                                onFail: _onFail,
-                                onSucces: _onSucces);
+                            //
+                            _appController.createLoginEmailSenha(
+                              email: _emailCont.text,
+                              nome: _nomeCont.text,
+                              pass: _senhaCont.text,
+                              onFail: _onFail,
+                              onSucces: _onSucces,
+                            );
+                            //
+
                           }
                         },
                       ),
@@ -141,8 +149,6 @@ class _LoginCadastroPageState extends State<LoginCadastroPage> {
     ));
 
     Future.delayed(Duration(milliseconds: 500)).then((_) async {
-      // Modular.to.pushReplacementNamed('/home');
-      await _cartController.carregaCarrinhoUser();
       Modular.to.pop<bool>(true);
     });
   }

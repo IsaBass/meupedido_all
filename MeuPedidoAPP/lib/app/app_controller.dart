@@ -21,7 +21,7 @@ abstract class _AppControllerBase with Store {
   @observable
   CnpjModel cnpjAtivo;
   @observable
-  UserModel userAtual;
+  UserModel userAtual = UserModel();
   @observable
   bool isLoading = false;
 
@@ -131,7 +131,9 @@ abstract class _AppControllerBase with Store {
     var rsp = await _authController.loadCurrentUser(cnpjAtivo.docId);
 
     if (rsp.resp == RspType.ok) {
+      //
       _setUsuarioLogado(rsp.data);
+      //
       isLoading = false;
       return true;
     } else {
@@ -205,6 +207,39 @@ abstract class _AppControllerBase with Store {
       return "erro";
     }
     /////////////
+  }
+
+  @action
+  Future<void> createLoginEmailSenha(
+      {@required String email,
+      @required String pass,
+      @required String nome,
+      @required VoidCallback onSucces,
+      @required VoidCallback onFail}) async {
+    isLoading = true;
+
+    var rsp = await _authController.createLoginEmailSenha(
+      email: email,
+      pass: pass,
+      cnpj: cnpjAtivo.docId,
+    );
+
+    if (rsp.resp == RspType.ok) {
+      var user = rsp.data
+        ..nome = nome
+        ..email = email;
+
+      _setUsuarioLogado(user);
+
+      await saveUserData();
+
+      isLoading = false;
+      onSucces();
+    } else {
+      _limpaIsuarioLogado();
+      isLoading = false;
+      onFail();
+    }
   }
 
   @action

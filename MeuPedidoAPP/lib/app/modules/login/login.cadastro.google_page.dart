@@ -1,3 +1,4 @@
+import 'package:MeuPedido/app/app_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -17,16 +18,19 @@ class LoginCadastroGooglePage extends StatefulWidget {
 }
 
 class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
+  //
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  //
   final TextEditingController _nomeContr = TextEditingController();
-  final AuthController _authController = Modular.get<AuthController>();
-  final CartController _cartController = Modular.get<CartController>();
+  //
+  final AppController _appController = Modular.get();
+  //
 
   @override
   void initState() {
     super.initState();
-    _nomeContr.text = _authController.userAtual.nome;
+    _nomeContr.text = _appController.userAtual.nome;
   }
 
   @override
@@ -47,12 +51,12 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
                 padding: EdgeInsets.all(8),
                 child: Column(
                   children: <Widget>[
-                    _authController.userAtual.urlImg.isEmpty
+                    _appController.userAtual.urlImg.isEmpty
                         ? Container(height: 0)
                         : Container(
                             height: 50,
                             child: Image.network(
-                              _authController.userAtual.urlImg,
+                              _appController.userAtual.urlImg,
                               width: 150,
                               height: 150,
                             ),
@@ -61,7 +65,7 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
                       alignment: Alignment.center,
                       height: 50,
                       child: Text(
-                        'Olá, ${_authController.userAtual.nome}\n'
+                        'Olá, ${_appController.userAtual.nome}\n'
                         'Este é seu primeiro acesso\nPor favor confirme seu nome para identificação',
                         textAlign: TextAlign.center,
                       ),
@@ -83,17 +87,17 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
                       builder: (_) => Container(
                         width: MediaQuery.of(context).size.width,
                         padding: EdgeInsets.all(4),
-                        child: _authController.isLoading
+                        child: _appController.isLoading
                             ? Center(child: CircularProgressIndicator())
                             : SignInButton(
                                 Buttons.Google,
                                 text: 'Cadastrar com Google',
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                    _authController.userAtual.nome =
+                                    _appController.userAtual.nome =
                                         _nomeContr.text;
-                                    await _authController.saveUserData();
-                                    await _authController.loadCurrentUser();
+                                    await _appController.saveUserData();
+                                    await _appController.loadCurrentUser();
                                     _onSucces();
                                   }
                                 },
@@ -118,8 +122,6 @@ class _LoginCadastroPageState extends State<LoginCadastroGooglePage> {
     ));
 
     Future.delayed(Duration(milliseconds: 500)).then((_) {
-      // Modular.to.pushReplacementNamed('/home');
-      _cartController.carregaCarrinhoUser();
       Modular.to.pop<bool>(true);
     });
   }

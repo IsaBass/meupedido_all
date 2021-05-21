@@ -77,7 +77,7 @@ abstract class _AuthControllerBase with Store {
       // setEstaLogado();
 
       // carrega varias inform da base para a variavel userAtual
-      user.carregaDoMap(docUser, cnpj);
+      user.carregaDoMap(docUser..['uid'] = uid, cnpj);
       // favoritos = userAtual.favoritos.asObservable();
 
       user.empresas = [];
@@ -143,12 +143,11 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action
-  Future<Rsp<UserModel>> createLoginEmailSenha(
-      {@required String email,
-      @required String pass,
-      @required String cnpj,
-      @required VoidCallback onSucces,
-      @required VoidCallback onFail}) async {
+  Future<Rsp<UserModel>> createLoginEmailSenha({
+    @required String email,
+    @required String pass,
+    @required String cnpj,
+  }) async {
     isLoading = true;
 
     var rsp = await _service.createLoginEmailSenha(email: email, pass: pass);
@@ -159,8 +158,6 @@ abstract class _AuthControllerBase with Store {
 
       await saveUserData(user, cnpj);
       await _repository.registreAcesso(user.uid);
-
-      onSucces();
 
       return Rsp.ok(user);
     } else {

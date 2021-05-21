@@ -131,7 +131,7 @@ class _MeusPedidosTabState
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            onPressed: () => Modular.to.pushNamed('pedido/$idPedido'),
+            onPressed: () => Modular.to.pushNamed('/pedido/$idPedido'),
             child: Text(
               'DETALHES',
               style: TextStyle(fontSize: 14, color: Colors.blueAccent),

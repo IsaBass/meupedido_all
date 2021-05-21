@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 // import 'package:get/get.dart';
 import 'package:meupedido_core/core/constantes.dart';
-
-import 'app_controller.dart';
 
 class AppWidget extends StatelessWidget {
   //
@@ -35,7 +33,7 @@ class AppWidget extends StatelessWidget {
             //   bottomAppBarColor: Colors.yellowAccent,
             // ),
 
-            initialRoute: '/home',
+            initialRoute: '/',
             // onGenerateRoute: Modular,
             localizationsDelegates: [
               GlobalCupertinoLocalizations.delegate,

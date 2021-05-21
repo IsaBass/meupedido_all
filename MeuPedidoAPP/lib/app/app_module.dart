@@ -57,7 +57,7 @@ class AppModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ModuleRoute('/', module: SplashModule()),
+    ModuleRoute(Modular.initialRoute, module: SplashModule()),
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/home', module: HomeModule()),
     ModuleRoute('/proddetail', module: ProddetailsModule()),
@@ -65,6 +65,7 @@ class AppModule extends Module {
     ModuleRoute('/endereco', module: EnderecoModule()),
     ModuleRoute('/pedido', module: PedidoModule()),
     ModuleRoute('/categoria', module: CategoriaModule()),
+    ModuleRoute('/carrinho', module: CarrinhoModule()),
     ChildRoute('/agmercadopago', child: (_, args) => AGMercadoPago()),
     ChildRoute(
       'categoria/categ/:codcateg',

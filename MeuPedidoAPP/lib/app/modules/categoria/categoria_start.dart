@@ -36,7 +36,7 @@ class CategoriaStartState extends State<CategoriaStart> {
     //super.build(context);
     print('desenhou build de CategoriaStart_tab.dart');
     return WillPopScope(
-      onWillPop: () => Future.value(false),
+      onWillPop: () => Future.value(true),
       child: Scaffold(
         appBar: AppBar(
           //backgroundColor: Theme.of(context).accentColor,

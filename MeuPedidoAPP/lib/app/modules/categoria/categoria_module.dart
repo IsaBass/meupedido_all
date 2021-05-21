@@ -16,7 +16,7 @@ class CategoriaModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute('/', child: (_, args) => CategoriaStart()),
     ChildRoute(
-      '/categ/:codcateg',
+      'categ/:codcateg',
       child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
     ),
   ];

@@ -44,7 +44,7 @@ class NaoLogado extends StatelessWidget {
             color: Theme.of(context).primaryTextTheme.bodyText1.color,
           ),
         ),
-        onPressed: () => Modular.to.pushNamed('login'),
+        onPressed: () => Modular.to.pushNamed('/login'),
       ),
     );
   }

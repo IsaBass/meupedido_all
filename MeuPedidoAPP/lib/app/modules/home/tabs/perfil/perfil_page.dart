@@ -17,7 +17,7 @@ class PerfilPage extends StatefulWidget {
 
 class _PerfilPageState extends State<PerfilPage> {
   ///
-  final AuthController _authController = Modular.get<AuthController>();
+  // final AuthController _authController = Modular.get<AuthController>();
   final AppController _appController = Modular.get<AppController>();
 
   ///
@@ -37,7 +37,7 @@ class _PerfilPageState extends State<PerfilPage> {
             children: [
               Observer(
                 builder: (_) =>
-                    exibeCarregandoLinha(isLoading: _authController.isLoading),
+                    exibeCarregandoLinha(isLoading: _appController.isLoading),
               ),
               CardUsuarioWidget(),
               _cardEndereco(context),
@@ -64,7 +64,7 @@ class _PerfilPageState extends State<PerfilPage> {
             trailing: IconButton(
               icon: Icon(FontAwesomeIcons.chevronRight),
               onPressed: () {
-                Modular.to.pushNamed('home/listenderecos');
+                Modular.to.navigate('listenderecos');
               },
             ),
           ),

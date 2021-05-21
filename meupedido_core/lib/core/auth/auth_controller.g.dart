@@ -63,18 +63,9 @@ mixin _$AuthController on _AuthControllerBase, Store {
 
   @override
   Future<Rsp<UserModel>> createLoginEmailSenha(
-      {String email,
-      String pass,
-      String cnpj,
-      VoidCallback onSucces,
-      VoidCallback onFail}) {
-    return _$createLoginEmailSenhaAsyncAction.run(() => super
-        .createLoginEmailSenha(
-            email: email,
-            pass: pass,
-            cnpj: cnpj,
-            onSucces: onSucces,
-            onFail: onFail));
+      {String email, String pass, String cnpj}) {
+    return _$createLoginEmailSenhaAsyncAction.run(() =>
+        super.createLoginEmailSenha(email: email, pass: pass, cnpj: cnpj));
   }
 
   final _$loadCurrentUserAsyncAction =
@@ -140,10 +131,8 @@ mixin _$AuthController on _AuthControllerBase, Store {
       AsyncAction('_AuthControllerBase.logarGoogle');
 
   @override
-  Future<Rsp<UserModel>> logarGoogle(
-      {String cnpj, VoidCallback onSucces, VoidCallback onFail}) {
-    return _$logarGoogleAsyncAction.run(() =>
-        super.logarGoogle(cnpj: cnpj, onSucces: onSucces, onFail: onFail));
+  Future<Rsp<UserModel>> logarGoogle({String cnpj}) {
+    return _$logarGoogleAsyncAction.run(() => super.logarGoogle(cnpj: cnpj));
   }
 
   final _$_AuthControllerBaseActionController =

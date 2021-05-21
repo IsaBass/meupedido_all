@@ -131,10 +131,10 @@ class _HomePageState extends State<HomePage> {
               // );
 
               if (index == 0) {
-                Modular.to.navigate('/categoria/');
+                Modular.to.pushNamed('/categoria/');
               }
               if (index == 2) {
-                Modular.to.navigate('/carrinho/');
+                Modular.to.pushNamed('/carrinho/');
               }
             },
             items: [
