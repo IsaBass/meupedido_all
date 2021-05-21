@@ -1,4 +1,5 @@
 import 'package:MeuPedido/app/app_controller.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
 
@@ -28,4 +29,10 @@ class CarrinhoModule extends Module {
   ];
 
   static Inject get to => Inject<CarrinhoModule>();
+
+  // @override
+  // Widget get view {
+  //   Modular.init(this);
+  //   return CarrinhoListaPage();
+  // }
 }

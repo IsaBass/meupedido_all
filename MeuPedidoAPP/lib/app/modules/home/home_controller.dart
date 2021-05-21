@@ -7,7 +7,7 @@ class HomeController = _HomeBase with _$HomeController;
 
 abstract class _HomeBase with Store {
   // final IHomeRepository _homeRepository;
-  final PageController pageController = PageController();
+  final PageController pageController = PageController(keepPage: true);
 
   // _HomeBase(this._homeRepository);
 

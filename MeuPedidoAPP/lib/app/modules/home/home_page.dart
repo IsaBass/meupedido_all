@@ -22,7 +22,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+//with WidgetsBindingObserver, AutomaticKeepAliveClientMixin
+{
   //
   final HomeController _controller = Modular.get<HomeController>();
   final CategsController _categsController = Modular.get<CategsController>();
@@ -75,10 +77,10 @@ class _HomePageState extends State<HomePage> {
         controller: _controller.pageController,
         onPageChanged: _controller.setTabActive, //onPageChanged,
         children: <Widget>[
-          // RouterOutlet(module: CategoriaModule()),
+          // CategoriaModule(),
           Container(),
           FavoritosTab(),
-          // RouterOutlet(module: CarrinhoModule()),
+          // CarrinhoModule(),
           Container(),
           MeusPedidosTab(),
           PerfilTab(),
@@ -213,6 +215,9 @@ class _HomePageState extends State<HomePage> {
     //   }),
     // );
   }
+
+  // @override
+  // bool get wantKeepAlive => true;
 
   // void onPageChanged(int page) {
   //  // _controller.setTabActive(page)

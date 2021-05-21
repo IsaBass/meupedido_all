@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'package:meupedido_core/meupedido_core.dart';
-
 class SplashPage extends StatefulWidget {
   final String title;
   final String identificador;

@@ -6,6 +6,7 @@ import 'categoria_start.dart';
 import 'repository/categoria_repository.dart';
 
 class CategoriaModule extends Module {
+//extends WidgetModule {
   @override
   List<Bind> get binds => [
         Bind((i) => CategoriaRepository()),
@@ -21,5 +22,11 @@ class CategoriaModule extends Module {
     ),
   ];
 
-  // static Inject get to => Inject<CategoriaModule>.of();
+  // @override
+  // Widget get view {
+  //   Modular.init(this);
+  //   return CategoriaStart();
+  // }
+
+  static Inject get to => Inject<CategoriaModule>();
 }

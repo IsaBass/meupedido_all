@@ -25,6 +25,7 @@ class CategoriaPage extends StatefulWidget {
 }
 
 class _CategoriaPageState extends State<CategoriaPage> {
+  // with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   final CategoriaController _controller = Modular.get();
 
   bool tipoLista = false;
@@ -137,4 +138,7 @@ class _CategoriaPageState extends State<CategoriaPage> {
       );
     });
   }
+
+  // @override
+  // bool get wantKeepAlive => true;
 }

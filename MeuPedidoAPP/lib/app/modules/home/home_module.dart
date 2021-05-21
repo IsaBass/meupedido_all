@@ -1,4 +1,5 @@
 import 'package:MeuPedido/app/app_controller.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_controller.dart';
@@ -38,5 +39,11 @@ class HomeModule extends Module {
     ChildRoute('/listenderecos', child: (_, args) => PerfilListaEnderecos()),
   ];
 
-  // static Inject get to => Inject<HomeModule>.of();
+  // @override
+  // Widget get view {
+  //   Modular.init(this);
+  //   return HomePage();
+  // }
+
+  static Inject get to => Inject<HomeModule>();
 }

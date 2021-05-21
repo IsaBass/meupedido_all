@@ -16,6 +16,7 @@ class CategoriaStart extends StatefulWidget {
 }
 
 class CategoriaStartState extends State<CategoriaStart> {
+  // with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   ///
   final CategoriaController _controller = Modular.get();
   final ThemeController _themeController = Modular.get();
@@ -199,4 +200,7 @@ class CategoriaStartState extends State<CategoriaStart> {
       ],
     );
   }
+
+  // @override
+  // bool get wantKeepAlive => true;
 }

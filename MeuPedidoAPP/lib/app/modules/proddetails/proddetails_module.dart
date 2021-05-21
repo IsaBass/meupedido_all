@@ -19,5 +19,5 @@ class ProddetailsModule extends Module {
         child: (_, args) => ProdDetailsPage(codigoProd: args.params['cod'])),
   ];
 
-  // static Inject get to => Inject<ProddetailsModule>.of();
+  static Inject get to => Inject<ProddetailsModule>();
 }
