@@ -69,7 +69,7 @@ class CardUsuarioWidget extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(FontAwesomeIcons.edit, color: Colors.grey),
                     onPressed: () async {
-                      if ((await Modular.to.pushNamed('home/editusuario')) ==
+                      if ((await Modular.to.pushNamed('editusuario/')) ==
                           true) {
                         mySnackBar(context,
                             texto: "Cadastro salvo com sucesso.",

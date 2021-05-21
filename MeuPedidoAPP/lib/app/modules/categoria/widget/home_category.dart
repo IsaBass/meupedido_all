@@ -21,7 +21,7 @@ class _HomeCategoryState extends State<HomeCategory> {
     if (kIsWeb) {
       Modular.to.pushNamed('categoria/categ/${widget.categ.codCateg}');
     } else {
-      Modular.to.pushNamed('categ/${widget.categ.codCateg}');
+      Modular.to.navigate('categ/${widget.categ.codCateg}');
     }
     //
   }

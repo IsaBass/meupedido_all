@@ -1,5 +1,7 @@
 import 'package:MeuPedido/app/app_controller.dart';
 
+import 'package:MeuPedido/app/modules/categoria/categoria_page.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'home_controller.dart';
@@ -30,6 +32,7 @@ class HomeModule extends Module {
         ),
         Bind((i) => MeusPedidosRepository(Modular.get<AppController>())),
         Bind((i) => MeusPedidosController(i())),
+        //
       ];
 
   @override
@@ -37,6 +40,10 @@ class HomeModule extends Module {
     ChildRoute('/', child: (_, args) => HomePage()),
     ChildRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
     ChildRoute('/listenderecos', child: (_, args) => PerfilListaEnderecos()),
+    ChildRoute(
+      'categ/:codcateg',
+      child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
+    ),
   ];
 
   // @override

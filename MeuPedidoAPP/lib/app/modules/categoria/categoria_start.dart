@@ -15,8 +15,8 @@ class CategoriaStart extends StatefulWidget {
   CategoriaStartState createState() => CategoriaStartState();
 }
 
-class CategoriaStartState extends State<CategoriaStart> {
-  // with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
+class CategoriaStartState extends State<CategoriaStart>
+    with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
   ///
   final CategoriaController _controller = Modular.get();
   final ThemeController _themeController = Modular.get();
@@ -48,7 +48,7 @@ class CategoriaStartState extends State<CategoriaStart> {
             IconButton(
               icon: Icon(Icons.textsms),
               onPressed: () async {
-                var retorno = await Modular.to.pushNamed('agmercadopago');
+                var retorno = await Modular.to.pushNamed('/agmercadopago');
                 print(' retorno MP em CategoriaStart_page =  $retorno');
               },
             ),
@@ -201,6 +201,6 @@ class CategoriaStartState extends State<CategoriaStart> {
     );
   }
 
-  // @override
-  // bool get wantKeepAlive => true;
+  @override
+  bool get wantKeepAlive => true;
 }

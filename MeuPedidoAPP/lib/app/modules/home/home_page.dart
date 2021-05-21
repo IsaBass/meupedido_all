@@ -1,5 +1,7 @@
 import 'package:MeuPedido/app/app_controller.dart';
 import 'package:MeuPedido/app/categs/categs_controller.dart';
+import 'package:MeuPedido/app/modules/carrinho/carrinho_module.dart';
+import 'package:MeuPedido/app/modules/categoria/categoria_module.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -77,11 +79,11 @@ class _HomePageState extends State<HomePage>
         controller: _controller.pageController,
         onPageChanged: _controller.setTabActive, //onPageChanged,
         children: <Widget>[
-          // CategoriaModule(),
-          Container(),
+          CategoriaModule(),
+          // Container(),
           FavoritosTab(),
-          // CarrinhoModule(),
-          Container(),
+          CarrinhoModule(),
+          // Container(),
           MeusPedidosTab(),
           PerfilTab(),
         ],
@@ -132,12 +134,12 @@ class _HomePageState extends State<HomePage>
               //   curve: Curves.easeOut,
               // );
 
-              if (index == 0) {
-                Modular.to.pushNamed('/categoria/');
-              }
-              if (index == 2) {
-                Modular.to.pushNamed('/carrinho/');
-              }
+              // if (index == 0) {
+              //   Modular.to.pushNamed('/categoria/');
+              // }
+              // if (index == 2) {
+              //   Modular.to.pushNamed('/carrinho/');
+              // }
             },
             items: [
               BottomNavigationBarItem(

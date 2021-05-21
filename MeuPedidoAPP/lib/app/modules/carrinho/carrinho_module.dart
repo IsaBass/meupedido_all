@@ -1,4 +1,5 @@
 import 'package:MeuPedido/app/app_controller.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:meupedido_core/meupedido_core.dart';
@@ -8,7 +9,7 @@ import 'carrinho_page.dart';
 import 'repository/carrinho_repository.dart';
 import 'carrinho_lista.dart';
 
-class CarrinhoModule extends Module {
+class CarrinhoModule extends WidgetModule {
   @override
   List<Bind> get binds => [
         Bind((i) => CarrinhoRepository(Modular.get<AppController>())),
@@ -30,9 +31,11 @@ class CarrinhoModule extends Module {
 
   static Inject get to => Inject<CarrinhoModule>();
 
-  // @override
-  // Widget get view {
-  //   Modular.init(this);
-  //   return CarrinhoListaPage();
-  // }
+  @override
+  Widget get view {
+    // Modular.init(this);
+    Modular.bindModule(this);
+
+    return CarrinhoListaPage();
+  }
 }
