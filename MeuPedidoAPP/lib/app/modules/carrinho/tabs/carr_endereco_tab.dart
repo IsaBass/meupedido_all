@@ -12,9 +12,8 @@ class CarrinhoEnderecoTab extends StatefulWidget {
 }
 
 class _CarrinhoEnderecoTabState extends State<CarrinhoEnderecoTab> {
-  // final CartController _cartController = Modular.get<CartController>();
-  final CarrinhoController _carrinhoController =
-      Modular.get<CarrinhoController>();
+  //
+  final _carrinhoController = Modular.get<CarrinhoController>();
 
   @override
   Widget build(BuildContext context) {

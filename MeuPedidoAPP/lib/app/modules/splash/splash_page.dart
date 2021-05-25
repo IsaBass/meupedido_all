@@ -17,7 +17,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   // final AuthController _authController = AppModule.to.get<AuthController>();
   // final CNPJSController _cnpjsController = Modular.get<CNPJSController>();
-  final AppController _appController = Modular.get();
+  final _appController = Modular.get<AppController>();
 
   @override
   void initState() {

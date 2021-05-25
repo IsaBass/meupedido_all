@@ -1,4 +1,3 @@
-import 'package:MeuPedido/app/app_module.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -11,8 +10,7 @@ class SacolaButton extends StatefulWidget {
 }
 
 class _SacolaButtonState extends State<SacolaButton> {
-  final CartController _cartController =
-      AppModule().getBind<CartController>(typesInRequest: [CartController]);
+  final _cartController = Modular.get<CartController>();
   @override
   Widget build(BuildContext context) {
     return IconButton(

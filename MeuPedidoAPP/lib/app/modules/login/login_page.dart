@@ -20,9 +20,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
-  // final AuthController _authController = Modular.get<AuthController>();
+
   final AppController _appController = Modular.get();
-  final CartController _cartController = Modular.get<CartController>();
+  final _cartController = Modular.get<CartController>();
   final _contSenha = TextEditingController();
   final _contEmail = TextEditingController();
 

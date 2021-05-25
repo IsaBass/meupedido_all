@@ -37,6 +37,7 @@ abstract class _CartBase with Store {
 
   @action
   Future<void> adicionarCarrinho(CartItemModel item) async {
+    print(this.hashCode);
     if (_uid == "" || _cnpj == "") return;
     ////
     cartAtual.adicionarItem(item);

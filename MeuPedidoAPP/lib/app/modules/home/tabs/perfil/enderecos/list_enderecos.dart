@@ -85,7 +85,8 @@ class PerfilListaEnderecosState
       onPressed: () async {
         // await Modular.to
         //     .pushNamed('endereco/edit', arguments: {"endereco": end});
-        await Get.toNamed('endereco/edit', arguments: {"endereco": end});
+        await Modular.to
+            .pushNamed('/endereco/edit', arguments: {"endereco": end});
         setState(() {});
         //await _carrinhoController.getEnderecos();
       },
@@ -135,7 +136,7 @@ class PerfilListaEnderecosState
         Text('Endereços cadastrados:'),
         TextButton(
           onPressed: () async {
-            var ret = await Modular.to.pushNamed('endereco/novo');
+            var ret = await Modular.to.pushNamed('/endereco/novo');
 
             if (ret != null && ret != '') {
               controller.getEnderecos();

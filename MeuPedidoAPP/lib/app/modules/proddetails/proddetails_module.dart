@@ -9,8 +9,10 @@ import 'repository/proddetails_repository.dart';
 class ProddetailsModule extends Module {
   @override
   List<Bind> get binds => [
-        Bind((i) => ProddetailsRepository(Modular.get<AppController>())),
-        Bind((i) => ProddetailsController(i.get<ProddetailsRepository>())),
+        Bind.singleton(
+            (i) => ProddetailsRepository(Modular.get<AppController>())),
+        Bind.singleton(
+            (i) => ProddetailsController(i.get<ProddetailsRepository>())),
       ];
 
   @override

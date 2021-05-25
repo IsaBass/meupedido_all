@@ -69,13 +69,15 @@ class CardUsuarioWidget extends StatelessWidget {
                   child: IconButton(
                     icon: Icon(FontAwesomeIcons.edit, color: Colors.grey),
                     onPressed: () async {
-                      if ((await Modular.to.pushNamed('editusuario/')) ==
-                          true) {
-                        mySnackBar(context,
-                            texto: "Cadastro salvo com sucesso.",
-                            color: Colors.indigo[900],
-                            miliseconds: 1500);
-                      }
+                      //var resp = await
+                      Modular.to.navigate('editusuario');
+
+                      // if (resp == true) {
+                      //   mySnackBar(context,
+                      //       texto: "Cadastro salvo com sucesso.",
+                      //       color: Colors.indigo[900],
+                      //       miliseconds: 1500);
+                      // }
                     },
                   )),
             ],

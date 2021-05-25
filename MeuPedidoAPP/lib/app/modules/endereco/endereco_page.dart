@@ -178,7 +178,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
       labelText: 'CEP*',
       //helperText: 'seu -email cadastrado',
       validator: (v) {
-        if ((v.length != 10)) return 'CEP Inválido';
+        if ((v.length < 8)) return 'CEP Inválido';
         return null;
       },
     );
@@ -302,12 +302,12 @@ class _EnderecoPageState extends State<EnderecoPage> {
 
       await controller.alteraEndereco(endereco);
 
-      //Toast.show("Salvo com Sucesso", context);
-      //Modular.to.pop();
+      Toast.show("Salvo com Sucesso", context);
+      Modular.to.pop();
       //
-      Get.back();
-      Get.snackbar("Salvo com Sucesso", "OK",
-          snackPosition: SnackPosition.BOTTOM);
+      //Get.back();
+      // Get.snackbar("Salvo com Sucesso", "OK",
+      //     snackPosition: SnackPosition.BOTTOM);
     }
 
     return Container(
@@ -321,7 +321,7 @@ class _EnderecoPageState extends State<EnderecoPage> {
           FontAwesomeIcons.save,
           color: Theme.of(context).primaryTextTheme.bodyText1.color,
         ),
-        label: _authController.isLoading == true
+        label: controller.isLoading == true
             ? Center(
                 child: CircularProgressIndicator(),
               )

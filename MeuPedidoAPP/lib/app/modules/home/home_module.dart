@@ -21,17 +21,19 @@ class HomeModule extends Module {
   @override
   List<Bind> get binds => [
         // Bind((i) => HomeRepository()),
-        Bind((i) => HomeController()),
-        Bind((i) => FavoritosRepository(Modular.get<AppController>())),
-        Bind((i) => FavoritosController(i(), Modular.get())),
-        Bind((i) => SearchController(Modular.get())),
-        Bind(
+        Bind.singleton((i) => HomeController()),
+        Bind.singleton(
+            (i) => FavoritosRepository(Modular.get<AppController>())),
+        Bind.singleton((i) => FavoritosController(i(), Modular.get())),
+        Bind.singleton((i) => SearchController(Modular.get())),
+        Bind.singleton(
           (i) => ListEnderecosController(
             ListEnderecosRepository(Modular.get<AppController>()),
           ),
         ),
-        Bind((i) => MeusPedidosRepository(Modular.get<AppController>())),
-        Bind((i) => MeusPedidosController(i())),
+        Bind.singleton(
+            (i) => MeusPedidosRepository(Modular.get<AppController>())),
+        Bind.singleton((i) => MeusPedidosController(i())),
         //
       ];
 

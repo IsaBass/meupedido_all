@@ -12,8 +12,8 @@ import 'carrinho_lista.dart';
 class CarrinhoModule extends WidgetModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => CarrinhoRepository(Modular.get<AppController>())),
-        Bind(
+        Bind.singleton((i) => CarrinhoRepository(Modular.get<AppController>())),
+        Bind.singleton(
           (i) => CarrinhoController(
             i(),
             Modular.get<CartController>(),

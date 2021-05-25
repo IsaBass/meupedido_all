@@ -16,10 +16,9 @@ class CardCartItem extends StatefulWidget {
 }
 
 class _CardCartItemState extends State<CardCartItem> {
-  // final AppController _appController = Modular.get();
-
-  // final AuthController _authController = Modular.get();
-  final CartController _cartController = Modular.get();
+  //
+  final _cartController = Modular.get<CartController>();
+  //
   @override
   Widget build(BuildContext context) {
     var item = widget.item;

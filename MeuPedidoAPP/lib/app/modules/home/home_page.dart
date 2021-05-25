@@ -28,10 +28,10 @@ class _HomePageState extends State<HomePage>
 //with WidgetsBindingObserver, AutomaticKeepAliveClientMixin
 {
   //
-  final HomeController _controller = Modular.get<HomeController>();
-  final CategsController _categsController = Modular.get<CategsController>();
-  final CartController _cartController = Modular.get();
-  final AppController _appController = Modular.get();
+  final _controller = Modular.get<HomeController>();
+  final _categsController = Modular.get<CategsController>();
+  final _cartController = Modular.get<CartController>();
+  final _appController = Modular.get<AppController>();
   //
 
   //int _page = 1;

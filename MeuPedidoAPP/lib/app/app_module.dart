@@ -16,6 +16,7 @@ import 'modules/categoria/categoria_module.dart';
 import 'modules/categoria/categoria_page.dart';
 import 'modules/endereco/endereco_module.dart';
 import 'modules/home/home_module.dart';
+import 'modules/home/tabs/perfil/edit_usuario.dart';
 import 'modules/login/login_module.dart';
 import 'modules/pedido/pedido_module.dart';
 import 'modules/proddetails/proddetails_module.dart';
@@ -28,6 +29,7 @@ class AppModule extends Module {
   @override
   List<Bind> get binds => [
         Bind.singleton((i) => ThemeController()),
+        Bind.singleton((i) => FCMFirebase()),
         Bind.singleton((i) => CNPJSController(CnpjRepository())),
         Bind.singleton((i) => AuthFirebaseService()),
         Bind.singleton(
@@ -37,22 +39,23 @@ class AppModule extends Module {
             i<FCMFirebase>(),
           ),
         ),
+        Bind.singleton((i) => CartController(CartRepository())),
         Bind.singleton(
           (i) => AppController(
             i.get<AuthController>(),
             i.get<CNPJSController>(),
             AppRepository(),
-            i<CartController>(),
+            i.get<CartController>(),
           ),
         ),
-        Bind.singleton((i) => CartController(CartRepository())),
         Bind.singleton((i) => CardTypeRepository()),
         Bind.singleton((i) => CategsRepository()),
-        Bind.singleton((i) => CategsController(
-              i.get<CategsRepository>(),
-              i(),
-            )),
-        Bind.singleton((i) => FCMFirebase()),
+        Bind.singleton(
+          (i) => CategsController(
+            i.get<CategsRepository>(),
+            i(),
+          ),
+        ),
       ];
 
   @override
@@ -71,6 +74,9 @@ class AppModule extends Module {
       'categoria/categ/:codcateg',
       child: (_, args) => CategoriaPage(codCateg: args.params['codcateg']),
     ),
+
+    //
+    ChildRoute('/editusuario', child: (_, args) => PerfilEditUsuario()),
   ];
 
   // @override

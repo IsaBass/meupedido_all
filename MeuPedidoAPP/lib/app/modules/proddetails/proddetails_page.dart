@@ -22,9 +22,7 @@ class ProdDetailsPage extends StatefulWidget {
 class _ProdDetailsPageState extends State<ProdDetailsPage> {
   ///
   final ProddetailsController _controller = Modular.get();
-  // final AppController _appController = AppModule.to.get();
-  //final CartController _cartController = AppModule.to.get();
-  // final AuthController _authController = AppModule.to.get();
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   bool isFav = false;

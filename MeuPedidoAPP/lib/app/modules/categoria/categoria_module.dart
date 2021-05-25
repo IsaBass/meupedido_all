@@ -6,13 +6,13 @@ import 'categoria_controller.dart';
 import 'categoria_start.dart';
 import 'repository/categoria_repository.dart';
 
-class CategoriaModule
-// extends Module {
-    extends WidgetModule {
+class CategoriaModule extends WidgetModule {
+  // extends WidgetModule {
   @override
   List<Bind> get binds => [
-        Bind((i) => CategoriaRepository()),
-        Bind((i) => CategoriaController(i.get<CategoriaRepository>())),
+        Bind.singleton((i) => CategoriaRepository()),
+        Bind.singleton(
+            (i) => CategoriaController(i.get<CategoriaRepository>())),
       ];
 
   @override

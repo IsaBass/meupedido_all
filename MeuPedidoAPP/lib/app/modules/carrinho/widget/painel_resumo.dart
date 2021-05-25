@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:meupedido_core/core/cart/cart_controller.dart';
 
 class CartPainelResumo extends StatelessWidget {
-  final CartController _cartController = Modular.get();
+  final _cartController = Modular.get<CartController>();
 
   @override
   Widget build(BuildContext context) {

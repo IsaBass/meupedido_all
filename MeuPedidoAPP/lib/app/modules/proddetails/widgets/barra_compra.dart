@@ -145,8 +145,8 @@ class BarraCompraDet extends StatelessWidget {
     ;
   }
 
-  void _adicionarProd() {
-    Modular.get<CartController>().adicionarCarrinho(
+  void _adicionarProd() async {
+    await Modular.get<CartController>().adicionarCarrinho(
       CartItemModel(
         idProduto: prod.codigo,
         quant: controller.quantidade,
