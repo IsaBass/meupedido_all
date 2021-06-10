@@ -19,7 +19,7 @@
 - busca CEP através de API
 - Login por Email ou Google
 - Produtos com opcionais, obrigatórios ou não, determinantes de preços etc.
-- Acesso experiemntal ao mercadoPago para cartão de crédito (comunicação via nativo (channel) para sdk da empresa)
+- Acesso experimental ao mercadoPago para cartão de crédito (comunicação via nativo (channel) para sdk da empresa)
 
 #### Tecnologias utilizadas:
 
